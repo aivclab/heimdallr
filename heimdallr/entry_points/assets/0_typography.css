@@ -1,0 +1,20 @@
+/*
+ Use css grids
+*/
+
+html { /* root ems */
+  font-size: 16px;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+/ / color: hotpink
+}
+
+h1 { /* 2rem = 32px */
+  font-size: 2rem;
+}
+
