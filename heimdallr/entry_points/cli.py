@@ -17,7 +17,8 @@ from pyfiglet import Figlet
 
 from draugr.python_utilities.styling import get_terminal_size
 from heimdallr import get_version
-from heimdallr.entry_points import publisher, server
+from heimdallr.entry_points import server
+from heimdallr.entry_points import publisher
 from heimdallr.utilities import (
   disable_systemd_service,
   enable_systemd_service,

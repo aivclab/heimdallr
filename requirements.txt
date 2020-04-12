@@ -20,3 +20,4 @@ paho-mqtt
 sh
 fire
 pyfiglet
+schedule

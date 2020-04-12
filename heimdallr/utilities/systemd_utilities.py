@@ -96,10 +96,10 @@ def disable_systemd_service(service_name: str) -> None:
 
 
 if __name__ == "__main__":
-  from heimdallr.entry_points import publisher
+  from heimdallr.entry_points.deprecated import publisher_non_sch
 
   # print()
-  install_systemd_service(Path(publisher.__file__), "publisher")
+  install_systemd_service(Path(publisher_non_sch.__file__), "publisher")
   # print(sh.ls("/home/heider"))
   # print(sys.executable)
 

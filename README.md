@@ -1,4 +1,4 @@
-![Header](.github/images/header.png)
+![Header](.github/images/horn.svg)
 
 # Heimdallr
 

@@ -4,7 +4,6 @@ import time
 from contextlib import suppress
 
 import paho.mqtt.client as mqtt
-import schedule
 
 from draugr.python_utilities.business import busy_indicator
 from draugr.writers import LogWriter, MockWriter, Writer
@@ -42,26 +41,30 @@ def main():
 
   HEIMDALLR_SETTINGS = HeimdallrSettings()
 
-  client.username_pw_set(HEIMDALLR_SETTINGS.mqtt_username, HEIMDALLR_SETTINGS.mqtt_password)
-  client.connect(HEIMDALLR_SETTINGS.mqtt_broker, HEIMDALLR_SETTINGS.mqtt_port, keepalive=60)
+  client.username_pw_set(
+    HEIMDALLR_SETTINGS.mqtt_username, HEIMDALLR_SETTINGS.mqtt_password
+    )
+  client.connect(
+    HEIMDALLR_SETTINGS.mqtt_broker, HEIMDALLR_SETTINGS.mqtt_port, keepalive=60
+    )
   client.loop_start()
 
   sensor_data = NOD({HOSTNAME:pull_gpu_info()})
+  next_reading = time.time()
 
   with suppress(KeyboardInterrupt):
     print("Publisher started")
 
-    def job():
+    for _ in busy_indicator():
       sensor_data[HOSTNAME] = pull_gpu_info()
       s = sensor_data.as_dict()
       s = json.dumps(s)
       client.publish(ALL_CONSTANTS.MQTT_TOPIC, s, ALL_CONSTANTS.MQTT_QOS)
+      next_reading += ALL_CONSTANTS.MQTT_PUBLISH_INTERVAL_SEC
+      sleep_time = next_reading - time.time()
 
-    schedule.every(ALL_CONSTANTS.MQTT_PUBLISH_INTERVAL_SEC).second.do(job)
-
-    for _ in busy_indicator():
-      schedule.run_pending()
-      time.sleep(1)
+      if sleep_time > 0:
+        time.sleep(sleep_time)
 
   # noinspection PyUnreachableCode
   LOG_WRITER.close()
