@@ -112,9 +112,13 @@ class HeimdallrCLI:
             mode = HeimdallrMode(mode)
             if option == ServiceOption.install:
                 if mode == HeimdallrMode.server:
-                    install_service(Path(server.__file__), str(mode.value))
+                    install_service(
+                        Path(server.__file__), f"heimdallr_{str(mode.value)}"
+                    )
                 elif mode == HeimdallrMode.publisher:
-                    install_service(Path(publisher.__file__), str(mode.value))
+                    install_service(
+                        Path(publisher.__file__), f"heimdallr_{str(mode.value)}"
+                    )
                 else:
                     raise Exception
             elif option == ServiceOption.remove:

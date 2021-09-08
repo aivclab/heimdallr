@@ -5,10 +5,10 @@ import logging
 import uuid
 
 from dash import Dash
+from dash.dash_table import DataTable
 from dash.dependencies import Input, Output
 from dash.html import Div
 
-from dash.table import DataTable
 from paho import mqtt
 from paho.mqtt.client import Client
 from pandas import DataFrame

@@ -17,3 +17,6 @@ sh
 fire
 pyfiglet
 schedule
+-r requirements_docs.txt
+-r requirements_server.txt
+-r requirements_tests.txt

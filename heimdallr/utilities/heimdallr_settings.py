@@ -23,6 +23,8 @@ class HeimdallrSettings(PropertySettings):
     _google_settings_path = str(PROJECT_APP_PATH.user_config / "google.settings")
     _mqtt_settings_path = str(PROJECT_APP_PATH.user_config / "mqtt.settings")
 
+    PropertySettings.raise_exception_on_none = False
+
     def __init__(self):
         """Protects from overriding on initialisation"""
         pass

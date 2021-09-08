@@ -1,5 +1,7 @@
 __all__ = ["disable_service", "remove_service", "install_service", "enable_service"]
 
+from pathlib import Path
+
 from draugr.windows_utilities import (
     delete_task,
     new_user_logon_execute_task,
@@ -7,29 +9,29 @@ from draugr.windows_utilities import (
 )
 
 
-def disable_service():
-    set_task_activity("heimdallr_publisher", False)
+def disable_service(service_name: str) -> None:
+    set_task_activity(service_name, False)
 
 
-def enable_service():
-    set_task_activity("heimdallr_publisher", True)
+def enable_service(service_name: str) -> None:
+    set_task_activity(service_name, True)
 
 
-def install_service():
+def install_service(service_entry_point_path: Path, service_name: str) -> None:
     new_user_logon_execute_task(
-        "heimdallr_publisher",
-        "Heimdallr publisher",
-        "python.exe",
+        service_name,
+        service_name,
+        "python.exe",  # cmd.exe python.exe .....
         "-m heimdallr publish",
     )
 
 
-def remove_service():
-    delete_task("heimdallr_publisher")
+def remove_service(service_name) -> None:
+    delete_task(service_name)
 
 
 if __name__ == "__main__":
-    # remove_service()
-    install_service()
-    disable_service()
-    # enable_service()
+    # remove_service("heimdallr_publisher")
+    install_service("heimdallr_publisher")
+    disable_service("heimdallr_publisher")
+    # enable_service("heimdallr_publisher")
