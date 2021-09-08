@@ -35,21 +35,21 @@ from heimdallr import PROJECT_AUTHOR, PROJECT_NAME, PROJECT_YEAR, PROJECT_VERSIO
 # ones.
 
 extensions = [
-  "m2r",
-  # 'recommonmark',
-  "sphinxcontrib.programoutput",
-  "sphinx.ext.autodoc",
-  "sphinx.ext.autosummary",
-  "sphinx.ext.napoleon",
-  "sphinx.ext.doctest",
-  "sphinx.ext.intersphinx",
-  "sphinx.ext.todo",
-  "sphinx.ext.coverage",
-  "sphinx.ext.mathjax",
-  "sphinx.ext.viewcode",
-  "sphinx.ext.githubpages",
-  "sphinx.ext.graphviz",
-  ]
+    "m2r",
+    # 'recommonmark',
+    "sphinxcontrib.programoutput",
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.doctest",
+    "sphinx.ext.intersphinx",
+    "sphinx.ext.todo",
+    "sphinx.ext.coverage",
+    "sphinx.ext.mathjax",
+    "sphinx.ext.viewcode",
+    "sphinx.ext.githubpages",
+    "sphinx.ext.graphviz",
+]
 
 napoleon_use_ivar = True
 
@@ -61,7 +61,7 @@ templates_path = ["_templates"]
 #
 # source_suffix = ['.rst', '.md']
 # source_suffix = '.rst'
-source_suffix = {".rst":"restructuredtext", ".txt":"markdown", ".md":"markdown"}
+source_suffix = {".rst": "restructuredtext", ".txt": "markdown", ".md": "markdown"}
 
 # source_parsers = {
 #    '.md': CommonMarkParser,
@@ -128,40 +128,40 @@ htmlhelp_basename = f"{PROJECT_NAME}doc"
 # -- Options for LaTeX output ---------------------------------------------
 
 latex_elements = {
-  # The paper size ('letterpaper' or 'a4paper').
-  #
-  # 'papersize': 'letterpaper',
-  # The font size ('10pt', '11pt' or '12pt').
-  #
-  # 'pointsize': '10pt',
-  # Additional stuff for the LaTeX preamble.
-  #
-  # 'preamble': '',
-  # Latex figure (float) alignment
-  #
-  # 'figure_align': 'htbp',
-  }
+    # The paper size ('letterpaper' or 'a4paper').
+    #
+    # 'papersize': 'letterpaper',
+    # The font size ('10pt', '11pt' or '12pt').
+    #
+    # 'pointsize': '10pt',
+    # Additional stuff for the LaTeX preamble.
+    #
+    # 'preamble': '',
+    # Latex figure (float) alignment
+    #
+    # 'figure_align': 'htbp',
+}
 
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (
-    master_doc,
-    f"{PROJECT_NAME}.tex",
-    f"{PROJECT_NAME} Documentation",
-    PROJECT_AUTHOR,
-    "manual",
+    (
+        master_doc,
+        f"{PROJECT_NAME}.tex",
+        f"{PROJECT_NAME} Documentation",
+        PROJECT_AUTHOR,
+        "manual",
     )
-  ]
+]
 
 # -- Options for manual page output ---------------------------------------
 
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-  (master_doc, PROJECT_NAME, f"{PROJECT_NAME} Documentation", [PROJECT_AUTHOR], 1)
-  ]
+    (master_doc, PROJECT_NAME, f"{PROJECT_NAME} Documentation", [PROJECT_AUTHOR], 1)
+]
 
 # -- Options for Texinfo output -------------------------------------------
 
@@ -169,16 +169,16 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  (
-    master_doc,
-    PROJECT_NAME,
-    f"{PROJECT_NAME} Documentation",
-    PROJECT_AUTHOR,
-    PROJECT_NAME,
-    "One line description of project.",
-    "Miscellaneous",
+    (
+        master_doc,
+        PROJECT_NAME,
+        f"{PROJECT_NAME} Documentation",
+        PROJECT_AUTHOR,
+        PROJECT_NAME,
+        "One line description of project.",
+        "Miscellaneous",
     )
-  ]
+]
 
 # -- Options for Epub output ----------------------------------------------
 
@@ -202,9 +202,9 @@ epub_exclude_files = ["search.html"]
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-  "python":("https://docs.python.org/", None),
-  "numpy": ("http://docs.scipy.org/doc/numpy/", None),
-  }
+    "python": ("https://docs.python.org/", None),
+    "numpy": ("http://docs.scipy.org/doc/numpy/", None),
+}
 
 # -- A patch that prevents Sphinx from cross-referencing ivar tags -------
 # See http://stackoverflow.com/a/41184353/3343043
@@ -215,52 +215,52 @@ from sphinx.util.docfields import TypedField
 
 
 def patched_make_field(self, types, domain, items, **kw):
-  # `kw` catches `env=None` needed for newer sphinx while maintaining
-  #  backwards compatibility when passed along further down!
-  # #type: (List, unicode, Tuple) -> nodes.field
-  def handle_item(fieldarg, content):
-    par = nodes.paragraph()
-    par += addnodes.literal_strong("", fieldarg)  # Patch: this line added
-    # par.extend(self.make_xrefs(self.rolename, domain, fieldarg,
-    #                           addnodes.literal_strong))
-    if fieldarg in types:
-      par += nodes.Text(" (")
-      # NOTE: using .pop() here to prevent a single type node to be
-      # inserted twice into the doctree, which leads to
-      # inconsistencies later when references are resolved
-      fieldtype = types.pop(fieldarg)
-      if len(fieldtype) == 1 and isinstance(fieldtype[0], nodes.Text):
-        typename = "".join(n.astext() for n in fieldtype)
-        typename = typename.replace("int", "python:int")
-        typename = typename.replace("long", "python:long")
-        typename = typename.replace("float", "python:float")
-        typename = typename.replace("type", "python:type")
-        par.extend(
-          self.make_xrefs(
-            self.typerolename,
-            domain,
-            typename,
-            addnodes.literal_emphasis,
-            **kw,
-            )
-          )
-      else:
-        par += fieldtype
-      par += nodes.Text(")")
-    par += nodes.Text(" -- ")
-    par += content
-    return par
+    # `kw` catches `env=None` needed for newer sphinx while maintaining
+    #  backwards compatibility when passed along further down!
+    # #type: (List, unicode, Tuple) -> nodes.field
+    def handle_item(fieldarg, content):
+        par = nodes.paragraph()
+        par += addnodes.literal_strong("", fieldarg)  # Patch: this line added
+        # par.extend(self.make_xrefs(self.rolename, domain, fieldarg,
+        #                           addnodes.literal_strong))
+        if fieldarg in types:
+            par += nodes.Text(" (")
+            # NOTE: using .pop() here to prevent a single type node to be
+            # inserted twice into the doctree, which leads to
+            # inconsistencies later when references are resolved
+            fieldtype = types.pop(fieldarg)
+            if len(fieldtype) == 1 and isinstance(fieldtype[0], nodes.Text):
+                typename = "".join(n.astext() for n in fieldtype)
+                typename = typename.replace("int", "python:int")
+                typename = typename.replace("long", "python:long")
+                typename = typename.replace("float", "python:float")
+                typename = typename.replace("type", "python:type")
+                par.extend(
+                    self.make_xrefs(
+                        self.typerolename,
+                        domain,
+                        typename,
+                        addnodes.literal_emphasis,
+                        **kw,
+                    )
+                )
+            else:
+                par += fieldtype
+            par += nodes.Text(")")
+        par += nodes.Text(" -- ")
+        par += content
+        return par
 
-  field_name = nodes.field_name("", self.label)
-  if len(items) == 1 and self.can_collapse:
-    field_arg, content = items[0]
-    body_node = handle_item(field_arg, content)
-  else:
-    body_node = self.list_type()
-    for field_arg, content in items:
-      body_node += nodes.list_item("", handle_item(field_arg, content))
-  field_body = nodes.field_body("", body_node)
-  return nodes.field("", field_name, field_body)
+    field_name = nodes.field_name("", self.label)
+    if len(items) == 1 and self.can_collapse:
+        field_arg, content = items[0]
+        body_node = handle_item(field_arg, content)
+    else:
+        body_node = self.list_type()
+        for field_arg, content in items:
+            body_node += nodes.list_item("", handle_item(field_arg, content))
+    field_body = nodes.field_body("", body_node)
+    return nodes.field("", field_name, field_body)
 
 
 TypedField.make_field = patched_make_field

@@ -16,15 +16,12 @@ A package for live plotting lab relevant information directly in your browser
 
 <br/>
 
-
 ## Demo
+
 ![demo](.github/images/demo/demo.png)
 
 ## Usage
 
-- Setup MQTT broker connection information
-    heimdallr mqtt_token
-- On computation machines run the publisher service.
-    heimdallr publish
-- Run server service on the displaying machine.
-    heimdallr serve
+- Setup MQTT broker connection information heimdallr mqtt_token
+- On computation machines run the publisher service. heimdallr publish
+- Run server service on the displaying machine. heimdallr serve

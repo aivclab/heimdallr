@@ -11,12 +11,12 @@ import datetime
 
 from draugr import default_datetime_repr
 
-__all__ = ["timestamp2datetime", "isoformat2datetime"]
+__all__ = ["timestamp_to_datetime", "iso_dt_to_datetime"]
 
 
-def timestamp2datetime(t: int) -> str:
-  return default_datetime_repr(datetime.datetime.fromtimestamp(t))
+def timestamp_to_datetime(t: int) -> str:
+    return default_datetime_repr(datetime.datetime.fromtimestamp(t))
 
 
-def isoformat2datetime(t: str) -> str:
-  return default_datetime_repr(datetime.datetime.fromisoformat(t[:-1]))
+def iso_dt_to_datetime(t: str) -> str:
+    return default_datetime_repr(datetime.datetime.fromisoformat(t[:-1]))
