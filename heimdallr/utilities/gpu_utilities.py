@@ -3,8 +3,8 @@
 
 import numpy
 import pandas
-from dash_core_components import Graph
-from dash_html_components import Div, H3
+from dash.dcc import Graph
+from dash.html import Div, H3
 from pandas import DataFrame
 from plotly import graph_objs
 from warg import NOD

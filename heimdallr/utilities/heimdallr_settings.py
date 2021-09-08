@@ -116,4 +116,4 @@ if __name__ == "__main__":
     # print(settings)
     # settings.mqtt_password = 2
 
-    # set_all_heimdallr_settings(**settings)
+    set_all_heimdallr_settings(**{k: None for k in iter(settings)})

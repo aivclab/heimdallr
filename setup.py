@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+from typing import List, Sequence
+import pathlib
+
+import re
+
+from setuptools import find_packages
+
+from setuptools import setup
 
 
 def python_version_check(major=3, minor=6):
@@ -13,10 +21,52 @@ def python_version_check(major=3, minor=6):
 
 python_version_check()
 
-import pathlib
-import re
 
-from setuptools import find_packages
+def read_reqs(file: str, path: pathlib.Path) -> List[str]:
+    """ """
+
+    def readlines_ignore_comments(f):
+        """ """
+        return [a_ for a_ in f.readlines() if "#" not in a_ and a_]
+
+    def recursive_flatten_ignore_str(seq: Sequence) -> Sequence:
+        """ """
+        if not seq:  # is empty Sequence
+            return seq
+        if isinstance(seq[0], str):
+            return seq
+        if isinstance(seq[0], Sequence):
+            return (
+                *recursive_flatten_ignore_str(seq[0]),
+                *recursive_flatten_ignore_str(seq[1:]),
+            )
+        return (*seq[:1], *recursive_flatten_ignore_str(seq[1:]))
+
+    def unroll_nested_reqs(req_str: str, base_path: pathlib.Path):
+        """ """
+        if req_str.startswith("-r"):
+            with open(base_path / req_str.strip("-r").strip()) as f:
+                return [
+                    unroll_nested_reqs(req.strip(), base_path)
+                    for req in readlines_ignore_comments(f)
+                ]
+        else:
+            return (req_str,)
+
+    requirements_group = []
+    with open(str(path / file)) as f:
+        requirements = readlines_ignore_comments(f)
+        for requirement in requirements:
+            requirements_group.extend(
+                recursive_flatten_ignore_str(
+                    unroll_nested_reqs(requirement.strip(), path)
+                )
+            )
+
+    req_set = set(requirements_group)
+    req_set.discard("")
+    return list(req_set)
+
 
 with open(
     pathlib.Path(__file__).parent / "heimdallr" / "__init__.py", "r"
@@ -104,6 +154,13 @@ class HeimdallrPackage:
             # 'ExtraName':['package-name; platform_system == "System(Linux,Windows)"'
         }
 
+        path: pathlib.Path = pathlib.Path(__file__).parent / "requirements"
+
+        for file in path.iterdir():
+            if file.name.startswith("requirements_"):
+                group_name_ = "_".join(file.name.strip(".txt").split("_")[1:])
+                these_extras[group_name_] = read_reqs(file.name, path)
+
         all_dependencies = []
 
         for group_name in these_extras:
@@ -163,10 +220,6 @@ class HeimdallrPackage:
     def version(self):
         return version
 
-
-__author__ = "Christian Heider Nielsen"
-
-from setuptools import setup
 
 if __name__ == "__main__":
 

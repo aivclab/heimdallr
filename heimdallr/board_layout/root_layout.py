@@ -6,7 +6,7 @@ from heimdallr.board_layout.body import get_body
 __author__ = "Christian Heider Nielsen"
 __doc__ = ""
 
-import dash_html_components as html
+from dash import html
 
 
 def get_root_layout():

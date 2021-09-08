@@ -7,8 +7,8 @@ __doc__ = r"""
            Created on 15/03/2020
            """
 
-import dash_core_components as dcc
-import dash_html_components as html
+from dash import dcc
+from dash import html
 
 from heimdallr.utilities.heimdallr_config import (
     BUILD_STATUS_INTERVAL,

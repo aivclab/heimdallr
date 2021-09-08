@@ -16,7 +16,12 @@ def enable_service():
 
 
 def install_service():
-    new_user_logon_execute_task("heimdallr_publisher")
+    new_user_logon_execute_task(
+        "heimdallr_publisher",
+        "Heimdallr publisher",
+        "python.exe",
+        "-m heimdallr publish",
+    )
 
 
 def remove_service():
@@ -24,7 +29,7 @@ def remove_service():
 
 
 if __name__ == "__main__":
+    # remove_service()
     install_service()
     disable_service()
-    enable_service()
-    remove_service()
+    # enable_service()

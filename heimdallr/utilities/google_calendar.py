@@ -3,7 +3,7 @@ from __future__ import print_function
 import datetime
 import pickle
 
-import dash_table
+from dash import dash_table
 import pandas
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
