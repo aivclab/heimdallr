@@ -22,6 +22,8 @@ from heimdallr.utilities.heimdallr_config import (
 
 
 def get_body():
+    """
+    """
     return html.Div(
         [
             html.Div(

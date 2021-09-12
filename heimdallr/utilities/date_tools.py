@@ -14,9 +14,13 @@ from draugr import default_datetime_repr
 __all__ = ["timestamp_to_datetime", "iso_dt_to_datetime"]
 
 
-def timestamp_to_datetime(t: int) -> str:
+def timestamp2datetime(t: int) -> str:
+    """
+    """
     return default_datetime_repr(datetime.datetime.fromtimestamp(t))
 
 
-def iso_dt_to_datetime(t: str) -> str:
+def isoformat2datetime(t: str) -> str:
+    """
+    """
     return default_datetime_repr(datetime.datetime.fromisoformat(t[:-1]))

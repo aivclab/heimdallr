@@ -20,10 +20,10 @@ __all__ = [
 
 
 class HeimdallrSettings(PropertySettings):
+    """
+    """
     _google_settings_path = str(PROJECT_APP_PATH.user_config / "google.settings")
     _mqtt_settings_path = str(PROJECT_APP_PATH.user_config / "mqtt.settings")
-
-    PropertySettings.raise_exception_on_none = False
 
     def __init__(self):
         """Protects from overriding on initialisation"""
@@ -34,6 +34,8 @@ class HeimdallrSettings(PropertySettings):
 
     @property
     def google_calendar_id(self) -> str:
+        """
+        """
         with shelve.open(HeimdallrSettings._google_settings_path) as d:
             return d["google_calendar_id"]
 
@@ -44,6 +46,8 @@ class HeimdallrSettings(PropertySettings):
 
     @property
     def mqtt_access_token(self) -> str:
+        """
+        """
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
             return d["mqtt_access_token"]
 
@@ -54,6 +58,8 @@ class HeimdallrSettings(PropertySettings):
 
     @property
     def mqtt_username(self) -> str:
+        """
+        """
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
             return d["mqtt_username"]
 
@@ -64,6 +70,8 @@ class HeimdallrSettings(PropertySettings):
 
     @property
     def mqtt_password(self) -> str:
+        """
+        """
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
             return d["mqtt_password"]
 
@@ -74,6 +82,8 @@ class HeimdallrSettings(PropertySettings):
 
     @property
     def mqtt_broker(self) -> str:
+        """
+        """
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
             return d["mqtt_broker"]
 
@@ -84,6 +94,8 @@ class HeimdallrSettings(PropertySettings):
 
     @property
     def mqtt_port(self) -> int:
+        """
+        """
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
             return d["mqtt_port"]
 
@@ -92,8 +104,15 @@ class HeimdallrSettings(PropertySettings):
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
             d["mqtt_port"] = port
 
+    @mqtt_port.setter
+    def mqtt_port(self, port: int) -> None:
+        with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
+            d["mqtt_port"] = port
+
 
 def set_all_heimdallr_settings(*, _lower_keys: bool = True, **kwargs):
+    """
+    """
     HEIMDALLR_SETTINGS = HeimdallrSettings()
     print(f"current heimdallr settings: {HEIMDALLR_SETTINGS}")
     if _lower_keys:

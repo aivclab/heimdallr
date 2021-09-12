@@ -14,9 +14,13 @@ NVML_PCIE_UTIL_COUNT = pynvml.NVML_PCIE_UTIL_COUNT
 # Fixture to initialize and finalize nvml
 @pytest.fixture(scope="module")
 def nvml(request):
+    """
+    """
     pynvml.nvmlInit()
 
     def nvml_close():
+        """
+        """
         pynvml.nvmlShutdown()
 
     request.addfinalizer(nvml_close)
@@ -25,6 +29,8 @@ def nvml(request):
 # Get GPU count
 @pytest.fixture
 def ngpus(nvml):
+    """
+    """
     result = pynvml.nvmlDeviceGetCount()
     assert result > 0
     print("[" + str(result) + " GPUs]", end=" ")
@@ -34,6 +40,8 @@ def ngpus(nvml):
 # Get handles using pynvml.nvmlDeviceGetHandleByIndex
 @pytest.fixture
 def handles(ngpus):
+    """
+    """
     handles = [pynvml.nvmlDeviceGetHandleByIndex(i) for i in range(ngpus)]
     assert len(handles) == ngpus
     return handles
@@ -41,6 +49,8 @@ def handles(ngpus):
 
 @pytest.fixture
 def serials(ngpus, handles):
+    """
+    """
     serials = [pynvml.nvmlDeviceGetSerial(handles[i]) for i in range(ngpus)]
     assert len(serials) == ngpus
     return serials
@@ -48,6 +58,8 @@ def serials(ngpus, handles):
 
 @pytest.fixture
 def uuids(ngpus, handles):
+    """
+    """
     uuids = [pynvml.nvmlDeviceGetUUID(handles[i]) for i in range(ngpus)]
     assert len(uuids) == ngpus
     return uuids
@@ -55,6 +67,8 @@ def uuids(ngpus, handles):
 
 @pytest.fixture
 def pci_info(ngpus, handles):
+    """
+    """
     pci_info = [pynvml.nvmlDeviceGetPciInfo(handles[i]) for i in range(ngpus)]
     assert len(pci_info) == ngpus
     return pci_info

@@ -17,6 +17,8 @@ from heimdallr.utilities.heimdallr_config import (
 
 
 def get_footer():
+    """
+    """
     return html.Footer(
         [
             html.Div(

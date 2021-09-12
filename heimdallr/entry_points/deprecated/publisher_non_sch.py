@@ -7,6 +7,7 @@ import paho.mqtt.client as mqtt
 from warg import NOD
 
 from draugr.python_utilities.business import busy_indicator
+from draugr import IgnoreInterruptSignal
 from draugr.writers import LogWriter, MockWriter, Writer
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 from heimdallr.utilities import HeimdallrSettings
@@ -21,17 +22,23 @@ LOG_WRITER: Writer = MockWriter()
 
 
 def on_publish(client, userdata, result) -> None:
+    """
+    """
     global LOG_WRITER
     LOG_WRITER(result)
 
 
 def on_disconnect(client, userdata, rc):
+    """
+    """
     if rc != 0:
         print("Unexpected MQTT disconnection. Will auto-reconnect")
         client.reconnect()
 
 
 def main():
+    """
+    """
     global LOG_WRITER
     LOG_WRITER = LogWriter(PROJECT_APP_PATH.user_log / f"{PROJECT_NAME}_publisher.log")
     LOG_WRITER.open()
@@ -52,7 +59,7 @@ def main():
     sensor_data = NOD({HOSTNAME: pull_gpu_info()})
     next_reading = time.time()
 
-    with suppress(KeyboardInterrupt):
+    with IgnoreInterruptSignal():
         print("Publisher started")
 
         for _ in busy_indicator():

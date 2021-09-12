@@ -71,6 +71,8 @@ LOG_WRITER: Writer = MockWriter()
     [Input(ALL_CONSTANTS.TIME_INTERVAL_ID, "n_intervals")],
 )
 def update_time(n):
+    """
+    """
     global GPU_STATS
     global KEEP_ALIVE
     for k, v in KEEP_ALIVE.items():
@@ -94,6 +96,8 @@ def update_time(n):
     [Input(ALL_CONSTANTS.CALENDAR_INTERVAL_ID, "n_intervals")],
 )
 def update_calendar_live(n):
+    """
+    """
     df = get_calender_df(
         HeimdallrSettings().google_calendar_id,
         PROJECT_APP_PATH.user_config,
@@ -121,6 +125,8 @@ def update_calendar_live(n):
     [Input(ALL_CONSTANTS.GPU_INTERVAL_ID, "n_intervals")],
 )
 def update_graph(n):
+    """
+    """
     global GPU_STATS
     global KEEP_ALIVE
     compute_machines = []
@@ -136,6 +142,8 @@ def update_graph(n):
     [Input(ALL_CONSTANTS.GPU_INTERVAL_ID, "n_intervals")],
 )
 def update_table(n) -> dict:
+    """
+    """
     MQTT_CLIENT.loop()
 
     compute_machines = []
@@ -166,6 +174,8 @@ def update_table(n) -> dict:
 
 
 def on_message(client, userdata, result: mqtt.client.MQTTMessage):
+    """
+    """
     global LOG_WRITER
     global GPU_STATS
     global KEEP_ALIVE
@@ -179,6 +189,8 @@ def on_message(client, userdata, result: mqtt.client.MQTTMessage):
 
 
 def on_disconnect(client, userdata, rc):
+    """
+    """
     if rc != 0:
         print("Unexpected MQTT disconnection. Will auto-reconnect")
         client.reconnect()
@@ -186,6 +198,8 @@ def on_disconnect(client, userdata, rc):
 
 
 def main():
+    """
+    """
     global LOG_WRITER
     LOG_WRITER = LogWriter(PROJECT_APP_PATH.user_log / f"{PROJECT_NAME}_server.log")
     LOG_WRITER.open()

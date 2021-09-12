@@ -10,6 +10,8 @@ from dash import html
 
 
 def get_root_layout():
+    """
+    """
     return html.Div(
         [get_header(), get_body(), get_footer()], className="container-fluid"
     )

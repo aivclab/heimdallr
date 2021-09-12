@@ -14,6 +14,8 @@ from heimdallr.utilities.heimdallr_config import HTML_TITLE, TIME_ID, TIME_INTER
 
 
 def get_header():
+    """
+    """
     return html.Div(
         [
             html.Div(
