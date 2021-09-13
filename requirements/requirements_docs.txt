@@ -1,3 +1,4 @@
+
 sphinx
-m2r
+m2r2
 sphinxcontrib-programoutput

@@ -1,0 +1,23 @@
+apppath
+warg
+numpy
+six
+pytest
+matplotlib
+pandas
+scikit-learn
+torch
+psutil
+dash
+plotly
+google_auth_oauthlib
+google-api-python-client
+paho-mqtt
+sh
+fire
+pyfiglet
+schedule
+-r requirements_docs.txt
+-r requirements_server.txt
+-r requirements_tests.txt
+-r ../requirements.txt

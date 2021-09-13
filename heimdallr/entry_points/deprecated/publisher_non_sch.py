@@ -4,7 +4,6 @@ import time
 
 
 import paho.mqtt.client as mqtt
-import schedule
 from warg import NOD
 
 from draugr.python_utilities.business import busy_indicator
@@ -12,7 +11,6 @@ from draugr import IgnoreInterruptSignal
 from draugr.writers import LogWriter, MockWriter, Writer
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
-
 from heimdallr.utilities.gpu_utilities import pull_gpu_info
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
 
@@ -56,22 +54,21 @@ def main():
     client.loop_start()
 
     sensor_data = NOD({HOSTNAME: pull_gpu_info()})
+    next_reading = time.time()
 
     with IgnoreInterruptSignal():
         print("Publisher started")
 
-        def job():
-            """ """
+        for _ in busy_indicator():
             sensor_data[HOSTNAME] = pull_gpu_info()
             s = sensor_data.as_dict()
             s = json.dumps(s)
             client.publish(ALL_CONSTANTS.MQTT_TOPIC, s, ALL_CONSTANTS.MQTT_QOS)
+            next_reading += ALL_CONSTANTS.MQTT_PUBLISH_INTERVAL_SEC
+            sleep_time = next_reading - time.time()
 
-        schedule.every(ALL_CONSTANTS.MQTT_PUBLISH_INTERVAL_SEC).second.do(job)
-
-        for _ in busy_indicator():
-            schedule.run_pending()
-            time.sleep(1)
+            if sleep_time > 0:
+                time.sleep(sleep_time)
 
     # noinspection PyUnreachableCode
     LOG_WRITER.close()
