@@ -336,15 +336,19 @@ NVSMI_BRAND_NAMES = {
 ## ========================================================================== ##
 
 
+class NVMLError_NotSupported(Exception):
+    pass
+
+
 class NvidiaSMI:
-    """
-    """
+    """ """
+
     __instance = None
     __handles = None
 
     class loop_async:
-        """
-        """
+        """ """
+
         __last_result = None
         __task = None
         __abort = False
@@ -390,37 +394,33 @@ class NvidiaSMI:
                 self.__callback_chain(self, result)
 
         def cancel(self):
-            """
-            """
+            """ """
             self.__abort = True
             if self.__task is not None:
                 self.__task.join()
 
         def is_aborted(self):
-            """
-            """
+            """ """
             return self.__abort
 
         def result(self):
-            """
-            """
+            """ """
             return self.__last_result
 
     @staticmethod
     def getInstance():
-        """ Static access method. """
+        """Static access method."""
         if NvidiaSMI.__instance == None:
             NvidiaSMI()
         return NvidiaSMI.__instance
 
     @staticmethod
     def loop(time_in_milliseconds=1, filter=None, callback=None):
-        """
-        """
+        """ """
         return NvidiaSMI.loop_async(time_in_milliseconds, filter, callback)
 
     def __init__(self):
-        """ Virtually private constructor. """
+        """Virtually private constructor."""
         if NvidiaSMI.__instance != None:
             raise Exception("This class is a singleton, use getInstance()")
         else:
@@ -431,7 +431,7 @@ class NvidiaSMI:
 
     @staticmethod
     def __initialize_nvml():
-        """ Initialize NVML bindings. """
+        """Initialize NVML bindings."""
         nvmlInit()
         deviceCount = nvmlDeviceGetCount()
         handles = {}
@@ -3413,8 +3413,7 @@ class NvidiaSMI:
         return strResults
 
     def format(self, results):
-        """
-        """
+        """ """
         if type(results) is str:
             return results
 
@@ -3425,8 +3424,7 @@ class NvidiaSMI:
 if __name__ == "__main__":
 
     def main():
-        """
-        """
+        """ """
         # evaluate arguments
         as_xml = False
         query_gpu_args = None

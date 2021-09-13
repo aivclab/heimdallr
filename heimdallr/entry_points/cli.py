@@ -86,24 +86,24 @@ class HeimdallrCLI:
             mode = HeimdallrMode(mode)
             if option == ServiceOption.install:
                 if mode == HeimdallrMode.server:
-                    install_systemd_service(Path(server.__file__), str(mode.value))
+                    install_service(Path(server.__file__), str(mode.value))
                 elif mode == HeimdallrMode.publisher:
-                    install_systemd_service(Path(publisher.__file__), str(mode.value))
+                    install_service(Path(publisher.__file__), str(mode.value))
                 else:
                     raise Exception
             elif option == ServiceOption.remove:
                 if mode in HeimdallrMode:
-                    remove_systemd_service(str(mode.value))
+                    remove_service(str(mode.value))
                 else:
                     raise Exception
             elif option == ServiceOption.enable:
                 if mode in HeimdallrMode:
-                    enable_systemd_service(str(mode.value))
+                    enable_service(str(mode.value))
                 else:
                     raise Exception
             elif option == ServiceOption.disable:
                 if mode in HeimdallrMode:
-                    disable_systemd_service(str(mode.value))
+                    disable_service(str(mode.value))
                 else:
                     raise Exception
             else:
