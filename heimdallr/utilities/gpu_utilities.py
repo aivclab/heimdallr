@@ -10,7 +10,7 @@ from plotly import graph_objs
 from warg import NOD
 
 from heimdallr.utilities.date_tools import timestamp_to_datetime
-from heimdallr.utilities.heimdallr_config import (
+from heimdallr.configuration.heimdallr_config import (
     DROP_COLUMNS,
     INT_COLUMNS,
     MB_COLUMNS,

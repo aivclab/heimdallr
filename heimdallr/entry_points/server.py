@@ -24,7 +24,7 @@ from heimdallr.utilities import (
     per_machine_per_device_pie_charts,
     to_overall_gpu_process_df,
 )
-from heimdallr.utilities.heimdallr_config import ALL_CONSTANTS
+from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
 
 __all__ = ["main"]
 

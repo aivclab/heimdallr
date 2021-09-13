@@ -10,7 +10,11 @@ __doc__ = r"""
 from dash import dcc
 from dash import html
 
-from heimdallr.utilities.heimdallr_config import HTML_TITLE, TIME_ID, TIME_INTERVAL_ID
+from heimdallr.configuration.heimdallr_config import (
+    HTML_TITLE,
+    TIME_ID,
+    TIME_INTERVAL_ID,
+)
 
 
 def get_header():

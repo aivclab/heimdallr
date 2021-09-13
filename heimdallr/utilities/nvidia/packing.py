@@ -66,11 +66,11 @@ def get_nv_info(include_graphics_processes: bool = True):
 
             """
 try:
-  fan_speed = pynvml.nvmlDeviceGetFanSpeed(handle)
-  power_usage = pynvml.nvmlDeviceGetPowerUsage(handle)  # milliwatts mW
+fan_speed = pynvml.nvmlDeviceGetFanSpeed(handle)
+power_usage = pynvml.nvmlDeviceGetPowerUsage(handle)  # milliwatts mW
 except pynvml.NVMLError_NotSupported as e:
-  fan_speed = None
-  power_usage = None
+fan_speed = None
+power_usage = None
 
 power_state = pynvml.nvmlDeviceGetPowerState(handle)
 temperature = pynvml.nvmlDeviceGetTemperature(handle, pynvml.NVML_TEMPERATURE_GPU)

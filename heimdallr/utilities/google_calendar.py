@@ -11,7 +11,7 @@ from googleapiclient.discovery import build
 
 from heimdallr import PROJECT_APP_PATH
 from heimdallr.utilities.date_tools import iso_dt_to_datetime
-from heimdallr.utilities.heimdallr_settings import HeimdallrSettings
+from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
 
 __all__ = ["get_calender_df"]
 

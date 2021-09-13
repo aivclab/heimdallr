@@ -24,7 +24,7 @@ from heimdallr.utilities import (
     install_service,
     remove_service,
 )
-from heimdallr.utilities.heimdallr_settings import HeimdallrSettings
+from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
 
 margin_percentage = 0 / 6
 terminal_width = get_terminal_size().columns

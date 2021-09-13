@@ -11,6 +11,7 @@ from setuptools import setup
 
 
 def python_version_check(major=3, minor=6):
+    """ """
     import sys
 
     assert sys.version_info.major == major and sys.version_info.minor >= minor, (

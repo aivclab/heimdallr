@@ -10,7 +10,7 @@ __doc__ = r"""
 from dash import dcc
 from dash import html
 
-from heimdallr.utilities.heimdallr_config import (
+from heimdallr.configuration.heimdallr_config import (
     BUILD_STATUS_INTERVAL,
     BUILD_STATUS_MAPPING,
 )
