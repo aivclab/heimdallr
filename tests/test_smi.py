@@ -2,7 +2,7 @@ import pytest
 import sys
 
 # Fixture to initialize and finalize nvml
-if sys.platform != "linux":
+if sys.platform == "linux":
     from heimdallr.utilities.nvidia.smi_parsing import NvidiaSMI
 
 

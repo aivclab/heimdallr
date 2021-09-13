@@ -20,3 +20,4 @@ schedule
 -r requirements_docs.txt
 -r requirements_server.txt
 -r requirements_tests.txt
+-r ../requirements.txt

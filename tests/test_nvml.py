@@ -3,13 +3,59 @@ import sys
 import time
 from distutils.version import LooseVersion
 
-import pynvml
 import pytest
 
+if sys.platform == "linux":
+    print("Linux system detected")
+    import pynvml
 
-NVML_PCIE_UTIL_TX_BYTES = pynvml.NVML_PCIE_UTIL_TX_BYTES
-NVML_PCIE_UTIL_RX_BYTES = pynvml.NVML_PCIE_UTIL_RX_BYTES
-NVML_PCIE_UTIL_COUNT = pynvml.NVML_PCIE_UTIL_COUNT
+    NVML_PCIE_UTIL_TX_BYTES = pynvml.NVML_PCIE_UTIL_TX_BYTES
+    NVML_PCIE_UTIL_RX_BYTES = pynvml.NVML_PCIE_UTIL_RX_BYTES
+    NVML_PCIE_UTIL_COUNT = pynvml.NVML_PCIE_UTIL_COUNT
+
+    # Test pynvml.nvmlDeviceGetNvLinkCapability
+
+    @pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
+    @pytest.mark.parametrize(
+        "cap_type",
+        [
+            pynvml.NVML_NVLINK_CAP_P2P_SUPPORTED,  # P2P over NVLink is supported
+            pynvml.NVML_NVLINK_CAP_SYSMEM_ACCESS,  # Access to system memory is supported
+            pynvml.NVML_NVLINK_CAP_P2P_ATOMICS,  # P2P atomics are supported
+            pynvml.NVML_NVLINK_CAP_SYSMEM_ATOMICS,  # System memory atomics are supported
+            pynvml.NVML_NVLINK_CAP_SLI_BRIDGE,  # SLI is supported over this link
+            pynvml.NVML_NVLINK_CAP_VALID,
+        ],
+    )  # Link is supported on this device
+    def test_nvml_nvlink_capability(ngpus, handles, cap_type):
+        for i in range(ngpus):
+            for j in range(pynvml.NVML_NVLINK_MAX_LINKS):
+                cap = pynvml.nvmlDeviceGetNvLinkCapability(handles[i], j, cap_type)
+                assert cap >= 0
+
+    # Test pynvml.nvmlDeviceResetNvLinkErrorCounters
+    # Test pynvml.nvmlDeviceGetNvLinkErrorCounter
+    @pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
+    @pytest.mark.parametrize(
+        "error_type",
+        [
+            pynvml.NVML_NVLINK_ERROR_DL_REPLAY,
+            pynvml.NVML_NVLINK_ERROR_DL_RECOVERY,
+            pynvml.NVML_NVLINK_ERROR_DL_CRC_FLIT,
+            pynvml.NVML_NVLINK_ERROR_DL_CRC_DATA,
+        ],
+    )
+    def test_nvml_nvlink_error_counters(ngpus, handles, error_type):
+        for i in range(ngpus):
+            for j in range(pynvml.NVML_NVLINK_MAX_LINKS):
+                assert (
+                    pynvml.nvmlDeviceResetNvLinkErrorCounters(handles[i], j)
+                    == pynvml.NVML_SUCCESS
+                )
+                error_count = pynvml.nvmlDeviceGetNvLinkErrorCounter(
+                    handles[i], j, error_type
+                )
+                assert error_count >= 0
 
 
 # Fixture to initialize and finalize nvml
@@ -301,26 +347,6 @@ def test_nvml_nvlink_properties(ngpus, handles):
             assert isinstance(pci_info, pynvml.c_nvmlPciInfo_t)
 
 
-# Test pynvml.nvmlDeviceGetNvLinkCapability
-@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
-@pytest.mark.parametrize(
-    "cap_type",
-    [
-        pynvml.NVML_NVLINK_CAP_P2P_SUPPORTED,  # P2P over NVLink is supported
-        pynvml.NVML_NVLINK_CAP_SYSMEM_ACCESS,  # Access to system memory is supported
-        pynvml.NVML_NVLINK_CAP_P2P_ATOMICS,  # P2P atomics are supported
-        pynvml.NVML_NVLINK_CAP_SYSMEM_ATOMICS,  # System memory atomics are supported
-        pynvml.NVML_NVLINK_CAP_SLI_BRIDGE,  # SLI is supported over this link
-        pynvml.NVML_NVLINK_CAP_VALID,
-    ],
-)  # Link is supported on this device
-def test_nvml_nvlink_capability(ngpus, handles, cap_type):
-    for i in range(ngpus):
-        for j in range(pynvml.NVML_NVLINK_MAX_LINKS):
-            cap = pynvml.nvmlDeviceGetNvLinkCapability(handles[i], j, cap_type)
-            assert cap >= 0
-
-
 # Test pynvml.nvmlDeviceResetNvLinkUtilizationCounter
 # Test pynvml.nvmlDeviceSetNvLinkUtilizationControl
 # Test pynvml.nvmlDeviceGetNvLinkUtilizationCounter
@@ -359,28 +385,3 @@ def test_nvml_nvlink_counters(ngpus, handles, counter, control):
                 )
                 == pynvml.NVML_SUCCESS
             )
-
-
-# Test pynvml.nvmlDeviceResetNvLinkErrorCounters
-# Test pynvml.nvmlDeviceGetNvLinkErrorCounter
-@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
-@pytest.mark.parametrize(
-    "error_type",
-    [
-        pynvml.NVML_NVLINK_ERROR_DL_REPLAY,
-        pynvml.NVML_NVLINK_ERROR_DL_RECOVERY,
-        pynvml.NVML_NVLINK_ERROR_DL_CRC_FLIT,
-        pynvml.NVML_NVLINK_ERROR_DL_CRC_DATA,
-    ],
-)
-def test_nvml_nvlink_error_counters(ngpus, handles, error_type):
-    for i in range(ngpus):
-        for j in range(pynvml.NVML_NVLINK_MAX_LINKS):
-            assert (
-                pynvml.nvmlDeviceResetNvLinkErrorCounters(handles[i], j)
-                == pynvml.NVML_SUCCESS
-            )
-            error_count = pynvml.nvmlDeviceGetNvLinkErrorCounter(
-                handles[i], j, error_type
-            )
-            assert error_count >= 0

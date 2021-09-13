@@ -70,7 +70,7 @@ def to_overall_gpu_process_df(GPU_STATS) -> DataFrame:
     k = columns
     idx = ["machine", *k]
     out_df = out_df[idx]
-    out_df.create_time = out_df.create_time.map(timestamp2datetime)
+    out_df.create_time = out_df.create_time.map(timestamp_to_datetime)
 
     for c in INT_COLUMNS:
         out_df[c] = out_df[c].astype(int)

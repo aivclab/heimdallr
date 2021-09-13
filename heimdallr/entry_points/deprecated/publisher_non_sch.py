@@ -1,7 +1,7 @@
 import json
 import socket
 import time
-from contextlib import suppress
+
 
 import paho.mqtt.client as mqtt
 from warg import NOD
@@ -10,7 +10,7 @@ from draugr.python_utilities.business import busy_indicator
 from draugr import IgnoreInterruptSignal
 from draugr.writers import LogWriter, MockWriter, Writer
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
-from heimdallr.utilities import HeimdallrSettings
+from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
 from heimdallr.utilities.gpu_utilities import pull_gpu_info
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
 
