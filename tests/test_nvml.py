@@ -1,10 +1,11 @@
 import os
+import sys
 import time
 from distutils.version import LooseVersion
 
+import pynvml
 import pytest
 
-from heimdallr.utilities import pynvml
 
 NVML_PCIE_UTIL_TX_BYTES = pynvml.NVML_PCIE_UTIL_TX_BYTES
 NVML_PCIE_UTIL_RX_BYTES = pynvml.NVML_PCIE_UTIL_RX_BYTES
@@ -12,19 +13,24 @@ NVML_PCIE_UTIL_COUNT = pynvml.NVML_PCIE_UTIL_COUNT
 
 
 # Fixture to initialize and finalize nvml
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 @pytest.fixture(scope="module")
 def nvml(request):
+    """ """
     pynvml.nvmlInit()
 
     def nvml_close():
+        """ """
         pynvml.nvmlShutdown()
 
     request.addfinalizer(nvml_close)
 
 
 # Get GPU count
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 @pytest.fixture
 def ngpus(nvml):
+    """ """
     result = pynvml.nvmlDeviceGetCount()
     assert result > 0
     print("[" + str(result) + " GPUs]", end=" ")
@@ -32,29 +38,37 @@ def ngpus(nvml):
 
 
 # Get handles using pynvml.nvmlDeviceGetHandleByIndex
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 @pytest.fixture
 def handles(ngpus):
+    """ """
     handles = [pynvml.nvmlDeviceGetHandleByIndex(i) for i in range(ngpus)]
     assert len(handles) == ngpus
     return handles
 
 
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 @pytest.fixture
 def serials(ngpus, handles):
+    """ """
     serials = [pynvml.nvmlDeviceGetSerial(handles[i]) for i in range(ngpus)]
     assert len(serials) == ngpus
     return serials
 
 
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 @pytest.fixture
 def uuids(ngpus, handles):
+    """ """
     uuids = [pynvml.nvmlDeviceGetUUID(handles[i]) for i in range(ngpus)]
     assert len(uuids) == ngpus
     return uuids
 
 
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 @pytest.fixture
 def pci_info(ngpus, handles):
+    """ """
     pci_info = [pynvml.nvmlDeviceGetPciInfo(handles[i]) for i in range(ngpus)]
     assert len(pci_info) == ngpus
     return pci_info
@@ -65,6 +79,7 @@ def pci_info(ngpus, handles):
 ## ---------------------------- ##
 
 # Test pynvml.nvmlSystemGetNVMLVersion
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 def test_nvmlSystemGetNVMLVersion(nvml):
     vsn = 0.0
     vsn = pynvml.nvmlSystemGetNVMLVersion().decode()
@@ -73,6 +88,7 @@ def test_nvmlSystemGetNVMLVersion(nvml):
 
 
 # Test pynvml.nvmlSystemGetProcessName
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 def test_nvmlSystemGetProcessName(nvml):
     procname = None
     procname = pynvml.nvmlSystemGetProcessName(os.getpid())
@@ -81,6 +97,7 @@ def test_nvmlSystemGetProcessName(nvml):
 
 
 # Test pynvml.nvmlSystemGetDriverVersion
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 def test_nvmlSystemGetDriverVersion(nvml):
     vsn = 0.0
     vsn = pynvml.nvmlSystemGetDriverVersion().decode()
@@ -93,18 +110,21 @@ def test_nvmlSystemGetDriverVersion(nvml):
 ## Device "Get" Functions (Note: Some functions are fixtures, above) ##
 
 # Test pynvml.nvmlDeviceGetHandleBySerial
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 def test_nvmlDeviceGetHandleBySerial(ngpus, serials):
     handles = [pynvml.nvmlDeviceGetHandleBySerial(serials[i]) for i in range(ngpus)]
     assert len(handles) == ngpus
 
 
 # Test pynvml.nvmlDeviceGetHandleByUUID
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 def test_nvmlDeviceGetHandleByUUID(ngpus, uuids):
     handles = [pynvml.nvmlDeviceGetHandleByUUID(uuids[i]) for i in range(ngpus)]
     assert len(handles) == ngpus
 
 
 # Test pynvml.nvmlDeviceGetHandleByPciBusId
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 def test_nvmlDeviceGetHandleByPciBusId(ngpus, pci_info):
     handles = [
         pynvml.nvmlDeviceGetHandleByPciBusId(pci_info[i].busId) for i in range(ngpus)
@@ -145,6 +165,7 @@ def test_nvmlDeviceGetHandleByPciBusId(ngpus, pci_info):
 # [Skipping] pynvml.nvmlDeviceGetEnforcedPowerLimit
 
 # Test pynvml.nvmlDeviceGetPowerUsage
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 def test_nvmlDeviceGetPowerUsage(ngpus, handles):
     for i in range(ngpus):
         power_mWatts = pynvml.nvmlDeviceGetPowerUsage(handles[i])
@@ -152,6 +173,7 @@ def test_nvmlDeviceGetPowerUsage(ngpus, handles):
 
 
 # Test pynvml.nvmlDeviceGetTotalEnergyConsumption
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 def test_nvmlDeviceGetTotalEnergyConsumption(ngpus, handles):
     for i in range(ngpus):
         energy_mJoules1 = pynvml.nvmlDeviceGetTotalEnergyConsumption(handles[i])
@@ -170,6 +192,7 @@ def test_nvmlDeviceGetTotalEnergyConsumption(ngpus, handles):
 # [Skipping] pynvml.nvmlDeviceGetPendingGpuOperationMode
 
 # Test pynvml.nvmlDeviceGetMemoryInfo
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 def test_nvmlDeviceGetMemoryInfo(ngpus, handles):
     for i in range(ngpus):
         meminfo = pynvml.nvmlDeviceGetMemoryInfo(handles[i])
@@ -186,6 +209,7 @@ def test_nvmlDeviceGetMemoryInfo(ngpus, handles):
 # [Skipping] pynvml.nvmlDeviceGetMemoryErrorCounter
 
 # Test pynvml.nvmlDeviceGetUtilizationRates
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 def test_nvmlDeviceGetUtilizationRates(ngpus, handles):
     for i in range(ngpus):
         urate = pynvml.nvmlDeviceGetUtilizationRates(handles[i])
@@ -243,6 +267,7 @@ def test_nvmlDeviceGetUtilizationRates(ngpus, handles):
 # [Skipping] pynvml.nvmlDeviceGetViolationStatus
 
 # Test pynvml.nvmlDeviceGetPcieThroughput
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 def test_nvmlDeviceGetPcieThroughput(ngpus, handles):
     for i in range(ngpus):
         tx_bytes_tp = pynvml.nvmlDeviceGetPcieThroughput(
@@ -264,6 +289,7 @@ def test_nvmlDeviceGetPcieThroughput(ngpus, handles):
 # Test pynvml.nvmlDeviceGetNvLinkVersion
 # Test pynvml.nvmlDeviceGetNvLinkState
 # Test pynvml.nvmlDeviceGetNvLinkRemotePciInfo
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 def test_nvml_nvlink_properties(ngpus, handles):
     for i in range(ngpus):
         for j in range(pynvml.NVML_NVLINK_MAX_LINKS):
@@ -276,6 +302,7 @@ def test_nvml_nvlink_properties(ngpus, handles):
 
 
 # Test pynvml.nvmlDeviceGetNvLinkCapability
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 @pytest.mark.parametrize(
     "cap_type",
     [
@@ -299,6 +326,7 @@ def test_nvml_nvlink_capability(ngpus, handles, cap_type):
 # Test pynvml.nvmlDeviceGetNvLinkUtilizationCounter
 # Test pynvml.nvmlDeviceGetNvLinkUtilizationControl
 # Test pynvml.nvmlDeviceFreezeNvLinkUtilizationCounter
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 @pytest.mark.parametrize("counter", [0, 1])
 @pytest.mark.parametrize("control", [0, 1, 2])
 def test_nvml_nvlink_counters(ngpus, handles, counter, control):
@@ -335,6 +363,7 @@ def test_nvml_nvlink_counters(ngpus, handles, counter, control):
 
 # Test pynvml.nvmlDeviceResetNvLinkErrorCounters
 # Test pynvml.nvmlDeviceGetNvLinkErrorCounter
+@pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 @pytest.mark.parametrize(
     "error_type",
     [

@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from typing import List, Sequence
-import pathlib
-
 import re
+from typing import List, Sequence
 
-from setuptools import find_packages
-
-from setuptools import setup
+from setuptools import find_packages, setup
 
 
-def python_version_check(major=3, minor=6):
+def python_version_check(major: int = 3, minor: int = 7):
     """ """
     import sys
 
@@ -22,8 +18,10 @@ def python_version_check(major=3, minor=6):
 
 python_version_check()
 
+from pathlib import Path
 
-def read_reqs(file: str, path: pathlib.Path) -> List[str]:
+
+def read_reqs(file: str, path: Path) -> List[str]:
     """ """
 
     def readlines_ignore_comments(f):
@@ -43,7 +41,7 @@ def read_reqs(file: str, path: pathlib.Path) -> List[str]:
             )
         return (*seq[:1], *recursive_flatten_ignore_str(seq[1:]))
 
-    def unroll_nested_reqs(req_str: str, base_path: pathlib.Path):
+    def unroll_nested_reqs(req_str: str, base_path: Path):
         """ """
         if req_str.startswith("-r"):
             with open(base_path / req_str.strip("-r").strip()) as f:
@@ -70,7 +68,7 @@ def read_reqs(file: str, path: pathlib.Path) -> List[str]:
 
 
 with open(
-    pathlib.Path(__file__).parent / "heimdallr" / "__init__.py", "r"
+    Path(__file__).parent / "heimdallr" / "__init__.py", "r"
 ) as project_init_file:
     str_reg_exp = "['\"]([^'\"]*)['\"]"
     content = project_init_file.read()  # get strings from module
@@ -83,30 +81,36 @@ __author__ = author
 class HeimdallrPackage:
     @property
     def test_dependencies(self) -> list:
-        return ["pytest", "mock"]
+        return read_reqs("requirements_tests.txt", Path(__file__).parent)
 
     @property
     def setup_dependencies(self) -> list:
-        return ["pytest-runner"]
+        """ """
+        return read_reqs("requirements_setup.txt", Path(__file__).parent)
 
     @property
     def package_name(self) -> str:
+        """ """
         return project_name
 
     @property
     def url(self) -> str:
-        return "https://github.com/cnheider/draugr"
+        """ """
+        return "https://github.com/cnheider/heimdallr"
 
     @property
     def download_url(self) -> str:
+        """ """
         return self.url + "/releases"
 
     @property
     def readme_type(self) -> str:
+        """ """
         return "text/markdown"
 
     @property
     def packages(self):
+        """ """
         return find_packages(
             exclude=[
                 # 'Path/To/Exclude'
@@ -115,22 +119,27 @@ class HeimdallrPackage:
 
     @property
     def author_name(self):
+        """ """
         return author
 
     @property
     def author_email(self):
+        """ """
         return "christian.heider@alexandra.dk"
 
     @property
     def maintainer_name(self):
+        """ """
         return self.author_name
 
     @property
     def maintainer_email(self):
+        """ """
         return self.author_email
 
     @property
     def package_data(self):
+        """ """
         # data = glob.glob('data/', recursive=True)
         return {
             # 'PackageName':[
@@ -140,6 +149,7 @@ class HeimdallrPackage:
 
     @property
     def entry_points(self):
+        """ """
         return {
             "console_scripts": [
                 # "name_of_executable = module.with:function_to_execute"
@@ -150,12 +160,12 @@ class HeimdallrPackage:
         }
 
     @property
-    def extras(self):
+    def extras(self) -> dict:
         these_extras = {
             # 'ExtraName':['package-name; platform_system == "System(Linux,Windows)"'
         }
 
-        path: pathlib.Path = pathlib.Path(__file__).parent / "requirements"
+        path: Path = Path(__file__).parent / "requirements"
 
         for file in path.iterdir():
             if file.name.startswith("requirements_"):
@@ -166,41 +176,40 @@ class HeimdallrPackage:
 
         for group_name in these_extras:
             all_dependencies += these_extras[group_name]
-        these_extras["all"] = all_dependencies
+        these_extras["all"] = list(set(all_dependencies))
 
         return these_extras
 
     @property
     def requirements(self) -> list:
-        requirements_out = []
-        with open("requirements.txt") as f:
-            requirements = f.readlines()
-
-            for requirement in requirements:
-                requirements_out.append(requirement.strip())
-
-        return requirements_out
+        """ """
+        return read_reqs("requirements.txt", Path(__file__).parent)
 
     @property
     def description(self):
-        return "A package for plotting directly in your terminal"
+        """ """
+        return "A package for hosting and connecting to a live dashboard"
 
     @property
     def readme(self):
-        with open("README.md") as f:
+        """ """
+        with open("README.md", encoding="utf8") as f:
             return f.read()
 
     @property
     def keyword(self):
+        """ """
         with open("KEYWORDS.md") as f:
             return f.read()
 
     @property
     def license(self):
+        """ """
         return "Apache License, Version 2.0"
 
     @property
     def classifiers(self):
+        """ """
         return [
             "Development Status :: 4 - Beta",
             "Environment :: Console",
@@ -219,6 +228,7 @@ class HeimdallrPackage:
 
     @property
     def version(self):
+        """ """
         return version
 
 

@@ -1,12 +1,19 @@
-![Header](.github/images/horn.svg)
 
-# Heimdallr
+<!--![horn](.github/images/horn.svg)-->
+
+<p align="center">
+  <img src=".github/images/horn.svg" alt='horn' />
+</p>
+
+<h1 align="center">Heimdallr</h1>
+
+<!--# Heimdallr-->
 
 A package for live plotting lab relevant information directly in your browser
 
 <p align="center" width="100%">
   <a href="https://alexandra.dk">
-    <img alt="Alexandra Instittutet"
+    <img alt="Alexandra Instituttet"
     src=".github/images/alexandra.png" height="40" align="left" />
   </a>
   <a href="http://python.org/">

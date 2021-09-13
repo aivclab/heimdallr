@@ -21,6 +21,7 @@ except Exception as e:
 
 
 def get_nv_info(include_graphics_processes: bool = True):
+    """ """
     devices = []
     try:
         driver_version = bindings.nvmlSystemGetDriverVersion().decode()

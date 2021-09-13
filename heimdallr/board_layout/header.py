@@ -18,6 +18,7 @@ from heimdallr.configuration.heimdallr_config import (
 
 
 def get_header():
+    """ """
     return html.Div(
         [
             html.Div(

@@ -49,6 +49,7 @@ def pull_gpu_info(include_graphics_processes: bool = True) -> dict:
 
 
 def to_overall_gpu_process_df(GPU_STATS) -> DataFrame:
+    """ """
     resulta = []
     columns = []
     for k2, v2 in GPU_STATS.items():
@@ -69,7 +70,7 @@ def to_overall_gpu_process_df(GPU_STATS) -> DataFrame:
     k = columns
     idx = ["machine", *k]
     out_df = out_df[idx]
-    out_df.create_time = out_df.create_time.map(timestamp_to_datetime)
+    out_df.create_time = out_df.create_time.map(timestamp2datetime)
 
     for c in INT_COLUMNS:
         out_df[c] = out_df[c].astype(int)
@@ -85,6 +86,7 @@ def to_overall_gpu_process_df(GPU_STATS) -> DataFrame:
 
 
 def per_machine_per_device_pie_charts(GPU_STATS, KEEP_ALIVE):
+    """ """
     compute_machines = []
     for machine_name, machine in GPU_STATS.items():
         machine_devices = []

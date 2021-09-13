@@ -127,3 +127,11 @@ logs/*.csv
 pip-wheel-metadata
 .pytest_cache
 build/
+
+*~develop
+*~HEAD
+
+*~develop_*
+*~HEAD_*
+
+*~refs
