@@ -213,7 +213,7 @@ class HeimdallrCLI:
         print(sponsors)
 
 
-def draw_cli_header(*, title="Heimdallr", font="big"):
+def draw_cli_header(*, title: str = "Heimdallr", font: str = "big"):
     """ """
     figlet = Figlet(font=font, justify="center", width=terminal_width)
     description = figlet.renderText(title)
@@ -221,7 +221,7 @@ def draw_cli_header(*, title="Heimdallr", font="big"):
     print(f"{description}{underline}\n")
 
 
-def main(*, always_draw_header=False):
+def main(*, always_draw_header: bool = False):
     """ """
     if always_draw_header:
         draw_cli_header()

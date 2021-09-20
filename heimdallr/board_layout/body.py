@@ -20,6 +20,8 @@ from heimdallr.configuration.heimdallr_config import (
     GPU_TABLES_ID,
 )
 
+__all__ = ["get_body"]
+
 
 def get_body():
     """ """

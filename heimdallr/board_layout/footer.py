@@ -15,6 +15,8 @@ from heimdallr.configuration.heimdallr_config import (
     BUILD_STATUS_MAPPING,
 )
 
+__all__ = ["get_footer"]
+
 
 def get_footer():
     """ """

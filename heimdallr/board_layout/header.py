@@ -16,6 +16,8 @@ from heimdallr.configuration.heimdallr_config import (
     TIME_INTERVAL_ID,
 )
 
+__all__ = ["get_header"]
+
 
 def get_header():
     """ """

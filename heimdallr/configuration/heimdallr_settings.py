@@ -19,6 +19,9 @@ __all__ = [
 ]
 
 
+# PropertySettings.raise_exception_on_none = False
+
+
 class HeimdallrSettings(PropertySettings):
     """ """
 
@@ -40,7 +43,8 @@ class HeimdallrSettings(PropertySettings):
 
     @google_calendar_id.setter
     def google_calendar_id(self, calendar_id: str) -> None:
-        with shelve.open(HeimdallrSettings._google_settings_path) as d:
+        print("SETTER WAS CALLED!")
+        with shelve.open(HeimdallrSettings._google_settings_path, writeback=True) as d:
             d["google_calendar_id"] = calendar_id
 
     @property
@@ -51,7 +55,7 @@ class HeimdallrSettings(PropertySettings):
 
     @mqtt_access_token.setter
     def mqtt_access_token(self, token: str) -> None:
-        with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
+        with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
             d["mqtt_access_token"] = token
 
     @property
@@ -62,7 +66,7 @@ class HeimdallrSettings(PropertySettings):
 
     @mqtt_username.setter
     def mqtt_username(self, username: str) -> None:
-        with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
+        with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
             d["mqtt_username"] = username
 
     @property
@@ -73,7 +77,7 @@ class HeimdallrSettings(PropertySettings):
 
     @mqtt_password.setter
     def mqtt_password(self, password: str) -> None:
-        with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
+        with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
             d["mqtt_password"] = password
 
     @property
@@ -84,7 +88,7 @@ class HeimdallrSettings(PropertySettings):
 
     @mqtt_broker.setter
     def mqtt_broker(self, broker: str) -> None:
-        with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
+        with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
             d["mqtt_broker"] = broker
 
     @property
@@ -95,12 +99,7 @@ class HeimdallrSettings(PropertySettings):
 
     @mqtt_port.setter
     def mqtt_port(self, port: int) -> None:
-        with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
-            d["mqtt_port"] = port
-
-    @mqtt_port.setter
-    def mqtt_port(self, port: int) -> None:
-        with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
+        with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
             d["mqtt_port"] = port
 
 
