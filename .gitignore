@@ -1,5 +1,10 @@
 docs/build/
+build/
 dist/
+venv/
+.idea/
+__pycache__/
+
 .vscode
 .installed.cfg
 develop-eggs
@@ -7,14 +12,17 @@ downloads
 eggs
 parts
 *.egg-info
-__pycache__/
-#*.py[cod]
-.idea/
+
+*.py[cod]
+
 .pytest_cache
 *.orig
 
-venv/
+# Dbm
 *.db
+*.bak
+*.dat
+*.dir
 
 *.log
 # Byte-compiled / optimized / DLL files
@@ -112,7 +120,6 @@ ENV/
 *.model
 *.model.py
 
-
 #.idea
 .ropeproject
 .pyre
@@ -123,11 +130,9 @@ logs/*.csv
 *[Ee]xcluded*
 *[Ee]xclude*
 
-
 pip-wheel-metadata
-.pytest_cache
-build/
 
+# Git trash
 *~develop
 *~HEAD
 

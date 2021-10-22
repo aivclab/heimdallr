@@ -67,7 +67,7 @@ def main():
             s = json.dumps(s)
             client.publish(ALL_CONSTANTS.MQTT_TOPIC, s, ALL_CONSTANTS.MQTT_QOS)
 
-        schedule.every(ALL_CONSTANTS.MQTT_PUBLISH_INTERVAL_SEC).second.do(job)
+        schedule.every(ALL_CONSTANTS.MQTT_PUBLISH_INTERVAL_SEC).seconds.do(job)
 
         for _ in busy_indicator():
             schedule.run_pending()

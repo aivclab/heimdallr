@@ -1,5 +1,6 @@
 """Function to get GPU infomations.
 """
+from typing import Mapping, Sequence
 
 import numpy
 import pandas
@@ -7,7 +8,7 @@ from dash.dcc import Graph
 from dash.html import Div, H3
 from pandas import DataFrame
 from plotly import graph_objs
-from warg import NOD
+from warg import NOD, Number
 
 from heimdallr.utilities.date_tools import timestamp_to_datetime
 from heimdallr.configuration.heimdallr_config import (
@@ -48,11 +49,11 @@ def pull_gpu_info(include_graphics_processes: bool = True) -> dict:
     return info.as_dict()
 
 
-def to_overall_gpu_process_df(GPU_STATS) -> DataFrame:
+def to_overall_gpu_process_df(gpu_stats: Mapping) -> DataFrame:
     """ """
     resulta = []
     columns = []
-    for k2, v2 in GPU_STATS.items():
+    for k2, v2 in gpu_stats.items():
         device_info = v2["devices"]
         for device_i in device_info:
             processes = device_i["processes"]
@@ -85,10 +86,10 @@ def to_overall_gpu_process_df(GPU_STATS) -> DataFrame:
     return out_df
 
 
-def per_machine_per_device_pie_charts(GPU_STATS, KEEP_ALIVE):
+def per_machine_per_device_pie_charts(gpu_stats: Mapping, keep_alive: Sequence[Number]):
     """ """
     compute_machines = []
-    for machine_name, machine in GPU_STATS.items():
+    for machine_name, machine in gpu_stats.items():
         machine_devices = []
         devices = machine["devices"]
 
@@ -134,7 +135,7 @@ def per_machine_per_device_pie_charts(GPU_STATS, KEEP_ALIVE):
             Div(
                 [
                     H3(
-                        f"{machine_name}: {KEEP_ALIVE[machine_name]} sec ago",
+                        f"{machine_name}: {keep_alive[machine_name]} sec ago",
                         className="text-monospace",
                         style={"text-decoration": "underline"},
                     ),
