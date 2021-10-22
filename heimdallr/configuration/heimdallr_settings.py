@@ -8,6 +8,7 @@ __doc__ = r"""
            """
 
 import shelve
+from typing import Optional
 
 from apppath import ensure_existence
 from warg import PropertySettings
@@ -41,10 +42,12 @@ class HeimdallrSettings(PropertySettings):
         # print(f'Using settings from {PROJECT_APP_PATH.user_config}')
 
     @property
-    def google_calendar_id(self) -> str:
+    def google_calendar_id(self) -> Optional[str]:
         """ """
         with shelve.open(HeimdallrSettings._google_settings_path) as d:
-            return d["google_calendar_id"]
+            if "google_calendar_id" in d:
+                return d["google_calendar_id"]
+        return None
 
     @google_calendar_id.setter
     def google_calendar_id(self, calendar_id: str) -> None:
@@ -52,10 +55,12 @@ class HeimdallrSettings(PropertySettings):
             d["google_calendar_id"] = calendar_id
 
     @property
-    def mqtt_access_token(self) -> str:
+    def mqtt_access_token(self) -> Optional[str]:
         """ """
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
-            return d["mqtt_access_token"]
+            if "mqtt_access_token" in d:
+                return d["mqtt_access_token"]
+        return None
 
     @mqtt_access_token.setter
     def mqtt_access_token(self, token: str) -> None:
@@ -63,10 +68,12 @@ class HeimdallrSettings(PropertySettings):
             d["mqtt_access_token"] = token
 
     @property
-    def mqtt_username(self) -> str:
+    def mqtt_username(self) -> Optional[str]:
         """ """
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
-            return d["mqtt_username"]
+            if "mqtt_username" in d:
+                return d["mqtt_username"]
+        return None
 
     @mqtt_username.setter
     def mqtt_username(self, username: str) -> None:
@@ -74,10 +81,12 @@ class HeimdallrSettings(PropertySettings):
             d["mqtt_username"] = username
 
     @property
-    def mqtt_password(self) -> str:
+    def mqtt_password(self) -> Optional[str]:
         """ """
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
-            return d["mqtt_password"]
+            if "mqtt_password" in d:
+                return d["mqtt_password"]
+        return None
 
     @mqtt_password.setter
     def mqtt_password(self, password: str) -> None:
@@ -85,10 +94,12 @@ class HeimdallrSettings(PropertySettings):
             d["mqtt_password"] = password
 
     @property
-    def mqtt_broker(self) -> str:
+    def mqtt_broker(self) -> Optional[str]:
         """ """
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
-            return d["mqtt_broker"]
+            if "mqtt_broker" in d:
+                return d["mqtt_broker"]
+        return None
 
     @mqtt_broker.setter
     def mqtt_broker(self, broker: str) -> None:
@@ -96,10 +107,12 @@ class HeimdallrSettings(PropertySettings):
             d["mqtt_broker"] = broker
 
     @property
-    def mqtt_port(self) -> int:
+    def mqtt_port(self) -> Optional[str]:
         """ """
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
-            return d["mqtt_port"]
+            if "mqtt_port" in d:
+                return d["mqtt_port"]
+        return None
 
     @mqtt_port.setter
     def mqtt_port(self, port: int) -> None:
