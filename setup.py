@@ -79,6 +79,8 @@ __author__ = author
 
 
 class HeimdallrPackage:
+    """ """
+
     @property
     def test_dependencies(self) -> list:
         return read_reqs(
