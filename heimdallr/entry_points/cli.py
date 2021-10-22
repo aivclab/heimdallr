@@ -13,12 +13,11 @@ from pathlib import Path
 from typing import Any
 
 import fire
-from draugr.python_utilities.styling import get_terminal_size
 from pyfiglet import Figlet
 
+from draugr.python_utilities.styling import get_terminal_size
 from heimdallr import get_version
 from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
-from heimdallr.entry_points import publisher, server
 from heimdallr.utilities import (
     disable_service,
     enable_service,
@@ -62,12 +61,14 @@ class HeimdallrCLI:
     @staticmethod
     def serve():
         """ """
+        from heimdallr.entry_points import server
 
         server.main()
 
     @staticmethod
     def publish():
         """ """
+        from heimdallr.entry_points import publisher
 
         publisher.main()
 
