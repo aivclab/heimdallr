@@ -234,12 +234,17 @@ def main():
     MQTT_CLIENT.on_disconnect = on_disconnect
 
     CRYSTALLISED_HEIMDALLR_SETTINGS = HeimdallrSettings()
-    if False:
-        # MQTT_CLIENT.username_pw_set(ALL_CONSTANTS.MQTT_ACCESS_TOKEN)
-        MQTT_CLIENT.username_pw_set(
-            CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_username,
-            CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_password,
-        )
+    if True:
+        if (
+            CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_access_token and False
+        ):  # TODO: not implemented
+            pass
+            # MQTT_CLIENT.username_pw_set(CRYSTALLISED_HEIMDALLR_SETTINGS.MQTT_ACCESS_TOKEN)
+        else:
+            MQTT_CLIENT.username_pw_set(
+                CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_username,
+                CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_password,
+            )
         MQTT_CLIENT.connect(
             CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_broker,
             CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_port,

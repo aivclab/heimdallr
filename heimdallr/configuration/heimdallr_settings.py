@@ -9,6 +9,7 @@ __doc__ = r"""
 
 import shelve
 
+from apppath import ensure_existence
 from warg import PropertySettings
 
 from heimdallr import PROJECT_APP_PATH
@@ -25,8 +26,12 @@ __all__ = [
 class HeimdallrSettings(PropertySettings):
     """ """
 
-    _google_settings_path = str(PROJECT_APP_PATH.user_config / "google.settings")
-    _mqtt_settings_path = str(PROJECT_APP_PATH.user_config / "mqtt.settings")
+    _google_settings_path = str(
+        ensure_existence(PROJECT_APP_PATH.user_config) / "google.settings"
+    )
+    _mqtt_settings_path = str(
+        ensure_existence(PROJECT_APP_PATH.user_config) / "mqtt.settings"
+    )
 
     def __init__(self):
         """Protects from overriding on initialisation"""
@@ -43,7 +48,6 @@ class HeimdallrSettings(PropertySettings):
 
     @google_calendar_id.setter
     def google_calendar_id(self, calendar_id: str) -> None:
-        print("SETTER WAS CALLED!")
         with shelve.open(HeimdallrSettings._google_settings_path, writeback=True) as d:
             d["google_calendar_id"] = calendar_id
 
@@ -106,7 +110,7 @@ class HeimdallrSettings(PropertySettings):
 def set_all_heimdallr_settings(*, _lower_keys: bool = True, **kwargs):
     """ """
     HEIMDALLR_SETTINGS = HeimdallrSettings()
-    print(f"current heimdallr settings: {HEIMDALLR_SETTINGS}")
+    # print(f"current heimdallr settings: {HEIMDALLR_SETTINGS}")
     if _lower_keys:
         kwargs = {k.lower(): v for k, v in kwargs.items()}
 
