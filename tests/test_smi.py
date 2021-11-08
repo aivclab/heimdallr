@@ -1,5 +1,6 @@
-import pytest
 import sys
+
+import pytest
 
 # Fixture to initialize and finalize nvml
 if sys.platform == "linux":

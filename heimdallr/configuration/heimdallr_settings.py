@@ -7,13 +7,16 @@ __doc__ = r"""
            Created on 17/03/2020
            """
 
+import getpass
 import shelve
+from enum import Enum
 from typing import Optional
 
-from apppath import ensure_existence
-from warg import PropertySettings
+import sh
 
+from apppath import ensure_existence
 from heimdallr import PROJECT_APP_PATH
+from warg import PropertySettings
 
 __all__ = [
     "HeimdallrSettings",  # Class
@@ -24,22 +27,68 @@ __all__ = [
 # PropertySettings.raise_exception_on_none = False
 
 
+class SettingScopeEnum(Enum):
+    user = "user"
+    site = "site"
+    root = "root"
+
+
 class HeimdallrSettings(PropertySettings):
     """ """
 
-    _google_settings_path = str(
-        ensure_existence(PROJECT_APP_PATH.user_config) / "google.settings"
-    )
-    _mqtt_settings_path = str(
-        ensure_existence(PROJECT_APP_PATH.user_config) / "mqtt.settings"
-    )
+    _google_settings_path = None
+    _mqtt_settings_path = None
+    _credentials_base_path = None
 
-    def __init__(self):
+    def __init__(self, user_settings: SettingScopeEnum = SettingScopeEnum.site):
         """Protects from overriding on initialisation"""
         pass
         # super().__init__()
         # TODO: FIGURE OUT A WAY TO EASILY COPY SETTINGS TO ROOT; for services
         # print(f'Using settings from {PROJECT_APP_PATH.user_config}')
+
+        if user_settings == SettingScopeEnum.user:
+            HeimdallrSettings._google_settings_path = str(
+                ensure_existence(PROJECT_APP_PATH.user_config) / "google.settings"
+            )
+            HeimdallrSettings._mqtt_settings_path = str(
+                ensure_existence(PROJECT_APP_PATH.user_config) / "mqtt.settings"
+            )
+            HeimdallrSettings._credentials_base_path = ensure_existence(
+                PROJECT_APP_PATH.user_config / "credentials"
+            )
+            # print(f'Using config at {PROJECT_APP_PATH.site_config}')
+        elif user_settings == SettingScopeEnum.site:
+            prev_val = PROJECT_APP_PATH._ensure_existence
+            PROJECT_APP_PATH._ensure_existence = False
+            HeimdallrSettings._credentials_base_path = (
+                PROJECT_APP_PATH.site_config / "credentials"
+            )
+            if not HeimdallrSettings._credentials_base_path.exists():
+                with sh.contrib.sudo(
+                    password=getpass.getpass(
+                        prompt=f"[sudo] password for {getpass.getuser()}: "
+                    ),
+                    _with=True,
+                ):
+                    sh.mkdir(["-p", HeimdallrSettings._credentials_base_path])
+                    sh.chown(
+                        f"{getpass.getuser()}:", PROJECT_APP_PATH.site_config
+                    )  # If a colon but no group name follows the user name, that user is made the owner of the files and the group of the files is changed to that user's login group.
+            PROJECT_APP_PATH._ensure_existence = prev_val
+            HeimdallrSettings._google_settings_path = str(
+                ensure_existence(PROJECT_APP_PATH.site_config) / "google.settings"
+            )
+            HeimdallrSettings._mqtt_settings_path = str(
+                ensure_existence(PROJECT_APP_PATH.site_config) / "mqtt.settings"
+            )
+
+            # print(f'Using config at {PROJECT_APP_PATH.site_config}')
+        elif user_settings == SettingScopeEnum.root:
+            raise NotImplementedError
+            pass  # TODO
+        else:
+            raise ValueError()
 
     @property
     def google_calendar_id(self) -> Optional[str]:
@@ -135,7 +184,7 @@ def set_all_heimdallr_settings(*, _lower_keys: bool = True, **kwargs):
 
     HEIMDALLR_SETTINGS.__from_dict__(kwargs)
 
-    print(f"new heimdallr settings: {HEIMDALLR_SETTINGS}")
+    print(f"new heimdallr settings: {HeimdallrSettings()}")
 
 
 if __name__ == "__main__":
@@ -143,7 +192,10 @@ if __name__ == "__main__":
 
     for k in settings:
         print(k)
-    # print(settings)
-    # settings.mqtt_password = 2
 
-    set_all_heimdallr_settings(**{k: None for k in iter(settings)})
+    set_all_heimdallr_settings(
+        **{
+            k: getattr(settings, k) if getattr(settings, k) else None
+            for k in iter(settings)
+        }
+    )

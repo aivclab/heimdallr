@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-from heimdallr.board_layout import get_footer, get_header, get_body, get_menu
-
+from heimdallr.board_layout import get_body, get_footer, get_header, get_menu
 
 __author__ = "Christian Heider Nielsen"
 __doc__ = ""

@@ -7,8 +7,9 @@ __doc__ = r"""
            Created on 15/03/2020
            """
 
-from dash import dcc, html
 from itertools import cycle
+
+from dash import dcc, html
 
 from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
 

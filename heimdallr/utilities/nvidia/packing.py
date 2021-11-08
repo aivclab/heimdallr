@@ -10,9 +10,9 @@ __doc__ = r"""
 import time
 
 import psutil
-from warg import NOD
 
 from heimdallr.utilities.nvidia import bindings
+from warg import NOD
 
 try:
     bindings.nvmlInit()

@@ -8,16 +8,16 @@ from dash.dcc import Graph
 from dash.html import Div, H3
 from pandas import DataFrame
 from plotly import graph_objs
-from warg import NOD, Number
 
-from heimdallr.utilities.date_tools import timestamp_to_datetime
 from heimdallr.configuration.heimdallr_config import (
     DROP_COLUMNS,
     INT_COLUMNS,
     MB_COLUMNS,
     PERCENT_COLUMNS,
 )
+from heimdallr.utilities.date_tools import timestamp_to_datetime
 from heimdallr.utilities.nvidia.packing import get_nv_info
+from warg import NOD, Number
 
 MB_DIVISOR = int(1024 ** 2)
 

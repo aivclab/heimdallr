@@ -7,11 +7,11 @@ __doc__ = r"""
            Created on 15/03/2020
            """
 
+import base64
 from pathlib import Path
 
-from dash import dcc
-from dash import html
-import base64
+from dash import dcc, html
+
 from heimdallr.configuration.heimdallr_config import (
     HTML_TITLE,
     TIME_ID,

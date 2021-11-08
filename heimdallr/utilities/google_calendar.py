@@ -5,13 +5,12 @@ import pickle
 from pathlib import Path
 
 import pandas
-from apppath import ensure_existence
 from dash import dash_table
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
-from heimdallr import PROJECT_APP_PATH
+from apppath import ensure_existence
 from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
 from heimdallr.utilities.date_tools import iso_dt_to_datetime
 
@@ -92,6 +91,6 @@ def get_calender_df(
 
 
 if __name__ == "__main__":
-    CALENDAR_ID = HeimdallrSettings().calendar_id  # Christian Alexandra
+    CALENDAR_ID = HeimdallrSettings().google_calendar_id  # Christian Alexandra
 
-    print(get_calender_df(CALENDAR_ID, PROJECT_APP_PATH.user_config))
+    print(get_calender_df(CALENDAR_ID, HeimdallrSettings()._credentials_base_path))

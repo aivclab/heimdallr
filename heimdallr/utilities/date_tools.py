@@ -15,8 +15,10 @@ __all__ = ["timestamp_to_datetime", "iso_dt_to_datetime"]
 
 
 def timestamp_to_datetime(t: int) -> str:
+    """ """
     return default_datetime_repr(datetime.datetime.fromtimestamp(t))
 
 
 def iso_dt_to_datetime(t: str) -> str:
+    """ """
     return default_datetime_repr(datetime.datetime.fromisoformat(t[:-1]))

@@ -5,18 +5,19 @@ import logging
 import uuid
 
 import dash
+import flask
 from dash import Dash
 from dash.dash_table import DataTable
 from dash.dependencies import Input, Output
 from dash.html import Div
-from draugr.python_utilities import default_datetime_repr
-from draugr.writers import LogWriter, MockWriter, Writer
 from flask import Response
 from paho import mqtt
 from paho.mqtt.client import Client
 from pandas import DataFrame
-from warg import NOD
 
+from apppath import ensure_existence
+from draugr.python_utilities import default_datetime_repr
+from draugr.writers import LogWriter, MockWriter, Writer
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 from heimdallr.board_layout import get_root_layout
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
@@ -26,7 +27,7 @@ from heimdallr.utilities import (
     per_machine_per_device_pie_charts,
     to_overall_gpu_process_df,
 )
-import flask
+from warg import NOD
 
 __all__ = ["main"]
 
@@ -100,7 +101,7 @@ def update_calendar_live(n) -> DataTable:
     """ """
     df = get_calender_df(
         HeimdallrSettings().google_calendar_id,
-        PROJECT_APP_PATH.user_config,
+        HeimdallrSettings()._credentials_base_path,
         num_entries=ALL_CONSTANTS.TABLE_PAGE_SIZE,
     )
 
@@ -225,15 +226,22 @@ def on_disconnect(client, userdata, rc) -> None:
         client.subscribe(ALL_CONSTANTS.MQTT_TOPIC, ALL_CONSTANTS.MQTT_QOS)
 
 
-def main():
+def main(is_user: bool = False):
     """ """
     global LOG_WRITER
-    LOG_WRITER = LogWriter(PROJECT_APP_PATH.user_log / f"{PROJECT_NAME}_server.log")
+    if is_user:
+        LOG_WRITER = LogWriter(
+            ensure_existence(PROJECT_APP_PATH.user_log) / f"{PROJECT_NAME}_server.log"
+        )
+    else:
+        LOG_WRITER = LogWriter(
+            ensure_existence(PROJECT_APP_PATH.site_log) / f"{PROJECT_NAME}_server.log"
+        )
     LOG_WRITER.open()
     MQTT_CLIENT.on_message = on_message
     MQTT_CLIENT.on_disconnect = on_disconnect
 
-    CRYSTALLISED_HEIMDALLR_SETTINGS = HeimdallrSettings()
+    CRYSTALLISED_HEIMDALLR_SETTINGS = HeimdallrSettings()  # TODO input scope
     if True:
         if (
             CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_access_token and False

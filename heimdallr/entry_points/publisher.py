@@ -2,19 +2,17 @@ import json
 import socket
 import time
 
-
 import paho.mqtt.client as mqtt
 import schedule
-from warg import NOD
 
+from apppath import ensure_existence
 from draugr.python_utilities.business import busy_indicator
-from draugr import IgnoreInterruptSignal
 from draugr.writers import LogWriter, MockWriter, Writer
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
-from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
-
-from heimdallr.utilities.gpu_utilities import pull_gpu_info
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
+from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
+from heimdallr.utilities.gpu_utilities import pull_gpu_info
+from warg import NOD
 
 HOSTNAME = socket.gethostname()
 
@@ -36,28 +34,46 @@ def on_disconnect(client, userdata, rc):
         client.reconnect()
 
 
-def main():
+def main(is_user: bool = False):
     """ """
     global LOG_WRITER
-    LOG_WRITER = LogWriter(PROJECT_APP_PATH.user_log / f"{PROJECT_NAME}_publisher.log")
+    if is_user:
+        LOG_WRITER = LogWriter(
+            ensure_existence(PROJECT_APP_PATH.user_log)
+            / f"{PROJECT_NAME}_publisher.log"
+        )
+    else:
+        LOG_WRITER = LogWriter(
+            ensure_existence(PROJECT_APP_PATH.site_log)
+            / f"{PROJECT_NAME}_publisher.log"
+        )
     LOG_WRITER.open()
     client = mqtt.Client()
     client.on_publish = on_publish
     client.on_disconnect = on_disconnect
 
-    HEIMDALLR_SETTINGS = HeimdallrSettings()
+    HEIMDALLR_SETTINGS = HeimdallrSettings()  # TODO input scope
 
     client.username_pw_set(
         HEIMDALLR_SETTINGS.mqtt_username, HEIMDALLR_SETTINGS.mqtt_password
     )
-    client.connect(
-        HEIMDALLR_SETTINGS.mqtt_broker, HEIMDALLR_SETTINGS.mqtt_port, keepalive=60
-    )
+    try:
+        client.connect(
+            HEIMDALLR_SETTINGS.mqtt_broker, HEIMDALLR_SETTINGS.mqtt_port, keepalive=60
+        )
+    except ValueError as ve:
+        raise ValueError(
+            f"{HEIMDALLR_SETTINGS._mqtt_settings_path},"
+            f"{HEIMDALLR_SETTINGS.mqtt_broker},"
+            f"{HEIMDALLR_SETTINGS.mqtt_port},"
+            f"{ve}"
+        )
+
     client.loop_start()
 
     sensor_data = NOD({HOSTNAME: pull_gpu_info()})
 
-    with IgnoreInterruptSignal():
+    if True:  # with IgnoreInterruptSignal():
         print("Publisher started")
 
         def job():
