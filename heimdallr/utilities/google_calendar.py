@@ -20,13 +20,31 @@ SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
 
 # If modifying these scopes, delete the file token.pickle.
+"""
+def implicit():
+    from google.cloud import storage
+
+    # If you don't specify credentials when constructing the client, the
+    # client library will look for credentials in the environment.
+    storage_client = storage.Client()
+
+    # Make an authenticated API request
+    buckets = list(storage_client.list_buckets())
+    print(buckets)
+"""
 
 
 def get_calender_df(
     calendar_id: str, credentials_base_path: Path, num_entries: int = 30
 ) -> dash_table.DataTable:
     """Shows basic usage of the Google Calendar API.
-    Prints the start and name of the next 10 events on the user's calendar."""
+    Prints the start and name of the next 10 events on the user's calendar.
+
+    :param num_entries:
+    :param credentials_base_path:
+    :type calendar_id: object
+    :rtype: object
+    """
     credentials = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first

@@ -13,13 +13,15 @@ from enum import Enum
 from typing import Optional
 
 import sh
+from sorcery import assigned_names
 
 from apppath import ensure_existence
 from heimdallr import PROJECT_APP_PATH
 from warg import PropertySettings
 
 __all__ = [
-    "HeimdallrSettings",  # Class
+    "HeimdallrSettings",  # Setting Class
+    "SettingScopeEnum",  # Setting scope Enum
     "set_all_heimdallr_settings",  # Set settings function
 ]
 
@@ -28,9 +30,7 @@ __all__ = [
 
 
 class SettingScopeEnum(Enum):
-    user = "user"
-    site = "site"
-    root = "root"
+    user, site, root = assigned_names()
 
 
 class HeimdallrSettings(PropertySettings):
@@ -40,7 +40,7 @@ class HeimdallrSettings(PropertySettings):
     _mqtt_settings_path = None
     _credentials_base_path = None
 
-    def __init__(self, user_settings: SettingScopeEnum = SettingScopeEnum.site):
+    def __init__(self, user_settings: SettingScopeEnum = SettingScopeEnum.user):
         """Protects from overriding on initialisation"""
         pass
         # super().__init__()
@@ -48,15 +48,16 @@ class HeimdallrSettings(PropertySettings):
         # print(f'Using settings from {PROJECT_APP_PATH.user_config}')
 
         if user_settings == SettingScopeEnum.user:
+            HeimdallrSettings._credentials_base_path = ensure_existence(
+                PROJECT_APP_PATH.user_config / "credentials"
+            )
             HeimdallrSettings._google_settings_path = str(
                 ensure_existence(PROJECT_APP_PATH.user_config) / "google.settings"
             )
             HeimdallrSettings._mqtt_settings_path = str(
                 ensure_existence(PROJECT_APP_PATH.user_config) / "mqtt.settings"
             )
-            HeimdallrSettings._credentials_base_path = ensure_existence(
-                PROJECT_APP_PATH.user_config / "credentials"
-            )
+
             # print(f'Using config at {PROJECT_APP_PATH.site_config}')
         elif user_settings == SettingScopeEnum.site:
             prev_val = PROJECT_APP_PATH._ensure_existence

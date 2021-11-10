@@ -261,6 +261,7 @@ def main(is_user: bool = False):
         MQTT_CLIENT.subscribe(ALL_CONSTANTS.MQTT_TOPIC, ALL_CONSTANTS.MQTT_QOS)
 
     DASH_APP.title = ALL_CONSTANTS.HTML_TITLE
+    DASH_APP.update_title = ALL_CONSTANTS.HTML_TITLE
 
     DASH_APP.run_server(
         host=ALL_CONSTANTS.SERVER_ADDRESS,
