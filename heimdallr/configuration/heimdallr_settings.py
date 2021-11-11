@@ -30,24 +30,28 @@ __all__ = [
 
 
 class SettingScopeEnum(Enum):
+    """ """
+
     user, site, root = assigned_names()
 
 
 class HeimdallrSettings(PropertySettings):
     """ """
 
+    _setting_scope = None
     _google_settings_path = None
     _mqtt_settings_path = None
     _credentials_base_path = None
 
-    def __init__(self, user_settings: SettingScopeEnum = SettingScopeEnum.user):
+    def __init__(self, setting_scope: SettingScopeEnum = SettingScopeEnum.site):
         """Protects from overriding on initialisation"""
         pass
         # super().__init__()
         # TODO: FIGURE OUT A WAY TO EASILY COPY SETTINGS TO ROOT; for services
         # print(f'Using settings from {PROJECT_APP_PATH.user_config}')
 
-        if user_settings == SettingScopeEnum.user:
+        _setting_scope = setting_scope
+        if setting_scope == SettingScopeEnum.user:
             HeimdallrSettings._credentials_base_path = ensure_existence(
                 PROJECT_APP_PATH.user_config / "credentials"
             )
@@ -59,7 +63,7 @@ class HeimdallrSettings(PropertySettings):
             )
 
             # print(f'Using config at {PROJECT_APP_PATH.site_config}')
-        elif user_settings == SettingScopeEnum.site:
+        elif setting_scope == SettingScopeEnum.site:
             prev_val = PROJECT_APP_PATH._ensure_existence
             PROJECT_APP_PATH._ensure_existence = False
             HeimdallrSettings._credentials_base_path = (
@@ -85,9 +89,32 @@ class HeimdallrSettings(PropertySettings):
             )
 
             # print(f'Using config at {PROJECT_APP_PATH.site_config}')
-        elif user_settings == SettingScopeEnum.root:
-            raise NotImplementedError
-            pass  # TODO
+        elif setting_scope == SettingScopeEnum.root:
+            prev_val = PROJECT_APP_PATH._ensure_existence
+            PROJECT_APP_PATH._ensure_existence = False
+            HeimdallrSettings._credentials_base_path = (
+                PROJECT_APP_PATH.root_config / "credentials"
+            )
+            if not HeimdallrSettings._credentials_base_path.exists():
+                with sh.contrib.sudo(
+                    password=getpass.getpass(
+                        prompt=f"[sudo] password for {getpass.getuser()}: "
+                    ),
+                    _with=True,
+                ):
+                    sh.mkdir(["-p", HeimdallrSettings._credentials_base_path])
+                    sh.chown(
+                        f"{getpass.getuser()}:", PROJECT_APP_PATH.root_config
+                    )  # If a colon but no group name follows the user name, that user is made the owner of the files and the group of the files is changed to that user's login group.
+            PROJECT_APP_PATH._ensure_existence = prev_val
+            HeimdallrSettings._google_settings_path = str(
+                ensure_existence(PROJECT_APP_PATH.root_config) / "google.settings"
+            )
+            HeimdallrSettings._mqtt_settings_path = str(
+                ensure_existence(PROJECT_APP_PATH.root_config) / "mqtt.settings"
+            )
+
+            # print(f'Using config at {PROJECT_APP_PATH.site_config}')
         else:
             raise ValueError()
 
@@ -170,9 +197,14 @@ class HeimdallrSettings(PropertySettings):
             d["mqtt_port"] = port
 
 
-def set_all_heimdallr_settings(*, _lower_keys: bool = True, **kwargs):
+def set_all_heimdallr_settings(
+    setting_scope: SettingScopeEnum = SettingScopeEnum.root,
+    *,
+    _lower_keys: bool = True,
+    **kwargs,
+):
     """ """
-    HEIMDALLR_SETTINGS = HeimdallrSettings()
+    HEIMDALLR_SETTINGS = HeimdallrSettings(setting_scope)
     # print(f"current heimdallr settings: {HEIMDALLR_SETTINGS}")
     if _lower_keys:
         kwargs = {k.lower(): v for k, v in kwargs.items()}

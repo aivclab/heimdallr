@@ -35,7 +35,17 @@ sponsors = "Alexandra Institute"
 class ServiceOption(Enum):
     """ """
 
-    install, remove, disable, enable, start, stop, restart, status = assigned_names()
+    (
+        install,
+        remove,
+        uninstall,
+        disable,
+        enable,
+        start,
+        stop,
+        restart,
+        status,
+    ) = assigned_names()  # same
 
 
 class HeimdallrMode(Enum):
@@ -47,7 +57,7 @@ class HeimdallrMode(Enum):
 class HeimdallrCLI:
     """ """
 
-    def __init__(self, user_settings: SettingScopeEnum = SettingScopeEnum.site):
+    def __init__(self, user_settings: SettingScopeEnum = SettingScopeEnum.root):
         for k in HeimdallrSettings(user_settings):
             setattr(self, f"set_{k}", partial(self.set, k))
             setattr(self, f"get_{k}", partial(self.get, k))
@@ -70,35 +80,40 @@ class HeimdallrCLI:
     def set(
         setting: str,
         value: Any,
-        user_settings: SettingScopeEnum = SettingScopeEnum.site,
+        setting_scope: SettingScopeEnum = SettingScopeEnum.root,
     ) -> None:
         """Setting options: [mqtt_access_token, mqtt_username, mqtt_password, mqtt_broker, mqtt_port]"""
-        HeimdallrSettings(user_settings).__setattr__(setting, value)
+        HeimdallrSettings(setting_scope).__setattr__(setting, value)
 
     @staticmethod
     def multi_set(
-        user_settings: SettingScopeEnum = SettingScopeEnum.site, **kw
+        *, setting_scope: SettingScopeEnum = SettingScopeEnum.root, **kw
     ) -> None:
-        """Setting options: [mqtt_access_token, mqtt_username, mqtt_password, mqtt_broker, mqtt_port]"""
-        settings = HeimdallrSettings(user_settings)
+        """prefix kwargs sequence with a '-' eg. 'heimdallr multi_set -mqtt_port=9213' Setting options: [
+        mqtt_access_token,
+        mqtt_username,
+        mqtt_password,
+        mqtt_broker,
+        mqtt_port]"""
+        settings = HeimdallrSettings(setting_scope)
         for setting, value in kw.items():
             settings.__setattr__(setting, value)
 
     @staticmethod
     def get(
-        setting: str, user_settings: SettingScopeEnum = SettingScopeEnum.site
+        setting: str, setting_scope: SettingScopeEnum = SettingScopeEnum.root
     ) -> None:
         """Setting options: [mqtt_access_token, mqtt_username, mqtt_password, mqtt_broker, mqtt_port, all]"""
         if setting == "all":
-            print(HeimdallrSettings(user_settings))
+            print(HeimdallrSettings(setting_scope))
         else:
-            print(getattr(HeimdallrSettings(user_settings), setting))
+            print(getattr(HeimdallrSettings(setting_scope), setting))
 
     @staticmethod
     def service(
         option: ServiceOption,
         mode: HeimdallrMode,
-        scope: SettingScopeEnum = SettingScopeEnum.site,
+        setting_scope: SettingScopeEnum = SettingScopeEnum.root,
     ):
         """
         Only support systemd implementation
@@ -112,9 +127,9 @@ class HeimdallrCLI:
             from draugr.os_utilities.linux_utilities import RunAsEnum
 
             run_as = RunAsEnum.app_user
-            if scope == SettingScopeEnum.user:
+            if setting_scope == SettingScopeEnum.user:
                 run_as = RunAsEnum.user
-            elif scope == SettingScopeEnum.root:
+            elif setting_scope == SettingScopeEnum.root:
                 run_as = RunAsEnum.root
 
             if option == ServiceOption.install:
@@ -134,7 +149,7 @@ class HeimdallrCLI:
                     )
                 else:
                     raise Exception
-            elif option == ServiceOption.remove:
+            elif option == ServiceOption.remove or option == ServiceOption.uninstall:
                 if mode in HeimdallrMode:
                     from draugr.os_utilities.linux_utilities import (
                         remove_service,
