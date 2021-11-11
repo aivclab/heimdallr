@@ -57,73 +57,71 @@ class HeimdallrMode(Enum):
 class HeimdallrCLI:
     """ """
 
-    def __init__(self, setting_scope: SettingScopeEnum = SettingScopeEnum.root):
-        for k in HeimdallrSettings(setting_scope=SettingScopeEnum(setting_scope)):
+    def __init__(self, *, setting_scope: SettingScopeEnum = SettingScopeEnum.root):
+        try:
+            self.setting_scope = SettingScopeEnum(setting_scope)
+        except ValueError as a:
+            print(a)
+            print(f"Valid options {list(SettingScopeEnum.__iter__())}")
+
+        for k in HeimdallrSettings(setting_scope=self.setting_scope):
             setattr(self, f"set_{k}", partial(self.set, k))
             setattr(self, f"get_{k}", partial(self.get, k))
 
-    @staticmethod
-    def serve(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
+    def serve(self):
         """serve metrics at localhost:5555"""
         from heimdallr.entry_points import server
 
-        server.main(setting_scope=SettingScopeEnum(setting_scope))
+        server.main(setting_scope=SettingScopeEnum(self.setting_scope))
 
-    @staticmethod
-    def publish(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
+    def publish(self):
         """publish metrics"""
         from heimdallr.entry_points import publisher
 
-        publisher.main(setting_scope=SettingScopeEnum(setting_scope))
+        publisher.main(setting_scope=SettingScopeEnum(self.setting_scope))
 
-    @staticmethod
     def set(
+        self,
         setting: str,
         value: Any,
-        setting_scope: SettingScopeEnum = SettingScopeEnum.root,
     ) -> None:
         """Setting options: [mqtt_access_token, mqtt_username, mqtt_password, mqtt_broker, mqtt_port]"""
-        HeimdallrSettings(setting_scope=SettingScopeEnum(setting_scope)).__setattr__(
-            setting, value
-        )
+        print(self.setting_scope)
+        settings = HeimdallrSettings(setting_scope=self.setting_scope)
+        print(settings._mqtt_settings_path)
+        settings.__setattr__(setting, value)
 
-    @staticmethod
-    def multi_set(
-        *, setting_scope: SettingScopeEnum = SettingScopeEnum.root, **kw
-    ) -> None:
+    def multi_set(self, **kw) -> None:
         """prefix kwargs sequence with a '-' eg. 'heimdallr multi_set -mqtt_port=9213' Setting options: [
         mqtt_access_token,
         mqtt_username,
         mqtt_password,
         mqtt_broker,
         mqtt_port]"""
-        settings = HeimdallrSettings(SettingScopeEnum(setting_scope))
+        settings = HeimdallrSettings(SettingScopeEnum(self.setting_scope))
         for setting, value in kw.items():
             settings.__setattr__(setting, value)
 
-    @staticmethod
-    def get(
-        setting: str, setting_scope: SettingScopeEnum = SettingScopeEnum.root
-    ) -> None:
+    def get(self, setting: str) -> None:
         """Setting options: [mqtt_access_token, mqtt_username, mqtt_password, mqtt_broker, mqtt_port, all]"""
-        setting_scope = SettingScopeEnum(setting_scope)
+        print(self.setting_scope)
+        settings = HeimdallrSettings(setting_scope=self.setting_scope)
+        print(settings._mqtt_settings_path)
         if setting == "all":
-            print(HeimdallrSettings(setting_scope))
+            print(settings)
         else:
-            print(getattr(HeimdallrSettings(setting_scope), setting))
+            print(getattr(settings, setting))
 
-    @staticmethod
     def service(
+        self,
         option: ServiceOption,
         mode: HeimdallrMode,
-        setting_scope: SettingScopeEnum = SettingScopeEnum.root,
     ):
         """
         Only support systemd implementation
         TODO: support Windows tasks
         """
         try:
-            setting_scope = SettingScopeEnum(setting_scope)
             option = ServiceOption(option)
             mode = HeimdallrMode(mode)
             service_name = f"heimdallr_{mode.value}"
@@ -131,9 +129,9 @@ class HeimdallrCLI:
             from draugr.os_utilities.linux_utilities import RunAsEnum
 
             run_as = RunAsEnum.app_user
-            if setting_scope == SettingScopeEnum.user:
+            if self.setting_scope == SettingScopeEnum.user:
                 run_as = RunAsEnum.user
-            elif setting_scope == SettingScopeEnum.root:
+            elif self.setting_scope == SettingScopeEnum.root:
                 run_as = RunAsEnum.root
 
             if option == ServiceOption.install:
