@@ -61,8 +61,8 @@ class HeimdallrCLI:
         try:
             self.setting_scope = SettingScopeEnum(setting_scope)
         except ValueError as a:
-            print(a)
             print(f"Valid options {list(SettingScopeEnum.__iter__())}")
+            raise a
 
         for k in HeimdallrSettings(setting_scope=self.setting_scope):
             setattr(self, f"set_{k}", partial(self.set, k))
