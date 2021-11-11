@@ -4,27 +4,33 @@ import json
 import logging
 import uuid
 
+import dash
+import flask
 from dash import Dash
 from dash.dash_table import DataTable
 from dash.dependencies import Input, Output
 from dash.html import Div
-
+from flask import Response
 from paho import mqtt
 from paho.mqtt.client import Client
 from pandas import DataFrame
-from warg import NOD
 
+from apppath import ensure_existence
 from draugr.python_utilities import default_datetime_repr
 from draugr.writers import LogWriter, MockWriter, Writer
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 from heimdallr.board_layout import get_root_layout
-from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
+from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
+from heimdallr.configuration.heimdallr_settings import (
+    HeimdallrSettings,
+    SettingScopeEnum,
+)
 from heimdallr.utilities import (
     get_calender_df,
     per_machine_per_device_pie_charts,
     to_overall_gpu_process_df,
 )
-from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
+from warg import NOD
 
 __all__ = ["main"]
 
@@ -70,7 +76,7 @@ LOG_WRITER: Writer = MockWriter()
     Output(ALL_CONSTANTS.TIME_ID, "children"),
     [Input(ALL_CONSTANTS.TIME_INTERVAL_ID, "n_intervals")],
 )
-def update_time(n):
+def update_time(n) -> str:
     """ """
     global GPU_STATS
     global KEEP_ALIVE
@@ -94,11 +100,11 @@ def update_time(n):
     Output(ALL_CONSTANTS.CALENDAR_ID, "children"),
     [Input(ALL_CONSTANTS.CALENDAR_INTERVAL_ID, "n_intervals")],
 )
-def update_calendar_live(n):
+def update_calendar_live(n) -> DataTable:
     """ """
     df = get_calender_df(
         HeimdallrSettings().google_calendar_id,
-        PROJECT_APP_PATH.user_config,
+        HeimdallrSettings()._credentials_base_path,
         num_entries=ALL_CONSTANTS.TABLE_PAGE_SIZE,
     )
 
@@ -122,7 +128,7 @@ def update_calendar_live(n):
     Output(ALL_CONSTANTS.GPU_GRAPHS_ID, "children"),
     [Input(ALL_CONSTANTS.GPU_INTERVAL_ID, "n_intervals")],
 )
-def update_graph(n):
+def update_graph(n) -> Div:
     """ """
     global GPU_STATS
     global KEEP_ALIVE
@@ -138,7 +144,7 @@ def update_graph(n):
     Output(ALL_CONSTANTS.GPU_TABLES_ID, "children"),
     [Input(ALL_CONSTANTS.GPU_INTERVAL_ID, "n_intervals")],
 )
-def update_table(n) -> dict:
+def update_table(n) -> Div:
     """ """
     MQTT_CLIENT.loop()
 
@@ -169,7 +175,39 @@ def update_table(n) -> dict:
     return Div(compute_machines)
 
 
-def on_message(client, userdata, result: mqtt.client.MQTTMessage):
+@DASH_APP.callback(
+    dash.dependencies.Output("menu_container", "style"),
+    [dash.dependencies.Input("menu_toggle_button", "n_clicks")],
+)
+def menu_toggle(n_clicks) -> dict:
+    """
+
+    Args:
+      n_clicks:
+
+    Returns:
+
+    """
+    if n_clicks and n_clicks % 2 == 1:
+        return {"display": "block"}
+    return {"display": "none"}
+
+
+@DASH_APP.server.route("/config", methods=["POST"])
+def on_post_config() -> Response:
+    """
+
+    Returns:
+
+    """
+    settings = HeimdallrSettings()
+    for k, v in flask.request.form.items():
+        if v != "":
+            setattr(settings, k, v)
+    return flask.redirect("/")
+
+
+def on_message(client, userdata, result: mqtt.client.MQTTMessage) -> None:
     """ """
     global LOG_WRITER
     global GPU_STATS
@@ -183,7 +221,7 @@ def on_message(client, userdata, result: mqtt.client.MQTTMessage):
     )
 
 
-def on_disconnect(client, userdata, rc):
+def on_disconnect(client, userdata, rc) -> None:
     """ """
     if rc != 0:
         print("Unexpected MQTT disconnection. Will auto-reconnect")
@@ -191,29 +229,42 @@ def on_disconnect(client, userdata, rc):
         client.subscribe(ALL_CONSTANTS.MQTT_TOPIC, ALL_CONSTANTS.MQTT_QOS)
 
 
-def main():
+def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
     """ """
     global LOG_WRITER
-    LOG_WRITER = LogWriter(PROJECT_APP_PATH.user_log / f"{PROJECT_NAME}_server.log")
+    if setting_scope == SettingScopeEnum.user:
+        LOG_WRITER = LogWriter(
+            ensure_existence(PROJECT_APP_PATH.user_log) / f"{PROJECT_NAME}_server.log"
+        )
+    else:
+        LOG_WRITER = LogWriter(
+            ensure_existence(PROJECT_APP_PATH.site_log) / f"{PROJECT_NAME}_server.log"
+        )
     LOG_WRITER.open()
     MQTT_CLIENT.on_message = on_message
     MQTT_CLIENT.on_disconnect = on_disconnect
 
-    CRYSTALLISED_HEIMDALLR_SETTINGS = HeimdallrSettings()
-
-    # MQTT_CLIENT.username_pw_set(ALL_CONSTANTS.MQTT_ACCESS_TOKEN)
-    MQTT_CLIENT.username_pw_set(
-        CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_username,
-        CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_password,
-    )
-    MQTT_CLIENT.connect(
-        CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_broker,
-        CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_port,
-        keepalive=60,
-    )
-    MQTT_CLIENT.subscribe(ALL_CONSTANTS.MQTT_TOPIC, ALL_CONSTANTS.MQTT_QOS)
+    CRYSTALLISED_HEIMDALLR_SETTINGS = HeimdallrSettings(setting_scope)
+    if True:
+        if (
+            CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_access_token and False
+        ):  # TODO: not implemented
+            pass
+            # MQTT_CLIENT.username_pw_set(CRYSTALLISED_HEIMDALLR_SETTINGS.MQTT_ACCESS_TOKEN)
+        else:
+            MQTT_CLIENT.username_pw_set(
+                CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_username,
+                CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_password,
+            )
+        MQTT_CLIENT.connect(
+            CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_broker,
+            CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_port,
+            keepalive=60,
+        )
+        MQTT_CLIENT.subscribe(ALL_CONSTANTS.MQTT_TOPIC, ALL_CONSTANTS.MQTT_QOS)
 
     DASH_APP.title = ALL_CONSTANTS.HTML_TITLE
+    DASH_APP.update_title = ALL_CONSTANTS.HTML_TITLE
 
     DASH_APP.run_server(
         host=ALL_CONSTANTS.SERVER_ADDRESS,

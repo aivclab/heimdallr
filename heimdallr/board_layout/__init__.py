@@ -7,4 +7,5 @@ __doc__ = ""
 from .body import *
 from .footer import *
 from .header import *
+from .menu import *
 from .root_layout import *

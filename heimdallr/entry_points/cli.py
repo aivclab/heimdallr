@@ -14,17 +14,14 @@ from typing import Any
 
 import fire
 from pyfiglet import Figlet
+from sorcery import assigned_names
 
-from draugr.python_utilities.styling import get_terminal_size
+from draugr.python_utilities import get_terminal_size
 from heimdallr import get_version
-from heimdallr.entry_points import publisher, server
-from heimdallr.utilities import (
-    disable_service,
-    enable_service,
-    install_service,
-    remove_service,
+from heimdallr.configuration.heimdallr_settings import (
+    HeimdallrSettings,
+    SettingScopeEnum,
 )
-from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
 
 margin_percentage = 0 / 6
 terminal_width = get_terminal_size().columns
@@ -36,163 +33,195 @@ sponsors = "Alexandra Institute"
 
 
 class ServiceOption(Enum):
-    install = "install"
-    remove = "remove"
-    disable = "disable"
-    enable = "enable"
+    """ """
+
+    (
+        install,
+        remove,
+        uninstall,
+        disable,
+        enable,
+        start,
+        stop,
+        restart,
+        status,
+    ) = assigned_names()  # same
 
 
 class HeimdallrMode(Enum):
-    server = "server"
-    publisher = "publisher"
+    """ """
+
+    server, publisher = assigned_names()
 
 
 class HeimdallrCLI:
     """ """
 
-    def __init__(self):
-        for k in HeimdallrSettings():
+    def __init__(self, *, setting_scope: SettingScopeEnum = SettingScopeEnum.user):
+        try:
+            self.setting_scope = SettingScopeEnum(setting_scope)
+        except ValueError as a:
+            print(f"Valid options {list(SettingScopeEnum.__iter__())}")
+            raise a
+
+        for k in HeimdallrSettings(setting_scope=self.setting_scope):
             setattr(self, f"set_{k}", partial(self.set, k))
             setattr(self, f"get_{k}", partial(self.get, k))
 
-    def server(self):
-        """ """
-        server.main()
-
     def serve(self):
-        """ """
-        self.server()
+        """serve metrics at localhost:5555"""
+        from heimdallr.entry_points import server
 
-    def publisher(self):
-        """ """
-        publisher.main()
+        server.main(setting_scope=SettingScopeEnum(self.setting_scope))
 
     def publish(self):
-        """ """
-        self.publisher()
+        """publish metrics"""
+        from heimdallr.entry_points import publisher
 
-    def set(self, setting: str, value: Any):
-        """ """
-        HeimdallrSettings().__setattr__(setting, value)
+        publisher.main(setting_scope=SettingScopeEnum(self.setting_scope))
 
-    def get(self, setting: str):
-        """ """
-        print(getattr(HeimdallrSettings(), setting))
+    def set(
+        self,
+        setting: str,
+        value: Any,
+    ) -> None:
+        """Setting options: [mqtt_access_token, mqtt_username, mqtt_password, mqtt_broker, mqtt_port]"""
+        print(self.setting_scope)
+        settings = HeimdallrSettings(setting_scope=self.setting_scope)
+        print(settings._mqtt_settings_path)
+        settings.__setattr__(setting, value)
 
-    def service(self, option: ServiceOption, mode: HeimdallrMode):
-        """ """
+    def multi_set(self, **kw) -> None:
+        """prefix kwargs sequence with a '-' eg. 'heimdallr multi_set -mqtt_port=9213' Setting options: [
+        mqtt_access_token,
+        mqtt_username,
+        mqtt_password,
+        mqtt_broker,
+        mqtt_port]"""
+        settings = HeimdallrSettings(SettingScopeEnum(self.setting_scope))
+        for setting, value in kw.items():
+            settings.__setattr__(setting, value)
+
+    def get(self, setting: str) -> None:
+        """Setting options: [mqtt_access_token, mqtt_username, mqtt_password, mqtt_broker, mqtt_port, all]"""
+        print(self.setting_scope)
+        settings = HeimdallrSettings(setting_scope=self.setting_scope)
+        print(settings._mqtt_settings_path)
+        if setting == "all":
+            print(settings)
+        else:
+            print(getattr(settings, setting))
+
+    def service(
+        self,
+        option: ServiceOption,
+        mode: HeimdallrMode,
+    ):
+        """
+        Only support systemd implementation
+        TODO: support Windows tasks
+        """
         try:
             option = ServiceOption(option)
             mode = HeimdallrMode(mode)
+            service_name = f"heimdallr_{mode.value}"
+
+            from draugr.os_utilities.linux_utilities import RunAsEnum
+
+            run_as = RunAsEnum.app_user
+            if self.setting_scope == SettingScopeEnum.user:
+                run_as = RunAsEnum.user
+            elif self.setting_scope == SettingScopeEnum.root:
+                run_as = RunAsEnum.root
+
             if option == ServiceOption.install:
+                from draugr.os_utilities.linux_utilities import (
+                    install_service,
+                )
+
                 if mode == HeimdallrMode.server:
-                    install_service(Path(server.__file__), str(mode.value))
+                    from heimdallr.entry_points import server
+
+                    install_service(Path(server.__file__), service_name, run_as=run_as)
                 elif mode == HeimdallrMode.publisher:
-                    install_service(Path(publisher.__file__), str(mode.value))
+                    from heimdallr.entry_points import publisher
+
+                    install_service(
+                        Path(publisher.__file__), service_name, run_as=run_as
+                    )
                 else:
                     raise Exception
-            elif option == ServiceOption.remove:
+            elif option == ServiceOption.remove or option == ServiceOption.uninstall:
                 if mode in HeimdallrMode:
-                    remove_service(str(mode.value))
+                    from draugr.os_utilities.linux_utilities import (
+                        remove_service,
+                    )
+
+                    remove_service(service_name, run_as=run_as)
                 else:
                     raise Exception
             elif option == ServiceOption.enable:
                 if mode in HeimdallrMode:
-                    enable_service(str(mode.value))
+                    from draugr.os_utilities.linux_utilities import (
+                        enable_service,
+                    )
+
+                    enable_service(service_name, run_as=run_as)
                 else:
                     raise Exception
             elif option == ServiceOption.disable:
                 if mode in HeimdallrMode:
-                    disable_service(str(mode.value))
+                    from draugr.os_utilities.linux_utilities import (
+                        disable_service,
+                    )
+
+                    disable_service(service_name, run_as=run_as)
+                else:
+                    raise Exception
+            elif option == ServiceOption.start:
+                if mode in HeimdallrMode:
+                    from draugr.os_utilities.linux_utilities import (
+                        start_service,
+                    )
+
+                    start_service(service_name, run_as=run_as)
+                else:
+                    raise Exception
+            elif option == ServiceOption.stop:
+                if mode in HeimdallrMode:
+                    from draugr.os_utilities.linux_utilities import (
+                        stop_service,
+                    )
+
+                    stop_service(service_name, run_as=run_as)
+                else:
+                    raise Exception
+            elif option == ServiceOption.restart:
+                if mode in HeimdallrMode:
+                    from draugr.os_utilities.linux_utilities import (
+                        restart_service,
+                    )
+
+                    restart_service(service_name, run_as=run_as)
+                else:
+                    raise Exception
+            elif option == ServiceOption.status:
+                if mode in HeimdallrMode:
+                    from draugr.os_utilities.linux_utilities import (
+                        status_service,
+                    )
+
+                    status_service(service_name, run_as=run_as)
                 else:
                     raise Exception
             else:
                 raise Exception
+            message = str(option.value).capitalize().rstrip("e")
+            if message[-1] == "p":  # E.g. stop -> stop+p(ed)
+                # A little bit yucky
+                message += "p"
             print(
-                f'{str(option.value).capitalize().rstrip("e")}ed the Heimdallr',
-                mode.value,
-                "service",
-            )
-        except ValueError as a:
-            print(a)
-            print(f"Valid options {list(ServiceOption.__iter__())}")
-            print(f"Valid modes {list(HeimdallrMode.__iter__())}")
-
-    @staticmethod
-    def version() -> None:
-        """
-        Prints the version of this Neodroid installation."""
-        draw_cli_header()
-        print(f"Version: {get_version()}")
-
-    @staticmethod
-    def sponsors() -> None:
-        """ """
-        print(sponsors)
-
-    def publish(self):
-        """
-
-        Returns:
-
-        """
-        self.publisher()
-
-    def set(self, setting: str, value: Any):
-        """
-
-        Args:
-          setting:
-          value:
-
-        Returns:
-
-        """
-        HeimdallrSettings().__setattr__(setting, value)
-
-    def get(self, setting: str):
-        """
-
-        Args:
-          setting:
-        """
-        print(getattr(HeimdallrSettings(), setting))
-
-    def service(self, option: ServiceOption, mode: HeimdallrMode):
-        """ """
-        try:
-            option = ServiceOption(option)
-            mode = HeimdallrMode(mode)
-            if option == ServiceOption.install:
-                if mode == HeimdallrMode.server:
-                    install_service(
-                        Path(server.__file__), f"heimdallr_{str(mode.value)}"
-                    )
-                elif mode == HeimdallrMode.publisher:
-                    install_service(
-                        Path(publisher.__file__), f"heimdallr_{str(mode.value)}"
-                    )
-                else:
-                    raise Exception
-            elif option == ServiceOption.remove:
-                if mode in HeimdallrMode:
-                    remove_service(str(mode.value))
-                else:
-                    raise Exception
-            elif option == ServiceOption.enable:
-                if mode in HeimdallrMode:
-                    enable_service(str(mode.value))
-                else:
-                    raise Exception
-            elif option == ServiceOption.disable:
-                if mode in HeimdallrMode:
-                    disable_service(str(mode.value))
-                else:
-                    raise Exception
-            else:
-                raise Exception
-            print(
-                f'{str(option.value).capitalize().rstrip("e")}ed the Heimdallr',
+                f"{message}ed the Heimdallr",
                 mode.value,
                 "service",
             )
@@ -209,19 +238,21 @@ class HeimdallrCLI:
         print(f"Version: {get_version()}")
 
     @staticmethod
-    def sponsors() -> None:
-        print(sponsors)
+    def sponsors(*, drawer: callable = print) -> None:
+        """emits sponsors"""
+        drawer(sponsors)
 
 
-def draw_cli_header(*, title="Heimdallr", font="big"):
+def draw_cli_header(
+    *, title: str = "Heimdallr", font: str = "big", drawer: callable = print
+):
     """ """
-    figlet = Figlet(font=font, justify="center", width=terminal_width)
-    description = figlet.renderText(title)
+    drawer(
+        f"{Figlet(font=font, justify='center', width=terminal_width).renderText(title)}{underline}\n"
+    )
 
-    print(f"{description}{underline}\n")
 
-
-def main(*, always_draw_header=False):
+def main(*, always_draw_header: bool = False):
     """ """
     if always_draw_header:
         draw_cli_header()

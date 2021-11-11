@@ -7,13 +7,14 @@ __doc__ = r"""
            Created on 15/03/2020
            """
 
-from dash import dcc
-from dash import html
+from dash import dcc, html
 
 from heimdallr.configuration.heimdallr_config import (
     BUILD_STATUS_INTERVAL,
     BUILD_STATUS_MAPPING,
 )
+
+__all__ = ["get_footer"]
 
 
 def get_footer():
@@ -32,3 +33,6 @@ def get_footer():
         + [dcc.Interval(id=BUILD_STATUS_INTERVAL, interval=60 * 1000, n_intervals=0)],
         className="page-footer text-center row p-3",
     )
+
+
+# TODO: https://bamboo.alexandra.dk/telemetry.action?filter=project&projectKey=WGDEMO

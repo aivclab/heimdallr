@@ -1,24 +1,18 @@
 fail_fast: true
-fail_fast: true
 repos:
   - repo: https://github.com/ambv/black
     rev:  21.8b0
     hooks:
       - id:               black
-        language_version: python3.7
-  - repo: local
-    hooks:
-      - id:             pytest-check
-        name:           pytest-check
-        entry:          pytest
-        language:       system
-        pass_filenames: false
-        always_run:     true
-  - repo: local
-    hooks:
-      - id:             pytest-check
-        name:           pytest-check
-        entry:          pytest
-        language:       system
-        pass_filenames: false
-        always_run:     true
+        language_version: python3.8
+        #  - repo: local
+        #    hooks:
+        #      - id:                       pytest-check
+        #        name:                     pytest-check
+        #        language:                 python
+        #        language_version:         python3.8
+        #additional_dependencies:  [-r, requirements.txt]
+        #language:                system
+#        entry:                    python -m pytest
+#        pass_filenames:           false
+#        always_run:               true

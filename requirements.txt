@@ -1,5 +1,4 @@
-apppath
-warg
+devpack
 numpy
 six
 psutil

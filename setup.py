@@ -79,14 +79,18 @@ __author__ = author
 
 
 class HeimdallrPackage:
+    """ """
+
     @property
     def test_dependencies(self) -> list:
-        return read_reqs("requirements_tests.txt", Path(__file__).parent)
+        return read_reqs(
+            "requirements_tests.txt", Path(__file__).parent / "requirements"
+        )
 
     @property
     def setup_dependencies(self) -> list:
         """ """
-        return read_reqs("requirements_setup.txt", Path(__file__).parent)
+        return read_reqs("requirements_dev.txt", Path(__file__).parent / "requirements")
 
     @property
     def package_name(self) -> str:
