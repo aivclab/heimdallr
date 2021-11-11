@@ -64,18 +64,18 @@ class HeimdallrCLI:
             setattr(self, f"get_{k}", partial(self.get, k))
 
     @staticmethod
-    def serve():
+    def serve(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
         """serve metrics at localhost:5555"""
         from heimdallr.entry_points import server
 
-        server.main()
+        server.main(setting_scope)
 
     @staticmethod
-    def publish():
+    def publish(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
         """publish metrics"""
         from heimdallr.entry_points import publisher
 
-        publisher.main()
+        publisher.main(setting_scope)
 
     @staticmethod
     def set(
