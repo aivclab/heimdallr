@@ -10,7 +10,10 @@ from draugr.python_utilities.business import busy_indicator
 from draugr.writers import LogWriter, MockWriter, Writer
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
-from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
+from heimdallr.configuration.heimdallr_settings import (
+    HeimdallrSettings,
+    SettingScopeEnum,
+)
 from heimdallr.utilities.gpu_utilities import pull_gpu_info
 from warg import NOD
 
@@ -34,10 +37,10 @@ def on_disconnect(client, userdata, rc):
         client.reconnect()
 
 
-def main(is_user: bool = False):
+def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
     """ """
     global LOG_WRITER
-    if is_user:
+    if setting_scope == SettingScopeEnum.user:
         LOG_WRITER = LogWriter(
             ensure_existence(PROJECT_APP_PATH.user_log)
             / f"{PROJECT_NAME}_publisher.log"
@@ -52,7 +55,7 @@ def main(is_user: bool = False):
     client.on_publish = on_publish
     client.on_disconnect = on_disconnect
 
-    HEIMDALLR_SETTINGS = HeimdallrSettings()  # TODO input scope
+    HEIMDALLR_SETTINGS = HeimdallrSettings(setting_scope)
 
     client.username_pw_set(
         HEIMDALLR_SETTINGS.mqtt_username, HEIMDALLR_SETTINGS.mqtt_password

@@ -21,7 +21,10 @@ from draugr.writers import LogWriter, MockWriter, Writer
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 from heimdallr.board_layout import get_root_layout
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
-from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
+from heimdallr.configuration.heimdallr_settings import (
+    HeimdallrSettings,
+    SettingScopeEnum,
+)
 from heimdallr.utilities import (
     get_calender_df,
     per_machine_per_device_pie_charts,
@@ -226,10 +229,10 @@ def on_disconnect(client, userdata, rc) -> None:
         client.subscribe(ALL_CONSTANTS.MQTT_TOPIC, ALL_CONSTANTS.MQTT_QOS)
 
 
-def main(is_user: bool = False):
+def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
     """ """
     global LOG_WRITER
-    if is_user:
+    if setting_scope == SettingScopeEnum.user:
         LOG_WRITER = LogWriter(
             ensure_existence(PROJECT_APP_PATH.user_log) / f"{PROJECT_NAME}_server.log"
         )
@@ -241,7 +244,7 @@ def main(is_user: bool = False):
     MQTT_CLIENT.on_message = on_message
     MQTT_CLIENT.on_disconnect = on_disconnect
 
-    CRYSTALLISED_HEIMDALLR_SETTINGS = HeimdallrSettings()  # TODO input scope
+    CRYSTALLISED_HEIMDALLR_SETTINGS = HeimdallrSettings(setting_scope)
     if True:
         if (
             CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_access_token and False
