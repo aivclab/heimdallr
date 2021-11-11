@@ -57,7 +57,7 @@ class HeimdallrMode(Enum):
 class HeimdallrCLI:
     """ """
 
-    def __init__(self, *, setting_scope: SettingScopeEnum = SettingScopeEnum.root):
+    def __init__(self, *, setting_scope: SettingScopeEnum = SettingScopeEnum.user):
         try:
             self.setting_scope = SettingScopeEnum(setting_scope)
         except ValueError as a:
