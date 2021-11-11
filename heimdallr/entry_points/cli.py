@@ -58,8 +58,7 @@ class HeimdallrCLI:
     """ """
 
     def __init__(self, setting_scope: SettingScopeEnum = SettingScopeEnum.root):
-        setting_scope = SettingScopeEnum(setting_scope)
-        for k in HeimdallrSettings(setting_scope):
+        for k in HeimdallrSettings(setting_scope=SettingScopeEnum(setting_scope)):
             setattr(self, f"set_{k}", partial(self.set, k))
             setattr(self, f"get_{k}", partial(self.get, k))
 
@@ -68,14 +67,14 @@ class HeimdallrCLI:
         """serve metrics at localhost:5555"""
         from heimdallr.entry_points import server
 
-        server.main(setting_scope)
+        server.main(setting_scope=SettingScopeEnum(setting_scope))
 
     @staticmethod
     def publish(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
         """publish metrics"""
         from heimdallr.entry_points import publisher
 
-        publisher.main(setting_scope)
+        publisher.main(setting_scope=SettingScopeEnum(setting_scope))
 
     @staticmethod
     def set(
@@ -84,8 +83,9 @@ class HeimdallrCLI:
         setting_scope: SettingScopeEnum = SettingScopeEnum.root,
     ) -> None:
         """Setting options: [mqtt_access_token, mqtt_username, mqtt_password, mqtt_broker, mqtt_port]"""
-        setting_scope = SettingScopeEnum(setting_scope)
-        HeimdallrSettings(setting_scope).__setattr__(setting, value)
+        HeimdallrSettings(setting_scope=SettingScopeEnum(setting_scope)).__setattr__(
+            setting, value
+        )
 
     @staticmethod
     def multi_set(
@@ -97,8 +97,7 @@ class HeimdallrCLI:
         mqtt_password,
         mqtt_broker,
         mqtt_port]"""
-        setting_scope = SettingScopeEnum(setting_scope)
-        settings = HeimdallrSettings(setting_scope)
+        settings = HeimdallrSettings(SettingScopeEnum(setting_scope))
         for setting, value in kw.items():
             settings.__setattr__(setting, value)
 
