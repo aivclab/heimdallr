@@ -16,37 +16,16 @@ from heimdallr.configuration.heimdallr_config import (
     PERCENT_COLUMNS,
 )
 from heimdallr.utilities.date_tools import timestamp_to_datetime
-from heimdallr.utilities.nvidia.packing import get_nv_info
-from warg import NOD, Number
+from warg import Number
+
+from heimdallr.utilities.unpacking import pull_gpu_info
 
 MB_DIVISOR = int(1024 ** 2)
 
 __all__ = [
-    "pull_gpu_info",
     "to_overall_gpu_process_df",
     "per_machine_per_device_pie_charts",
 ]
-
-
-def pull_gpu_info(include_graphics_processes: bool = True) -> dict:
-    """Get all information about all your graphics cards.
-
-    Returns:
-      dict: The returned result is a dict with 3 keys: count, driver_version and devices:
-          count: Number of gpus found
-          driver_version: The version of the system’s graphics driver
-          devices: It's a list and every item is a namedtuple Device which has 10 fields, for exzample id,
-          name and fan_speed etc.
-                   It should be noted that the Process field is also a namedtuple which has 11 fields."""
-
-    driver_version, devices = get_nv_info(include_graphics_processes)
-
-    info = NOD()
-
-    info["count"] = len(devices)
-    info["driver_version"] = driver_version
-    info["devices"] = devices
-    return info.as_dict()
 
 
 def to_overall_gpu_process_df(gpu_stats: Mapping) -> DataFrame:

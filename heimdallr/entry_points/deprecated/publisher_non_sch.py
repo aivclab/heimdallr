@@ -11,7 +11,7 @@ from draugr.writers import LogWriter, MockWriter, Writer
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
 from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
-from heimdallr.utilities.gpu_utilities import pull_gpu_info
+from heimdallr.utilities.unpacking import pull_gpu_info
 from warg import NOD
 
 HOSTNAME = socket.gethostname()

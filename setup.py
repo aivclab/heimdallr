@@ -100,7 +100,7 @@ class HeimdallrPackage:
     @property
     def url(self) -> str:
         """ """
-        return "https://github.com/cnheider/heimdallr"
+        return "https://github.com/aivclab/heimdallr"
 
     @property
     def download_url(self) -> str:

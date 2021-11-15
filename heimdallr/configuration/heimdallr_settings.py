@@ -43,7 +43,7 @@ class HeimdallrSettings(PropertySettings):
     _mqtt_settings_path = None
     _credentials_base_path = None
 
-    def __init__(self, setting_scope: SettingScopeEnum = SettingScopeEnum.site):
+    def __init__(self, setting_scope: SettingScopeEnum = SettingScopeEnum.user):
         """Protects from overriding on initialisation"""
         pass
         # super().__init__()
@@ -198,7 +198,7 @@ class HeimdallrSettings(PropertySettings):
 
 
 def set_all_heimdallr_settings(
-    setting_scope: SettingScopeEnum = SettingScopeEnum.root,
+    setting_scope: SettingScopeEnum = SettingScopeEnum.user,
     *,
     _lower_keys: bool = True,
     **kwargs,
