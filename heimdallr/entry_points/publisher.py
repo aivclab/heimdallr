@@ -14,7 +14,7 @@ from heimdallr.configuration.heimdallr_settings import (
     HeimdallrSettings,
     SettingScopeEnum,
 )
-from heimdallr.utilities.gpu_utilities import pull_gpu_info
+from heimdallr.utilities.unpacking import pull_gpu_info
 from warg import NOD
 
 HOSTNAME = socket.gethostname()
@@ -24,17 +24,22 @@ __all__ = ["main"]
 LOG_WRITER: Writer = MockWriter()
 
 
-def on_publish(client, userdata, result) -> None:
+def on_publish(client, userdata, result, writer: callable = None) -> None:
     """ """
     global LOG_WRITER
     LOG_WRITER(result)
+    if writer:
+        writer(result)
 
 
-def on_disconnect(client, userdata, rc):
+def on_disconnect(client, userdata, rc, writer: callable = print):
     """ """
+    global LOG_WRITER
     if rc != 0:
-        print("Unexpected MQTT disconnection. Will auto-reconnect")
         client.reconnect()
+        result = "Unexpected MQTT disconnection. Will auto-reconnect"
+        LOG_WRITER(result)
+        writer(result)
 
 
 def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):

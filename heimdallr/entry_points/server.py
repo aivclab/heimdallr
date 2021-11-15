@@ -25,7 +25,7 @@ from heimdallr.configuration.heimdallr_settings import (
     HeimdallrSettings,
     SettingScopeEnum,
 )
-from heimdallr.utilities import (
+from heimdallr.utilities.server import (
     get_calender_df,
     per_machine_per_device_pie_charts,
     to_overall_gpu_process_df,
