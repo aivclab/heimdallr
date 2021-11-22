@@ -19,7 +19,7 @@ from apppath import ensure_existence
 from draugr.python_utilities import default_datetime_repr
 from draugr.writers import LogWriter, MockWriter, Writer
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
-from heimdallr.board_layout import get_root_layout
+from heimdallr.server.board_layout import get_root_layout
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
 from heimdallr.configuration.heimdallr_settings import (
     HeimdallrSettings,

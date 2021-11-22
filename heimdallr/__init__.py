@@ -10,7 +10,7 @@ from apppath import AppPath
 
 __project__ = "Heimdallr"
 __author__ = "Christian Heider Nielsen"
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 __doc__ = """
 Created on 27/04/2019
 

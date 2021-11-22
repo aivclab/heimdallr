@@ -7,3 +7,4 @@ sh
 fire
 pyfiglet
 schedule
+pynvml
