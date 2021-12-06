@@ -18,3 +18,4 @@ sh
 fire
 pyfiglet
 schedule
+PyGithub

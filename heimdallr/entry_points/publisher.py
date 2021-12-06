@@ -24,7 +24,7 @@ __all__ = ["main"]
 LOG_WRITER: Writer = MockWriter()
 
 
-def on_publish(client, userdata, result, writer: callable = None) -> None:
+def on_publish(client: Any, userdata: Any, result, writer: callable = None) -> None:
     """ """
     global LOG_WRITER
     LOG_WRITER(result)
@@ -32,7 +32,7 @@ def on_publish(client, userdata, result, writer: callable = None) -> None:
         writer(result)
 
 
-def on_disconnect(client, userdata, rc, writer: callable = print):
+def on_disconnect(client: Any, userdata: Any, rc, writer: callable = print) -> None:
     """ """
     global LOG_WRITER
     if rc != 0:
@@ -42,7 +42,7 @@ def on_disconnect(client, userdata, rc, writer: callable = print):
         writer(result)
 
 
-def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
+def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
     """ """
     global LOG_WRITER
     if setting_scope == SettingScopeEnum.user:

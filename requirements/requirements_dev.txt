@@ -1,13 +1,20 @@
-pip>=19.0.3
+pip>=21.1.3
 wheel>=0.33.0
 twine>=1.13.0
-black>=18.9b0
 pytest>=4.3.0
 pytest-cov>=2.6.1
 coveralls>=1.6.0
 pynvml
+black
 pre-commit
 -r requirements_docs.txt
 -r requirements_server.txt
 -r requirements_tests.txt
+#-r requirements_nvidia.txt
+#-r requirements_intel.txt
+#-r requirements_amd.txt
+
+#-r requirements_windows.txt
+#-r requirements_linux.txt
+
 -r ../requirements.txt

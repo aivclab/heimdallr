@@ -1,9 +1,11 @@
-"""Function to get GPU infomations.
+"""Function to get GPU information.
 """
-from typing import Mapping, Sequence
+
+from typing import List, Mapping, Sequence
 
 import numpy
 import pandas
+from dash import html
 from dash.dcc import Graph
 from dash.html import Div, H3
 from pandas import DataFrame
@@ -65,7 +67,9 @@ def to_overall_gpu_process_df(gpu_stats: Mapping) -> DataFrame:
     return out_df
 
 
-def per_machine_per_device_pie_charts(gpu_stats: Mapping, keep_alive: Sequence[Number]):
+def per_machine_per_device_pie_charts(
+    gpu_stats: Mapping, keep_alive: Sequence[Number]
+) -> List[html.Div]:
     """ """
     compute_machines = []
     for machine_name, machine in gpu_stats.items():

@@ -76,7 +76,7 @@ ALLOWED_TYPES = (
 """
 
 
-def get_menu():
+def get_menu() -> html.Div:
     """ """
     return html.Div(
         [

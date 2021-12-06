@@ -40,6 +40,14 @@ from pynvml import *
 # Helper function
 #
 def StrVirt(mode):
+    """
+
+    Args:
+      mode:
+
+    Returns:
+
+    """
     if mode == NVML_GPU_VIRTUALIZATION_MODE_NONE:
         return "None"
     elif mode == NVML_GPU_VIRTUALIZATION_MODE_PASSTHROUGH:
@@ -58,6 +66,14 @@ def StrVirt(mode):
 # Converts errors into string messages
 #
 def handleError(err):
+    """
+
+    Args:
+      err:
+
+    Returns:
+
+    """
     if err.value == NVML_ERROR_NOT_SUPPORTED:
         return "N/A"
     else:
@@ -66,6 +82,11 @@ def handleError(err):
 
 #######
 def deviceQuery():
+    """
+
+    Returns:
+
+    """
     strResult = ""
     try:
         #

@@ -11,7 +11,7 @@ import base64
 from pathlib import Path
 
 from dash import dcc, html
-
+import heimdallr
 from heimdallr.configuration.heimdallr_config import (
     HTML_TITLE,
     TIME_ID,
@@ -21,10 +21,11 @@ from heimdallr.configuration.heimdallr_config import (
 __all__ = ["get_header"]
 
 
-def get_header():
+def get_header() -> html.Div:
     """ """
     with open(
-        Path(__file__).parent.parent.parent / ".github" / "images" / "aivclab.svg", "rb"
+        Path(heimdallr.__file__).parent.parent / ".github" / "images" / "aivclab.svg",
+        "rb",
     ) as svg:
         encoded = base64.b64encode(svg.read())
         return html.Div(

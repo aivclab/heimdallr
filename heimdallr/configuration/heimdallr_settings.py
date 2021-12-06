@@ -8,16 +8,21 @@ __doc__ = r"""
            """
 
 import getpass
+
 import shelve
 from enum import Enum
 from typing import Optional
 
-import sh
+try:
+    import sh
+except:
+    pass
+
 from sorcery import assigned_names
 
 from apppath import ensure_existence
 from heimdallr import PROJECT_APP_PATH
-from warg import PropertySettings
+from warg import PropertySettings, is_windows
 
 __all__ = [
     "HeimdallrSettings",  # Setting Class
@@ -41,6 +46,7 @@ class HeimdallrSettings(PropertySettings):
     _setting_scope = None
     _google_settings_path = None
     _mqtt_settings_path = None
+    _github_settings_path = None
     _credentials_base_path = None
 
     def __init__(self, setting_scope: SettingScopeEnum = SettingScopeEnum.user):
@@ -51,7 +57,7 @@ class HeimdallrSettings(PropertySettings):
         # print(f'Using settings from {PROJECT_APP_PATH.user_config}')
 
         _setting_scope = setting_scope
-        if setting_scope == SettingScopeEnum.user:
+        if setting_scope == SettingScopeEnum.user or is_windows():
             HeimdallrSettings._credentials_base_path = ensure_existence(
                 PROJECT_APP_PATH.user_config / "credentials"
             )
@@ -60,6 +66,9 @@ class HeimdallrSettings(PropertySettings):
             )
             HeimdallrSettings._mqtt_settings_path = str(
                 ensure_existence(PROJECT_APP_PATH.user_config) / "mqtt.settings"
+            )
+            HeimdallrSettings._github_settings_path = str(
+                ensure_existence(PROJECT_APP_PATH.user_config) / "github.settings"
             )
 
             # print(f'Using config at {PROJECT_APP_PATH.site_config}')
@@ -87,6 +96,9 @@ class HeimdallrSettings(PropertySettings):
             HeimdallrSettings._mqtt_settings_path = str(
                 ensure_existence(PROJECT_APP_PATH.site_config) / "mqtt.settings"
             )
+            HeimdallrSettings._github_settings_path = str(
+                ensure_existence(PROJECT_APP_PATH.site_config) / "github.settings"
+            )
 
             # print(f'Using config at {PROJECT_APP_PATH.site_config}')
         elif setting_scope == SettingScopeEnum.root:
@@ -113,6 +125,9 @@ class HeimdallrSettings(PropertySettings):
             HeimdallrSettings._mqtt_settings_path = str(
                 ensure_existence(PROJECT_APP_PATH.root_config) / "mqtt.settings"
             )
+            HeimdallrSettings._github_settings_path = str(
+                ensure_existence(PROJECT_APP_PATH.root_config) / "github.settings"
+            )
 
             # print(f'Using config at {PROJECT_APP_PATH.site_config}')
         else:
@@ -130,6 +145,19 @@ class HeimdallrSettings(PropertySettings):
     def google_calendar_id(self, calendar_id: str) -> None:
         with shelve.open(HeimdallrSettings._google_settings_path, writeback=True) as d:
             d["google_calendar_id"] = calendar_id
+
+    @property
+    def github_token(self) -> Optional[str]:
+        """ """
+        with shelve.open(HeimdallrSettings._github_settings_path) as d:
+            if "github_token" in d:
+                return d["github_token"]
+        return None
+
+    @github_token.setter
+    def github_token(self, calendar_id: str) -> None:
+        with shelve.open(HeimdallrSettings._github_settings_path, writeback=True) as d:
+            d["github_token"] = calendar_id
 
     @property
     def mqtt_access_token(self) -> Optional[str]:

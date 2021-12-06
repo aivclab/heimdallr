@@ -36,7 +36,7 @@ def implicit():
 
 def get_calender_df(
     calendar_id: str, credentials_base_path: Path, num_entries: int = 30
-) -> dash_table.DataTable:
+) -> pandas.DataFrame:
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
 

@@ -8,10 +8,11 @@ __doc__ = r"""
            """
 
 import time
+from typing import List, Tuple
 
 import psutil
 
-from heimdallr.utilities.nvidia import bindings
+import bindings
 from warg import NOD
 
 try:
@@ -20,7 +21,7 @@ except Exception as e:
     print(e)
 
 
-def get_nv_info(include_graphics_processes: bool = True):
+def get_nv_info(include_graphics_processes: bool = True) -> Tuple[str, List]:
     """ """
     devices = []
     try:

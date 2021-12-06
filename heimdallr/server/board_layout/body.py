@@ -22,7 +22,7 @@ from heimdallr.configuration.heimdallr_config import (
 __all__ = ["get_body"]
 
 
-def get_body():
+def get_body() -> html.Div:
     """ """
     return html.Div(
         [

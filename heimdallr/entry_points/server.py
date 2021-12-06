@@ -3,6 +3,7 @@ import datetime
 import json
 import logging
 import uuid
+from typing import Any
 
 import dash
 import flask
@@ -76,7 +77,7 @@ LOG_WRITER: Writer = MockWriter()
     Output(ALL_CONSTANTS.TIME_ID, "children"),
     [Input(ALL_CONSTANTS.TIME_INTERVAL_ID, "n_intervals")],
 )
-def update_time(n) -> str:
+def update_time(n: int) -> str:
     """ """
     global GPU_STATS
     global KEEP_ALIVE
@@ -100,7 +101,7 @@ def update_time(n) -> str:
     Output(ALL_CONSTANTS.CALENDAR_ID, "children"),
     [Input(ALL_CONSTANTS.CALENDAR_INTERVAL_ID, "n_intervals")],
 )
-def update_calendar_live(n) -> DataTable:
+def update_calendar_live(n: int) -> DataTable:
     """ """
     df = get_calender_df(
         HeimdallrSettings().google_calendar_id,
@@ -128,7 +129,7 @@ def update_calendar_live(n) -> DataTable:
     Output(ALL_CONSTANTS.GPU_GRAPHS_ID, "children"),
     [Input(ALL_CONSTANTS.GPU_INTERVAL_ID, "n_intervals")],
 )
-def update_graph(n) -> Div:
+def update_graph(n: int) -> Div:
     """ """
     global GPU_STATS
     global KEEP_ALIVE
@@ -144,7 +145,7 @@ def update_graph(n) -> Div:
     Output(ALL_CONSTANTS.GPU_TABLES_ID, "children"),
     [Input(ALL_CONSTANTS.GPU_INTERVAL_ID, "n_intervals")],
 )
-def update_table(n) -> Div:
+def update_table(n: int) -> Div:
     """ """
     MQTT_CLIENT.loop()
 
@@ -179,7 +180,7 @@ def update_table(n) -> Div:
     dash.dependencies.Output("menu_container", "style"),
     [dash.dependencies.Input("menu_toggle_button", "n_clicks")],
 )
-def menu_toggle(n_clicks) -> dict:
+def menu_toggle(n_clicks: int) -> dict:
     """
 
     Args:
@@ -207,7 +208,7 @@ def on_post_config() -> Response:
     return flask.redirect("/")
 
 
-def on_message(client, userdata, result: mqtt.client.MQTTMessage) -> None:
+def on_message(client: Any, userdata: Any, result: mqtt.client.MQTTMessage) -> None:
     """ """
     global LOG_WRITER
     global GPU_STATS
@@ -221,7 +222,7 @@ def on_message(client, userdata, result: mqtt.client.MQTTMessage) -> None:
     )
 
 
-def on_disconnect(client, userdata, rc) -> None:
+def on_disconnect(client: Any, userdata: Any, rc: Any) -> None:
     """ """
     if rc != 0:
         print("Unexpected MQTT disconnection. Will auto-reconnect")

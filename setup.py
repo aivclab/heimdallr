@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import re
-from typing import List, Sequence
+from typing import List, Sequence, Union
 
 from setuptools import find_packages, setup
 
 
-def python_version_check(major: int = 3, minor: int = 7):
+def python_version_check(major: int = 3, minor: int = 7) -> None:
     """ """
     import sys
 
@@ -113,7 +113,7 @@ class HeimdallrPackage:
         return "text/markdown"
 
     @property
-    def packages(self):
+    def packages(self) -> List[Union[str, bytes]]:
         """ """
         return find_packages(
             exclude=[
@@ -122,27 +122,27 @@ class HeimdallrPackage:
         )
 
     @property
-    def author_name(self):
+    def author_name(self) -> str:
         """ """
         return author
 
     @property
-    def author_email(self):
+    def author_email(self) -> str:
         """ """
         return "christian.heider@alexandra.dk"
 
     @property
-    def maintainer_name(self):
+    def maintainer_name(self) -> str:
         """ """
         return self.author_name
 
     @property
-    def maintainer_email(self):
+    def maintainer_email(self) -> str:
         """ """
         return self.author_email
 
     @property
-    def package_data(self):
+    def package_data(self) -> dict:
         """ """
         # data = glob.glob('data/', recursive=True)
         return {
@@ -152,7 +152,7 @@ class HeimdallrPackage:
         }
 
     @property
-    def entry_points(self):
+    def entry_points(self) -> dict:
         """ """
         return {
             "console_scripts": [
@@ -165,6 +165,11 @@ class HeimdallrPackage:
 
     @property
     def extras(self) -> dict:
+        """
+
+        Returns:
+
+        """
         these_extras = {
             # 'ExtraName':['package-name; platform_system == "System(Linux,Windows)"'
         }
@@ -185,34 +190,34 @@ class HeimdallrPackage:
         return these_extras
 
     @property
-    def requirements(self) -> list:
+    def requirements(self) -> List[str]:
         """ """
         return read_reqs("requirements.txt", Path(__file__).parent)
 
     @property
-    def description(self):
+    def description(self) -> str:
         """ """
         return "A package for hosting and connecting to a live dashboard"
 
     @property
-    def readme(self):
+    def readme(self) -> str:
         """ """
         with open("README.md", encoding="utf8") as f:
             return f.read()
 
     @property
-    def keyword(self):
+    def keyword(self) -> str:
         """ """
         with open("KEYWORDS.md") as f:
             return f.read()
 
     @property
-    def license(self):
+    def license(self) -> str:
         """ """
         return "Apache License, Version 2.0"
 
     @property
-    def classifiers(self):
+    def classifiers(self) -> List[str]:
         """ """
         return [
             "Development Status :: 4 - Beta",
@@ -231,7 +236,7 @@ class HeimdallrPackage:
         ]
 
     @property
-    def version(self):
+    def version(self) -> str:
         """ """
         return version
 
