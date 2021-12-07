@@ -8,6 +8,8 @@ __doc__ = r"""
            """
 
 import getpass
+import inspect
+import os
 
 import shelve
 from enum import Enum
@@ -48,6 +50,7 @@ class HeimdallrSettings(PropertySettings):
     _mqtt_settings_path = None
     _github_settings_path = None
     _credentials_base_path = None
+    _look_up_env_on_missing = True
 
     def __init__(self, setting_scope: SettingScopeEnum = SettingScopeEnum.user):
         """Protects from overriding on initialisation"""
@@ -136,93 +139,121 @@ class HeimdallrSettings(PropertySettings):
     @property
     def google_calendar_id(self) -> Optional[str]:
         """ """
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._google_settings_path) as d:
-            if "google_calendar_id" in d:
-                return d["google_calendar_id"]
+            if key in d:
+                return d[key]
+        if self._look_up_env_on_missing:
+            return os.environ.get(key)
         return None
 
     @google_calendar_id.setter
     def google_calendar_id(self, calendar_id: str) -> None:
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._google_settings_path, writeback=True) as d:
-            d["google_calendar_id"] = calendar_id
+            d[key] = calendar_id
 
     @property
     def github_token(self) -> Optional[str]:
         """ """
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._github_settings_path) as d:
-            if "github_token" in d:
-                return d["github_token"]
+            if key in d:
+                return d[key]
+        if self._look_up_env_on_missing:
+            return os.environ.get(key)
         return None
 
     @github_token.setter
     def github_token(self, calendar_id: str) -> None:
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._github_settings_path, writeback=True) as d:
-            d["github_token"] = calendar_id
+            d[key] = calendar_id
 
     @property
     def mqtt_access_token(self) -> Optional[str]:
         """ """
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
-            if "mqtt_access_token" in d:
-                return d["mqtt_access_token"]
+            if key in d:
+                return d[key]
+        if self._look_up_env_on_missing:
+            return os.environ.get(key)
         return None
 
     @mqtt_access_token.setter
     def mqtt_access_token(self, token: str) -> None:
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
-            d["mqtt_access_token"] = token
+            d[key] = token
 
     @property
     def mqtt_username(self) -> Optional[str]:
         """ """
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
-            if "mqtt_username" in d:
-                return d["mqtt_username"]
+            if key in d:
+                return d[key]
+        if self._look_up_env_on_missing:
+            return os.environ.get(key)
         return None
 
     @mqtt_username.setter
     def mqtt_username(self, username: str) -> None:
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
-            d["mqtt_username"] = username
+            d[key] = username
 
     @property
     def mqtt_password(self) -> Optional[str]:
         """ """
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
-            if "mqtt_password" in d:
-                return d["mqtt_password"]
+            if key in d:
+                return d[key]
+        if self._look_up_env_on_missing:
+            return os.environ.get(key)
         return None
 
     @mqtt_password.setter
     def mqtt_password(self, password: str) -> None:
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
-            d["mqtt_password"] = password
+            d[key] = password
 
     @property
     def mqtt_broker(self) -> Optional[str]:
         """ """
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
-            if "mqtt_broker" in d:
-                return d["mqtt_broker"]
+            if key in d:
+                return d[key]
+        if self._look_up_env_on_missing:
+            return os.environ.get(key)
         return None
 
     @mqtt_broker.setter
     def mqtt_broker(self, broker: str) -> None:
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
-            d["mqtt_broker"] = broker
+            d[key] = broker
 
     @property
     def mqtt_port(self) -> Optional[str]:
         """ """
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
-            if "mqtt_port" in d:
-                return d["mqtt_port"]
+            if key in d:
+                return d[key]
+        if self._look_up_env_on_missing:
+            return os.environ.get(key)
         return None
 
     @mqtt_port.setter
     def mqtt_port(self, port: int) -> None:
+        key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
-            d["mqtt_port"] = port
+            d[key] = port
 
 
 def set_all_heimdallr_settings(
@@ -252,11 +283,13 @@ if __name__ == "__main__":
     settings = HeimdallrSettings()
 
     for k in settings:
-        print(k)
+        print(k, settings[k])
 
+    """
     set_all_heimdallr_settings(
         **{
             k: getattr(settings, k) if getattr(settings, k) else None
             for k in iter(settings)
         }
     )
+    """
