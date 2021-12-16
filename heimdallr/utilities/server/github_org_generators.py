@@ -77,10 +77,20 @@ def yield_org_repos(
 
 
 def yield_org_issues(g: Github, org_name: str) -> Generator[Issue, None, None]:
+    """
+
+    :param g:
+    :param org_name:
+    """
     yield from yield_issues(yield_org_repos(g, org_name))
 
 
 def yield_org_prs(g: Github, org_name: str) -> Generator[PullRequest, None, None]:
+    """
+
+    :param g:
+    :param org_name:
+    """
     yield from yield_prs(yield_org_repos(g, org_name))
 
 
@@ -170,6 +180,14 @@ def yield_prs(
 
 #
 def get_pull_request(g, org_name, repo_name, pull_request_number):
+    """
+
+    :param g:
+    :param org_name:
+    :param repo_name:
+    :param pull_request_number:
+    :return:
+    """
     return (
         g.get_organization(org_name).get_repo(repo_name).get_pull(pull_request_number)
     )
@@ -179,6 +197,11 @@ import calendar
 
 
 def utc_to_epoch(timestamp):  # Timestamp is a datetime object in UTC time
+    """
+
+    :param timestamp:
+    :return:
+    """
     return calendar.timegm(timestamp.utctimetuple())
 
 
