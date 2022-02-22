@@ -158,6 +158,7 @@ class HeimdallrPackage:
             "console_scripts": [
                 # "name_of_executable = module.with:function_to_execute"
                 "heimdallr = heimdallr.entry_points.cli:main",
+                "heimdallr-repl = heimdallr.entry_points.repl:main",
                 "heimdallr-publish = heimdallr.entry_points.publisher:main",
                 "heimdallr-server = heimdallr.entry_points.server:main",
             ]

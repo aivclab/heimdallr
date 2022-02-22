@@ -23,6 +23,7 @@ from heimdallr.configuration.heimdallr_settings import (
     SettingScopeEnum,
 )
 
+
 margin_percentage = 0 / 6
 terminal_width = get_terminal_size().columns
 margin = int(margin_percentage * terminal_width)
@@ -241,6 +242,12 @@ class HeimdallrCLI:
     def sponsors(*, drawer: callable = print) -> None:
         """emits sponsors"""
         drawer(sponsors)
+
+    @staticmethod
+    def shell():
+        from heimdallr.entry_points import repl
+
+        repl.main()
 
 
 def draw_cli_header(

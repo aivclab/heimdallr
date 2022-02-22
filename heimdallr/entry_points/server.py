@@ -2,6 +2,7 @@ import copy
 import datetime
 import json
 import logging
+import socket
 import uuid
 from typing import Any
 
@@ -61,9 +62,16 @@ external_stylesheets = [
 ]
 
 GPU_STATS = NOD()
+DU_STATS = NOD()
 KEEP_ALIVE = NOD()
 
-MQTT_CLIENT = Client(client_id=str(uuid.getnode()), clean_session=True)
+# CLIENT_ID = str(uuid.getnode())
+HOSTNAME = socket.gethostname()
+CLIENT_ID = HOSTNAME
+MQTT_CLIENT = Client(
+    client_id=CLIENT_ID,
+    # clean_session=True
+)
 DASH_APP = Dash(
     __name__,
     external_scripts=external_scripts,
@@ -215,7 +223,8 @@ def on_message(client: Any, userdata: Any, result: mqtt.client.MQTTMessage) -> N
     global KEEP_ALIVE
     d = json.loads(result.payload)
     keys = d.keys()
-    GPU_STATS[keys] = d.values()
+    GPU_STATS[keys] = d.values()["gpu_stats"]
+    DU_STATS[keys] = d.values()["du_stats"]
     KEEP_ALIVE[keys] = [0] * len(keys)
     LOG_WRITER(
         f"received payload for {keys}, retain:{result.retain}, timestamp:{result.timestamp}"
@@ -248,7 +257,8 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
     CRYSTALLISED_HEIMDALLR_SETTINGS = HeimdallrSettings(setting_scope)
     if True:
         if (
-            CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_access_token and False
+            False
+            # CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_access_token and False
         ):  # TODO: not implemented
             pass
             # MQTT_CLIENT.username_pw_set(CRYSTALLISED_HEIMDALLR_SETTINGS.MQTT_ACCESS_TOKEN)

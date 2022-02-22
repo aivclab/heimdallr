@@ -20,7 +20,7 @@ from heimdallr.configuration.heimdallr_config import (
 from heimdallr.utilities.date_tools import timestamp_to_datetime
 from warg import Number
 
-from heimdallr.utilities.unpacking import pull_gpu_info
+from heimdallr.utilities.publisher.unpacking import pull_gpu_info
 
 MB_DIVISOR = int(1024 ** 2)
 

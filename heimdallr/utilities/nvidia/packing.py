@@ -12,7 +12,7 @@ from typing import List, Tuple
 
 import psutil
 
-import bindings
+from heimdallr.utilities.nvidia import bindings
 from warg import NOD
 
 try:

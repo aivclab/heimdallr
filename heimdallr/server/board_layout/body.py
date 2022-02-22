@@ -13,6 +13,9 @@ from heimdallr.configuration.heimdallr_config import (
     CALENDAR_ID,
     CALENDAR_INTERVAL_ID,
     CALENDAR_INTERVAL_MS,
+    DU_INTERVAL_ID,
+    DU_INTERVAL_MS,
+    DU_TABLES_ID,
     GPU_GRAPHS_ID,
     GPU_INTERVAL_ID,
     GPU_INTERVAL_MS,
@@ -45,6 +48,13 @@ def get_body() -> html.Div:
                 className="col p-2",
             ),
             dcc.Interval(id=GPU_INTERVAL_ID, interval=GPU_INTERVAL_MS, n_intervals=0),
+            html.Div(  # Disk Usage
+                [
+                    html.Div([], id=DU_TABLES_ID),
+                ],
+                className="col p-2",
+            ),
+            dcc.Interval(id=DU_INTERVAL_ID, interval=DU_INTERVAL_MS, n_intervals=0),
         ],
         className="row p-3",
     )

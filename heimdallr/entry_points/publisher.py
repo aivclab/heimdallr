@@ -1,21 +1,22 @@
 import json
 import socket
 import time
+from typing import Any
 
 import paho.mqtt.client as mqtt
 import schedule
-
 from apppath import ensure_existence
 from draugr.python_utilities.business import busy_indicator
 from draugr.writers import LogWriter, MockWriter, Writer
+from warg import NOD
+
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
 from heimdallr.configuration.heimdallr_settings import (
     HeimdallrSettings,
     SettingScopeEnum,
 )
-from heimdallr.utilities.unpacking import pull_gpu_info
-from warg import NOD
+from heimdallr.utilities.publisher.unpacking import pull_disk_usage_info, pull_gpu_info
 
 HOSTNAME = socket.gethostname()
 
@@ -56,7 +57,7 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
             / f"{PROJECT_NAME}_publisher.log"
         )
     LOG_WRITER.open()
-    client = mqtt.Client()
+    client = mqtt.Client(HOSTNAME)
     client.on_publish = on_publish
     client.on_disconnect = on_disconnect
 
@@ -79,7 +80,13 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
 
     client.loop_start()
 
-    sensor_data = NOD({HOSTNAME: pull_gpu_info()})
+    sensor_data = NOD(
+        {
+            HOSTNAME: NOD(
+                {"gpu_stats": pull_gpu_info(), "du_stats": pull_disk_usage_info()}
+            )
+        }
+    )
 
     if True:  # with IgnoreInterruptSignal():
         print("Publisher started")

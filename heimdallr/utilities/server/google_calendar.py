@@ -6,9 +6,15 @@ from pathlib import Path
 
 import pandas
 from dash import dash_table
+
+
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
+
+try:
+    from googleapiclient.discovery import build
+except:
+    print("try upgrade googleapiclient")
 
 from apppath import ensure_existence
 from heimdallr.configuration.heimdallr_settings import HeimdallrSettings

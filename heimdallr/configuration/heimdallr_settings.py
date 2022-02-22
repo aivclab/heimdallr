@@ -149,9 +149,31 @@ class HeimdallrSettings(PropertySettings):
 
     @google_calendar_id.setter
     def google_calendar_id(self, calendar_id: str) -> None:
+        """
+
+        Args:
+            calendar_id ():
+
+        Returns:
+
+        """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._google_settings_path, writeback=True) as d:
             d[key] = calendar_id
+
+    @google_calendar_id.deleter
+    def google_calendar_id(self) -> None:
+        """
+
+        Args:
+            calendar_id ():
+
+        Returns:
+
+        """
+        key = inspect.currentframe().f_code.co_name
+        with shelve.open(HeimdallrSettings._github_settings_path, writeback=True) as d:
+            del d[key]
 
     @property
     def github_token(self) -> Optional[str]:
@@ -166,10 +188,33 @@ class HeimdallrSettings(PropertySettings):
 
     @github_token.setter
     def github_token(self, calendar_id: str) -> None:
+        """
+
+        Args:
+            calendar_id ():
+
+        Returns:
+
+        """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._github_settings_path, writeback=True) as d:
             d[key] = calendar_id
 
+    @github_token.deleter
+    def github_token(self) -> None:
+        """
+
+        Args:
+            calendar_id ():
+
+        Returns:
+
+        """
+        key = inspect.currentframe().f_code.co_name
+        with shelve.open(HeimdallrSettings._github_settings_path, writeback=True) as d:
+            del d[key]
+
+    '''
     @property
     def mqtt_access_token(self) -> Optional[str]:
         """ """
@@ -186,6 +231,7 @@ class HeimdallrSettings(PropertySettings):
         key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
             d[key] = token
+    '''
 
     @property
     def mqtt_username(self) -> Optional[str]:
@@ -200,9 +246,28 @@ class HeimdallrSettings(PropertySettings):
 
     @mqtt_username.setter
     def mqtt_username(self, username: str) -> None:
+        """
+
+        Args:
+            username ():
+
+        Returns:
+
+        """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
             d[key] = username
+
+    @mqtt_username.deleter
+    def mqtt_username(self) -> None:
+        """
+
+        Returns:
+
+        """
+        key = inspect.currentframe().f_code.co_name
+        with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
+            del d[key]
 
     @property
     def mqtt_password(self) -> Optional[str]:
@@ -217,9 +282,28 @@ class HeimdallrSettings(PropertySettings):
 
     @mqtt_password.setter
     def mqtt_password(self, password: str) -> None:
+        """
+
+        Args:
+            password ():
+
+        Returns:
+
+        """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
             d[key] = password
+
+    @mqtt_password.deleter
+    def mqtt_password(self) -> None:
+        """
+
+        Returns:
+
+        """
+        key = inspect.currentframe().f_code.co_name
+        with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
+            del d[key]
 
     @property
     def mqtt_broker(self) -> Optional[str]:
@@ -234,9 +318,28 @@ class HeimdallrSettings(PropertySettings):
 
     @mqtt_broker.setter
     def mqtt_broker(self, broker: str) -> None:
+        """
+
+        Args:
+            broker ():
+
+        Returns:
+
+        """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
             d[key] = broker
+
+    @mqtt_broker.deleter
+    def mqtt_broker(self) -> None:
+        """
+
+        Returns:
+
+        """
+        key = inspect.currentframe().f_code.co_name
+        with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
+            del d[key]
 
     @property
     def mqtt_port(self) -> Optional[str]:
@@ -251,9 +354,28 @@ class HeimdallrSettings(PropertySettings):
 
     @mqtt_port.setter
     def mqtt_port(self, port: int) -> None:
+        """
+
+        Args:
+            port ():
+
+        Returns:
+
+        """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
             d[key] = port
+
+    @mqtt_port.deleter
+    def mqtt_port(self) -> None:
+        """
+
+        Returns:
+
+        """
+        key = inspect.currentframe().f_code.co_name
+        with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
+            del d[key]
 
 
 def set_all_heimdallr_settings(

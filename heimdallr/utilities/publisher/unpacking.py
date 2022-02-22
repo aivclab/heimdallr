@@ -22,3 +22,7 @@ def pull_gpu_info(include_graphics_processes: bool = True) -> dict:
     info["driver_version"] = driver_version
     info["devices"] = devices
     return info.as_dict()
+
+
+def pull_disk_usage_info() -> dict:
+    return {}
