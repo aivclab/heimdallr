@@ -243,7 +243,6 @@ class HeimdallrPackage:
 
 
 if __name__ == "__main__":
-
     pkg = HeimdallrPackage()
 
     setup(

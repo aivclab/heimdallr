@@ -13,16 +13,15 @@ from pathlib import Path
 from typing import Any
 
 import fire
+from draugr.python_utilities import get_terminal_size
 from pyfiglet import Figlet
 from sorcery import assigned_names
 
-from draugr.python_utilities import get_terminal_size
 from heimdallr import get_version
 from heimdallr.configuration.heimdallr_settings import (
     HeimdallrSettings,
     SettingScopeEnum,
 )
-
 
 margin_percentage = 0 / 6
 terminal_width = get_terminal_size().columns

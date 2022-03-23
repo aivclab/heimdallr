@@ -11,6 +11,7 @@ import base64
 from pathlib import Path
 
 from dash import dcc, html
+
 import heimdallr
 from heimdallr.configuration.heimdallr_config import (
     HTML_TITLE,

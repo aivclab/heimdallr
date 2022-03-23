@@ -27,7 +27,7 @@ sponsors = "Alexandra Institute"
 
 def draw_cli_header(
     *, title: str = "Heimdallr", font: str = "big", drawer: callable = print
-):
+) -> None:
     """ """
     drawer(
         f"{Figlet(font=font, justify='center', width=terminal_width).renderText(title)}{underline}\n"
@@ -38,7 +38,7 @@ def main(
     *,
     always_draw_header: bool = False,
     setting_scope: SettingScopeEnum = SettingScopeEnum.user,
-):
+) -> None:
     """ """
     if always_draw_header:
         draw_cli_header()

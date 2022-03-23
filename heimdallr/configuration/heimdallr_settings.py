@@ -13,7 +13,7 @@ import os
 
 import shelve
 from enum import Enum
-from typing import Optional
+from typing import Union
 
 try:
     import sh
@@ -50,6 +50,7 @@ class HeimdallrSettings(PropertySettings):
     _mqtt_settings_path = None
     _github_settings_path = None
     _credentials_base_path = None
+    _teams_settings_path = None
     _look_up_env_on_missing = True
 
     def __init__(self, setting_scope: SettingScopeEnum = SettingScopeEnum.user):
@@ -61,55 +62,21 @@ class HeimdallrSettings(PropertySettings):
 
         _setting_scope = setting_scope
         if setting_scope == SettingScopeEnum.user or is_windows():
-            HeimdallrSettings._credentials_base_path = ensure_existence(
-                PROJECT_APP_PATH.user_config / "credentials"
-            )
-            HeimdallrSettings._google_settings_path = str(
-                ensure_existence(PROJECT_APP_PATH.user_config) / "google.settings"
-            )
-            HeimdallrSettings._mqtt_settings_path = str(
-                ensure_existence(PROJECT_APP_PATH.user_config) / "mqtt.settings"
-            )
-            HeimdallrSettings._github_settings_path = str(
-                ensure_existence(PROJECT_APP_PATH.user_config) / "github.settings"
-            )
-
-            # print(f'Using config at {PROJECT_APP_PATH.site_config}')
+            p = PROJECT_APP_PATH.user_config
         elif setting_scope == SettingScopeEnum.site:
-            prev_val = PROJECT_APP_PATH._ensure_existence
-            PROJECT_APP_PATH._ensure_existence = False
-            HeimdallrSettings._credentials_base_path = (
-                PROJECT_APP_PATH.site_config / "credentials"
-            )
-            if not HeimdallrSettings._credentials_base_path.exists():
+            p = PROJECT_APP_PATH.site_config
+            if not p.exists():
                 with sh.contrib.sudo(
                     password=getpass.getpass(
                         prompt=f"[sudo] password for {getpass.getuser()}: "
                     ),
                     _with=True,
                 ):
-                    sh.mkdir(["-p", HeimdallrSettings._credentials_base_path])
                     sh.chown(
                         f"{getpass.getuser()}:", PROJECT_APP_PATH.site_config
                     )  # If a colon but no group name follows the user name, that user is made the owner of the files and the group of the files is changed to that user's login group.
-            PROJECT_APP_PATH._ensure_existence = prev_val
-            HeimdallrSettings._google_settings_path = str(
-                ensure_existence(PROJECT_APP_PATH.site_config) / "google.settings"
-            )
-            HeimdallrSettings._mqtt_settings_path = str(
-                ensure_existence(PROJECT_APP_PATH.site_config) / "mqtt.settings"
-            )
-            HeimdallrSettings._github_settings_path = str(
-                ensure_existence(PROJECT_APP_PATH.site_config) / "github.settings"
-            )
-
-            # print(f'Using config at {PROJECT_APP_PATH.site_config}')
         elif setting_scope == SettingScopeEnum.root:
-            prev_val = PROJECT_APP_PATH._ensure_existence
-            PROJECT_APP_PATH._ensure_existence = False
-            HeimdallrSettings._credentials_base_path = (
-                PROJECT_APP_PATH.root_config / "credentials"
-            )
+            p = PROJECT_APP_PATH.root_config
             if not HeimdallrSettings._credentials_base_path.exists():
                 with sh.contrib.sudo(
                     password=getpass.getpass(
@@ -117,27 +84,55 @@ class HeimdallrSettings(PropertySettings):
                     ),
                     _with=True,
                 ):
-                    sh.mkdir(["-p", HeimdallrSettings._credentials_base_path])
                     sh.chown(
                         f"{getpass.getuser()}:", PROJECT_APP_PATH.root_config
                     )  # If a colon but no group name follows the user name, that user is made the owner of the files and the group of the files is changed to that user's login group.
-            PROJECT_APP_PATH._ensure_existence = prev_val
-            HeimdallrSettings._google_settings_path = str(
-                ensure_existence(PROJECT_APP_PATH.root_config) / "google.settings"
-            )
-            HeimdallrSettings._mqtt_settings_path = str(
-                ensure_existence(PROJECT_APP_PATH.root_config) / "mqtt.settings"
-            )
-            HeimdallrSettings._github_settings_path = str(
-                ensure_existence(PROJECT_APP_PATH.root_config) / "github.settings"
-            )
-
-            # print(f'Using config at {PROJECT_APP_PATH.site_config}')
         else:
             raise ValueError()
 
+        HeimdallrSettings._credentials_base_path = str(
+            ensure_existence(p / "credentials")
+        )
+        HeimdallrSettings._mqtt_settings_path = str(
+            ensure_existence(p / "google.settings")
+        )
+        HeimdallrSettings._google_settings_path = str(
+            ensure_existence(p / "mqtt.settings")
+        )
+        HeimdallrSettings._github_settings_path = str(
+            ensure_existence(p / "github.settings")
+        )
+        HeimdallrSettings._teams_settings_path = str(
+            ensure_existence(p / "teams.settings")
+        )
+
     @property
-    def google_calendar_id(self) -> Optional[str]:
+    def teams_config(self) -> Union[object, dict, None]:
+        """ """
+        key = inspect.currentframe().f_code.co_name
+        with shelve.open(HeimdallrSettings._teams_settings_path) as d:
+            if key in d:
+                return d[key]
+        if self._look_up_env_on_missing:
+            return os.environ.get(key)
+        return None
+
+    @teams_config.setter
+    def teams_config(self, config: dict) -> None:
+        """
+
+        Args:
+            config ():
+
+        Returns:
+
+        """
+        key = inspect.currentframe().f_code.co_name
+        with shelve.open(HeimdallrSettings._teams_settings_path, writeback=True) as d:
+            d[key] = config
+
+    @property
+    def google_calendar_id(self) -> Union[object, str, None]:
         """ """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._google_settings_path) as d:
@@ -176,7 +171,7 @@ class HeimdallrSettings(PropertySettings):
             del d[key]
 
     @property
-    def github_token(self) -> Optional[str]:
+    def github_token(self) -> Union[object, str, None]:
         """ """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._github_settings_path) as d:
@@ -215,26 +210,26 @@ class HeimdallrSettings(PropertySettings):
             del d[key]
 
     '''
-    @property
-    def mqtt_access_token(self) -> Optional[str]:
-        """ """
-        key = inspect.currentframe().f_code.co_name
-        with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
-            if key in d:
-                return d[key]
-        if self._look_up_env_on_missing:
-            return os.environ.get(key)
-        return None
+  @property
+  def mqtt_access_token(self) -> Optional[str]:
+      """ """
+      key = inspect.currentframe().f_code.co_name
+      with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
+          if key in d:
+              return d[key]
+      if self._look_up_env_on_missing:
+          return os.environ.get(key)
+      return None
 
-    @mqtt_access_token.setter
-    def mqtt_access_token(self, token: str) -> None:
-        key = inspect.currentframe().f_code.co_name
-        with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
-            d[key] = token
-    '''
+  @mqtt_access_token.setter
+  def mqtt_access_token(self, token: str) -> None:
+      key = inspect.currentframe().f_code.co_name
+      with shelve.open(HeimdallrSettings._mqtt_settings_path, writeback=True) as d:
+          d[key] = token
+  '''
 
     @property
-    def mqtt_username(self) -> Optional[str]:
+    def mqtt_username(self) -> Union[object, str, None]:
         """ """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
@@ -270,7 +265,7 @@ class HeimdallrSettings(PropertySettings):
             del d[key]
 
     @property
-    def mqtt_password(self) -> Optional[str]:
+    def mqtt_password(self) -> Union[object, str, None]:
         """ """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
@@ -306,7 +301,7 @@ class HeimdallrSettings(PropertySettings):
             del d[key]
 
     @property
-    def mqtt_broker(self) -> Optional[str]:
+    def mqtt_broker(self) -> Union[object, str, None]:
         """ """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
@@ -342,7 +337,7 @@ class HeimdallrSettings(PropertySettings):
             del d[key]
 
     @property
-    def mqtt_port(self) -> Optional[str]:
+    def mqtt_port(self) -> Union[object, str, None]:
         """ """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(HeimdallrSettings._mqtt_settings_path) as d:
@@ -408,10 +403,10 @@ if __name__ == "__main__":
         print(k, settings[k])
 
     """
-    set_all_heimdallr_settings(
-        **{
-            k: getattr(settings, k) if getattr(settings, k) else None
-            for k in iter(settings)
-        }
-    )
-    """
+  set_all_heimdallr_settings(
+      **{
+          k: getattr(settings, k) if getattr(settings, k) else None
+          for k in iter(settings)
+      }
+  )
+  """

@@ -1,13 +1,8 @@
-from __future__ import print_function
-
 import datetime
 import pickle
 from pathlib import Path
 
 import pandas
-from dash import dash_table
-
-
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
 
@@ -23,7 +18,6 @@ from heimdallr.utilities.date_tools import iso_dt_to_datetime
 __all__ = ["get_calender_df"]
 
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
-
 
 # If modifying these scopes, delete the file token.pickle.
 """

@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "Christian"
+__doc__ = r"""
+
+           Created on 29/03/2020
+           """
+
 from typing import Dict, Mapping, Tuple
 
 import psutil
@@ -19,7 +28,7 @@ def select(mapping: Mapping, *a) -> Mapping:
 
 
 def get_list_of_process_sorted_by_memory(
-    attrs: Tuple = ("name", "username"), scaling: float = (1024 ** 2), top_k: int = 10
+    attrs: Tuple = ("name", "username"), scaling: float = (1024**2), top_k: int = 10
 ) -> Dict:
     """
     Get list of running process sorted by Memory Usage

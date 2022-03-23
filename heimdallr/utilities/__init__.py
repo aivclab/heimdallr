@@ -4,5 +4,4 @@
 __author__ = "Christian Heider Nielsen"
 __doc__ = ""
 
-
 from .date_tools import *

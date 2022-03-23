@@ -19,3 +19,4 @@ fire
 pyfiglet
 schedule
 PyGithub
+msal

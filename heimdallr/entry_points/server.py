@@ -3,36 +3,35 @@ import datetime
 import json
 import logging
 import socket
-import uuid
 from typing import Any
 
 import dash
 import flask
+from apppath import ensure_existence
 from dash import Dash
 from dash.dash_table import DataTable
 from dash.dependencies import Input, Output
 from dash.html import Div
+from draugr.python_utilities import default_datetime_repr
+from draugr.writers import LogWriter, MockWriter, Writer
 from flask import Response
 from paho import mqtt
 from paho.mqtt.client import Client
 from pandas import DataFrame
+from warg import NOD
 
-from apppath import ensure_existence
-from draugr.python_utilities import default_datetime_repr
-from draugr.writers import LogWriter, MockWriter, Writer
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
-from heimdallr.server.board_layout import get_root_layout
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
 from heimdallr.configuration.heimdallr_settings import (
     HeimdallrSettings,
     SettingScopeEnum,
 )
+from heimdallr.server.board_layout import get_root_layout
 from heimdallr.utilities.server import (
     get_calender_df,
     per_machine_per_device_pie_charts,
     to_overall_gpu_process_df,
 )
-from warg import NOD
 
 __all__ = ["main"]
 
@@ -288,5 +287,4 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
 
 
 if __name__ == "__main__":
-
     main()
