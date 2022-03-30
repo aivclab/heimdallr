@@ -35,6 +35,8 @@ from heimdallr.utilities.server import (
 
 __all__ = ["main"]
 
+from heimdallr.utilities.server.teams_status import team_members_status
+
 log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
 
@@ -130,6 +132,16 @@ def update_calendar_live(n: int) -> DataTable:
             },
         ],  # TODO: MAKE GRADIENT TO ORANGE FOR WHEN NEARING START, and GREEN WHEN IN PROGRESS
     )
+
+
+@DASH_APP.callback(
+    Output(ALL_CONSTANTS.TEAMS_STATUS_ID, "children"),
+    [Input(ALL_CONSTANTS.TEAMS_STATUS_INTERVAL_ID, "n_intervals")],
+)
+def update_teams_status_live(n: int) -> Div:
+    """ """
+
+    return Div(team_members_status(None), className="row")
 
 
 @DASH_APP.callback(
@@ -238,6 +250,30 @@ def on_disconnect(client: Any, userdata: Any, rc: Any) -> None:
         client.subscribe(ALL_CONSTANTS.MQTT_TOPIC, ALL_CONSTANTS.MQTT_QOS)
 
 
+def setup_mqtt_connection(settings) -> None:
+    if (
+        False
+        # settings.mqtt_access_token and False
+    ):  # TODO: not implemented
+        pass
+        # MQTT_CLIENT.username_pw_set(settings.MQTT_ACCESS_TOKEN)
+    else:
+        MQTT_CLIENT.username_pw_set(
+            settings.mqtt_username,
+            settings.mqtt_password,
+        )
+    try:
+        MQTT_CLIENT.connect(
+            settings.mqtt_broker,
+            settings.mqtt_port,
+            keepalive=60,
+        )
+        MQTT_CLIENT.subscribe(ALL_CONSTANTS.MQTT_TOPIC, ALL_CONSTANTS.MQTT_QOS)
+    except Exception as e:
+        LOG_WRITER(f"MQTT connection error: {e}")
+        # raise e
+
+
 def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
     """ """
     global LOG_WRITER
@@ -253,25 +289,9 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
     MQTT_CLIENT.on_message = on_message
     MQTT_CLIENT.on_disconnect = on_disconnect
 
-    CRYSTALLISED_HEIMDALLR_SETTINGS = HeimdallrSettings(setting_scope)
     if True:
-        if (
-            False
-            # CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_access_token and False
-        ):  # TODO: not implemented
-            pass
-            # MQTT_CLIENT.username_pw_set(CRYSTALLISED_HEIMDALLR_SETTINGS.MQTT_ACCESS_TOKEN)
-        else:
-            MQTT_CLIENT.username_pw_set(
-                CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_username,
-                CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_password,
-            )
-        MQTT_CLIENT.connect(
-            CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_broker,
-            CRYSTALLISED_HEIMDALLR_SETTINGS.mqtt_port,
-            keepalive=60,
-        )
-        MQTT_CLIENT.subscribe(ALL_CONSTANTS.MQTT_TOPIC, ALL_CONSTANTS.MQTT_QOS)
+        crystallised_heimdallr_settings = HeimdallrSettings(setting_scope)
+        setup_mqtt_connection(settings=crystallised_heimdallr_settings)
 
     DASH_APP.title = ALL_CONSTANTS.HTML_TITLE
     DASH_APP.update_title = ALL_CONSTANTS.HTML_TITLE

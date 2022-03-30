@@ -1,14 +1,55 @@
 import json
 import logging
+import random
+from typing import List
 
 import msal
 import requests
 
-# __all__ = [""]
+__all__ = ["team_members_status"]
 
-from heimdallr.utilities.server.exclude.set_teams_config import s
+from dash import html
+from dash.html import Div, H3, H4, H2
+
+
+def team_members_status(access_token) -> List[html.Div]:
+    """
+    Get the status of all teams in the tenant
+    """
+    members = []
+    for i in range(4):
+        members.append(
+            Div(
+                [
+                    H2(
+                        f"member{i}",
+                        className="text-monospace",
+                        style={"text-decoration": "underline"},
+                    ),
+                    H3(
+                        f"status: {'online' if random.randint(0, 1)>0 else 'offline'}",
+                        className="text-monospace",
+                        style={"text-decoration": "underline"},
+                    ),
+                    H4(
+                        f"{random.randint(0,10)} sec ago",
+                        className="text-monospace",
+                        style={"text-decoration": "underline"},
+                    ),
+                ],
+                style={
+                    "text-align": "center",
+                    "width": "100%",
+                },
+                className="col p-1",
+            )
+        )
+    return members
+
 
 if __name__ == "__main__":
+
+    from heimdallr.utilities.server.exclude.set_teams_config import s
 
     app = msal.ConfidentialClientApplication(
         s.teams_client_id,
