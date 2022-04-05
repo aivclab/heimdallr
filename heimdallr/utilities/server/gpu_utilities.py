@@ -29,7 +29,9 @@ __all__ = [
 ]
 
 
-def to_overall_gpu_process_df(gpu_stats: Mapping) -> DataFrame:
+def to_overall_gpu_process_df(
+    gpu_stats: Mapping, sort_by_key="used_gpu_mem"
+) -> DataFrame:
     """ """
     resulta = []
     columns = []
@@ -44,7 +46,7 @@ def to_overall_gpu_process_df(gpu_stats: Mapping) -> DataFrame:
             resulta.append(df)
 
     out_df = pandas.concat(resulta, sort=False)
-    out_df.sort_values(by="used_gpu_mem", axis=0, ascending=False, inplace=True)
+    out_df.sort_values(by=sort_by_key, axis=0, ascending=False, inplace=True)
     if len(out_df) == 0:
         return pandas.DataFrame()
 

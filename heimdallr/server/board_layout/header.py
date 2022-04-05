@@ -24,38 +24,49 @@ __all__ = ["get_header"]
 
 def get_header() -> html.Div:
     """ """
-    with open(
-        Path(heimdallr.__file__).parent.parent / ".github" / "images" / "aivclab.svg",
-        "rb",
-    ) as svg:
-        encoded = base64.b64encode(svg.read())
-        return html.Div(
-            [
-                html.Div(
-                    [html.H1(HTML_TITLE)],
-                    className="col text-left align-self-center p-1",
-                ),
-                html.Div(
+    svg_p = Path(heimdallr.__file__).parent / "entry_points" / "assets" / "aivclab.svg"
+    if svg_p.exists():
+        with open(
+            svg_p,
+            "rb",
+        ) as svg:
+            encoded = base64.b64encode(svg.read())
+    else:
+        encoded = None
+
+    return html.Div(
+        [
+            html.Div(
+                [html.H1(HTML_TITLE)],
+                className="col text-left align-self-center p-1",
+            ),
+            html.Div(
+                [
+                    html.Img(
+                        src="/assets/alexandra.png",
+                        style={"height": "110px", "object-fit": "contain"},
+                    ),
+                ]
+                + (
                     [
-                        html.Img(
-                            src="/assets/alexandra.png",
-                            style={"height": "110px", "object-fit": "contain"},
-                        ),
                         html.Img(
                             src=f"data:image/svg+xml;base64,{encoded.decode()}",
                             # className='img-responsive',
                             style={"height": "110px", "object-fit": "contain"},
-                        ),
-                    ],
-                    className="col text-center p-1",
+                        )
+                    ]
+                    if encoded
+                    else []
                 ),
-                html.Div(
-                    [
-                        html.H1(id=TIME_ID),
-                        dcc.Interval(id=TIME_INTERVAL_ID, interval=1000, n_intervals=0),
-                    ],
-                    className="col text-right align-self-center p-1",
-                ),
-            ],
-            className="row p-3",
-        )
+                className="col text-center p-1",
+            ),
+            html.Div(
+                [
+                    html.H1(id=TIME_ID),
+                    dcc.Interval(id=TIME_INTERVAL_ID, interval=1000, n_intervals=0),
+                ],
+                className="col text-right align-self-center p-1",
+            ),
+        ],
+        className="row p-3",
+    )

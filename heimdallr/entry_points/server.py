@@ -196,6 +196,41 @@ def update_table(n: int) -> Div:
 
 
 @DASH_APP.callback(
+    Output(ALL_CONSTANTS.DU_TABLES_ID, "children"),
+    [Input(ALL_CONSTANTS.DU_INTERVAL_ID, "n_intervals")],
+)
+def update_table(n: int) -> Div:
+    """ """
+    MQTT_CLIENT.loop()
+
+    compute_machines = []
+
+    if DU_STATS:
+        df = to_overall_gpu_process_df(copy.deepcopy(DU_STATS))
+    else:
+        df = DataFrame(["No data"], columns=("data",))
+
+    compute_machines.append(
+        DataTable(
+            id="du-table-0",
+            columns=[{"name": i, "id": i} for i in df.columns],
+            data=df.to_dict("records"),
+            page_size=ALL_CONSTANTS.TABLE_PAGE_SIZE,
+            # style_as_list_view=True,
+            style_data_conditional=[
+                {"if": {"row_index": "odd"}, "backgroundColor": "rgb(248, 248, 248)"}
+            ],
+            style_header={
+                "backgroundColor": "rgb(230, 230, 230)",
+                "fontWeight": "bold",
+            },
+        )
+    )
+
+    return Div(compute_machines)
+
+
+@DASH_APP.callback(
     dash.dependencies.Output("menu_container", "style"),
     [dash.dependencies.Input("menu_toggle_button", "n_clicks")],
 )
@@ -235,12 +270,12 @@ def on_message(client: Any, userdata: Any, result: mqtt.client.MQTTMessage) -> N
     d = json.loads(result.payload)
     keys = d.keys()
     for key in keys:
-        if "gpu_stats" in key:
+        if "gpu_stats" in d[key]:
             GPU_STATS[key] = d[key]["gpu_stats"]
             DU_STATS[key] = d[key]["du_stats"]
         else:
             GPU_STATS[key] = d[key]  # ["gpu_stats"]
-            # DU_STATS[key] = d[key]["du_stats"]
+            DU_STATS[key] = {}
         KEEP_ALIVE[key] = 0
     LOG_WRITER(
         f"received payload for {keys}, retain:{result.retain}, timestamp:{result.timestamp}"
