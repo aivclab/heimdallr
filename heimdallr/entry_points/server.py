@@ -234,9 +234,14 @@ def on_message(client: Any, userdata: Any, result: mqtt.client.MQTTMessage) -> N
     global KEEP_ALIVE
     d = json.loads(result.payload)
     keys = d.keys()
-    GPU_STATS[keys] = d.values()["gpu_stats"]
-    DU_STATS[keys] = d.values()["du_stats"]
-    KEEP_ALIVE[keys] = [0] * len(keys)
+    for key in keys:
+        if "gpu_stats" in key:
+            GPU_STATS[key] = d[key]["gpu_stats"]
+            DU_STATS[key] = d[key]["du_stats"]
+        else:
+            GPU_STATS[key] = d[key]  # ["gpu_stats"]
+            # DU_STATS[key] = d[key]["du_stats"]
+        KEEP_ALIVE[key] = 0
     LOG_WRITER(
         f"received payload for {keys}, retain:{result.retain}, timestamp:{result.timestamp}"
     )
