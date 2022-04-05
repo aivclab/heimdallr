@@ -81,11 +81,7 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
     client.loop_start()
 
     sensor_data = NOD(
-        {
-            HOSTNAME: NOD(
-                {"gpu_stats": pull_gpu_info(), "du_stats": pull_disk_usage_info()}
-            )
-        }
+        {HOSTNAME: {"gpu_stats": pull_gpu_info(), "du_stats": pull_disk_usage_info()}}
     )
 
     if True:  # with IgnoreInterruptSignal():
@@ -95,9 +91,11 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
             """ """
             sensor_data[HOSTNAME]["gpu_stats"] = pull_gpu_info()
             sensor_data[HOSTNAME]["du_stats"] = pull_disk_usage_info()
-            s = sensor_data.as_dict()
-            s = json.dumps(s)
-            client.publish(ALL_CONSTANTS.MQTT_TOPIC, s, ALL_CONSTANTS.MQTT_QOS)
+            client.publish(
+                ALL_CONSTANTS.MQTT_TOPIC,
+                json.dumps(sensor_data.as_dict()),
+                ALL_CONSTANTS.MQTT_QOS,
+            )
 
         schedule.every(ALL_CONSTANTS.MQTT_PUBLISH_INTERVAL_SEC).seconds.do(job)
 

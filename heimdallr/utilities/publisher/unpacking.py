@@ -25,4 +25,4 @@ def pull_gpu_info(include_graphics_processes: bool = True) -> dict:
 
 
 def pull_disk_usage_info() -> dict:
-    return {}
+    return {"disk_usage": {"total": 0, "used": 0, "free": 0}}
