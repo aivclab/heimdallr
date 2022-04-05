@@ -10,7 +10,6 @@ __doc__ = r"""
 import getpass
 import inspect
 import os
-
 import shelve
 from enum import Enum
 from typing import Union
@@ -57,9 +56,9 @@ class HeimdallrSettings(PropertySettings):
     _teams_settings_path = None
     _look_up_env_on_missing = True
 
+    # noinspection PyMissingConstructor
     def __init__(self, setting_scope: SettingScopeEnum = SettingScopeEnum.user):
         """Protects from overriding on initialisation"""
-        pass
         # super().__init__()
         # TODO: FIGURE OUT A WAY TO EASILY COPY SETTINGS TO ROOT; for services
         # print(f'Using settings from {PROJECT_APP_PATH.user_config}')
@@ -128,7 +127,7 @@ class HeimdallrSettings(PropertySettings):
         """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
-            str(HeimdallrSettings._teams_settings_path, writeback=True)
+            str(HeimdallrSettings._teams_settings_path), writeback=True
         ) as d:
             d[key] = config
 
@@ -155,7 +154,7 @@ class HeimdallrSettings(PropertySettings):
         """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
-            str(HeimdallrSettings._google_settings_path, writeback=True)
+            str(HeimdallrSettings._google_settings_path), writeback=True
         ) as d:
             d[key] = calendar_id
 
@@ -171,7 +170,7 @@ class HeimdallrSettings(PropertySettings):
         """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
-            str(HeimdallrSettings._github_settings_path, writeback=True)
+            str(HeimdallrSettings._github_settings_path), writeback=True
         ) as d:
             del d[key]
 
@@ -198,7 +197,7 @@ class HeimdallrSettings(PropertySettings):
         """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
-            str(HeimdallrSettings._github_settings_path, writeback=True)
+            str(HeimdallrSettings._github_settings_path), writeback=True
         ) as d:
             d[key] = calendar_id
 
@@ -214,28 +213,28 @@ class HeimdallrSettings(PropertySettings):
         """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
-            str(HeimdallrSettings._github_settings_path, writeback=True)
+            str(HeimdallrSettings._github_settings_path), writeback=True
         ) as d:
             del d[key]
 
     '''
-  @property
-  def mqtt_access_token(self) -> Optional[str]:
-      """ """
-      key = inspect.currentframe().f_code.co_name
-      with shelve.open(str(HeimdallrSettings._mqtt_settings_path)) as d:
-          if key in d:
-              return d[key]
-      if self._look_up_env_on_missing:
-          return os.environ.get(key)
-      return None
+@property
+def mqtt_access_token(self) -> Optional[str]:
+    """ """
+    key = inspect.currentframe().f_code.co_name
+    with shelve.open(str(HeimdallrSettings._mqtt_settings_path)) as d:
+        if key in d:
+            return d[key]
+    if self._look_up_env_on_missing:
+        return os.environ.get(key)
+    return None
 
-  @mqtt_access_token.setter
-  def mqtt_access_token(self, token: str) -> None:
-      key = inspect.currentframe().f_code.co_name
-      with shelve.open(str(HeimdallrSettings._mqtt_settings_path, writeback=True)) as d:
-          d[key] = token
-  '''
+@mqtt_access_token.setter
+def mqtt_access_token(self, token: str) -> None:
+    key = inspect.currentframe().f_code.co_name
+    with shelve.open(str(HeimdallrSettings._mqtt_settings_path), writeback=True) as d:
+        d[key] = token
+'''
 
     @property
     def mqtt_username(self) -> Union[object, str, None]:
@@ -260,7 +259,7 @@ class HeimdallrSettings(PropertySettings):
         """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
-            str(HeimdallrSettings._mqtt_settings_path, writeback=True)
+            str(HeimdallrSettings._mqtt_settings_path), writeback=True
         ) as d:
             d[key] = username
 
@@ -273,7 +272,7 @@ class HeimdallrSettings(PropertySettings):
         """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
-            str(HeimdallrSettings._mqtt_settings_path, writeback=True)
+            str(HeimdallrSettings._mqtt_settings_path), writeback=True
         ) as d:
             del d[key]
 
@@ -300,7 +299,7 @@ class HeimdallrSettings(PropertySettings):
         """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
-            str(HeimdallrSettings._mqtt_settings_path, writeback=True)
+            str(HeimdallrSettings._mqtt_settings_path), writeback=True
         ) as d:
             d[key] = password
 
@@ -313,7 +312,7 @@ class HeimdallrSettings(PropertySettings):
         """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
-            str(HeimdallrSettings._mqtt_settings_path, writeback=True)
+            str(HeimdallrSettings._mqtt_settings_path), writeback=True
         ) as d:
             del d[key]
 
@@ -340,7 +339,7 @@ class HeimdallrSettings(PropertySettings):
         """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
-            str(HeimdallrSettings._mqtt_settings_path, writeback=True)
+            str(HeimdallrSettings._mqtt_settings_path), writeback=True
         ) as d:
             d[key] = broker
 
@@ -353,7 +352,7 @@ class HeimdallrSettings(PropertySettings):
         """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
-            str(HeimdallrSettings._mqtt_settings_path, writeback=True)
+            str(HeimdallrSettings._mqtt_settings_path), writeback=True
         ) as d:
             del d[key]
 
@@ -380,7 +379,7 @@ class HeimdallrSettings(PropertySettings):
         """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
-            str(HeimdallrSettings._mqtt_settings_path, writeback=True)
+            str(HeimdallrSettings._mqtt_settings_path), writeback=True
         ) as d:
             d[key] = port
 
@@ -393,7 +392,7 @@ class HeimdallrSettings(PropertySettings):
         """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
-            str(HeimdallrSettings._mqtt_settings_path, writeback=True)
+            str(HeimdallrSettings._mqtt_settings_path), writeback=True
         ) as d:
             del d[key]
 
@@ -428,10 +427,10 @@ if __name__ == "__main__":
         print(k, settings[k])
 
     """
-  set_all_heimdallr_settings(
-      **{
-          k: getattr(settings, k) if getattr(settings, k) else None
-          for k in iter(settings)
-      }
-  )
-  """
+set_all_heimdallr_settings(
+    **{
+        k: getattr(settings, k) if getattr(settings, k) else None
+        for k in iter(settings)
+    }
+)
+"""

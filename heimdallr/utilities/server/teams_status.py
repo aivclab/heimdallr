@@ -27,12 +27,12 @@ def team_members_status(access_token) -> List[html.Div]:
                         style={"text-decoration": "underline"},
                     ),
                     H3(
-                        f"status: {'online' if random.randint(0, 1)>0 else 'offline'}",
+                        f"status: {'online' if random.randint(0, 1) > 0 else 'offline'}",
                         className="text-monospace",
                         style={"text-decoration": "underline"},
                     ),
                     H4(
-                        f"{random.randint(0,10)} sec ago",
+                        f"{random.randint(0, 10)} sec ago",
                         className="text-monospace",
                         style={"text-decoration": "underline"},
                     ),
@@ -49,7 +49,7 @@ def team_members_status(access_token) -> List[html.Div]:
 
 if __name__ == "__main__":
 
-    from heimdallr.utilities.server.exclude.set_teams_config import s
+    from exclude.calendar_app.tutorial.set_teams_config import s
 
     app = msal.ConfidentialClientApplication(
         s.teams_client_id,
@@ -60,10 +60,9 @@ if __name__ == "__main__":
         # https://msal-python.rtfd.io/en/latest/#msal.SerializableTokenCache
     )  # Create a preferably long-lived app instance which maintains a token cache.
 
-    result = app.acquire_token_silent(s.teams_scope, account=None)
-    # Firstly, looks up a token from cache
-    # Since we are looking for token for the current app, NOT for an end user,
-    # notice we give account parameter as None.
+    result = app.acquire_token_silent(
+        s.teams_scope, account=None
+    )  # Firstly, looks up a token from cache since we are looking for token for the current app, NOT for an end user, notice we give account parameter as None.
 
     if not result:
         logging.info("No suitable token exists in cache. Let's get a new one from AAD.")

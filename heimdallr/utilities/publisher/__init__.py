@@ -7,7 +7,6 @@ __doc__ = r"""
            Created on 29/03/2020
            """
 
-
 import sys
 
 from .system_resources import *

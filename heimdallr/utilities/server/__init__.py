@@ -7,6 +7,5 @@ __doc__ = r"""
            Created on 29/03/2020
            """
 
-
 from .google_calendar import *
 from .gpu_utilities import *
