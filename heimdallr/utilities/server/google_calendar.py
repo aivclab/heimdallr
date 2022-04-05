@@ -1,14 +1,15 @@
-from __future__ import print_function
-
 import datetime
 import pickle
 from pathlib import Path
 
 import pandas
-from dash import dash_table
 from google.auth.transport.requests import Request
 from google_auth_oauthlib.flow import InstalledAppFlow
-from googleapiclient.discovery import build
+
+try:
+    from googleapiclient.discovery import build
+except:
+    print("try upgrade googleapiclient")
 
 from apppath import ensure_existence
 from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
@@ -17,7 +18,6 @@ from heimdallr.utilities.date_tools import iso_dt_to_datetime
 __all__ = ["get_calender_df"]
 
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
-
 
 # If modifying these scopes, delete the file token.pickle.
 """
@@ -36,7 +36,7 @@ def implicit():
 
 def get_calender_df(
     calendar_id: str, credentials_base_path: Path, num_entries: int = 30
-) -> dash_table.DataTable:
+) -> pandas.DataFrame:
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
 

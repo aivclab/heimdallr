@@ -10,14 +10,30 @@ from draugr.os_utilities.windows_utilities import (
 
 
 def disable_service(service_name: str) -> None:
+    """
+
+    Args:
+      service_name:
+    """
     set_task_activity(service_name, False)
 
 
 def enable_service(service_name: str) -> None:
+    """
+
+    Args:
+      service_name:
+    """
     set_task_activity(service_name, True)
 
 
 def install_service(service_entry_point_path: Path, service_name: str) -> None:
+    """
+
+    Args:
+      service_entry_point_path:
+      service_name:
+    """
     new_user_logon_execute_task(
         service_name,
         service_name,
@@ -27,6 +43,11 @@ def install_service(service_entry_point_path: Path, service_name: str) -> None:
 
 
 def remove_service(service_name) -> None:
+    """
+
+    Args:
+      service_name:
+    """
     delete_task(service_name)
 
 

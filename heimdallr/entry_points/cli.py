@@ -13,10 +13,10 @@ from pathlib import Path
 from typing import Any
 
 import fire
+from draugr.python_utilities import get_terminal_size
 from pyfiglet import Figlet
 from sorcery import assigned_names
 
-from draugr.python_utilities import get_terminal_size
 from heimdallr import get_version
 from heimdallr.configuration.heimdallr_settings import (
     HeimdallrSettings,
@@ -241,6 +241,12 @@ class HeimdallrCLI:
     def sponsors(*, drawer: callable = print) -> None:
         """emits sponsors"""
         drawer(sponsors)
+
+    @staticmethod
+    def shell():
+        from heimdallr.entry_points import repl
+
+        repl.main()
 
 
 def draw_cli_header(

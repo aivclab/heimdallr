@@ -1,21 +1,22 @@
 import json
 import socket
 import time
+from typing import Any
 
 import paho.mqtt.client as mqtt
 import schedule
-
 from apppath import ensure_existence
 from draugr.python_utilities.business import busy_indicator
 from draugr.writers import LogWriter, MockWriter, Writer
+from warg import NOD
+
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
 from heimdallr.configuration.heimdallr_settings import (
     HeimdallrSettings,
     SettingScopeEnum,
 )
-from heimdallr.utilities.unpacking import pull_gpu_info
-from warg import NOD
+from heimdallr.utilities.publisher.unpacking import pull_disk_usage_info, pull_gpu_info
 
 HOSTNAME = socket.gethostname()
 
@@ -24,7 +25,7 @@ __all__ = ["main"]
 LOG_WRITER: Writer = MockWriter()
 
 
-def on_publish(client, userdata, result, writer: callable = None) -> None:
+def on_publish(client: Any, userdata: Any, result, writer: callable = None) -> None:
     """ """
     global LOG_WRITER
     LOG_WRITER(result)
@@ -32,7 +33,7 @@ def on_publish(client, userdata, result, writer: callable = None) -> None:
         writer(result)
 
 
-def on_disconnect(client, userdata, rc, writer: callable = print):
+def on_disconnect(client: Any, userdata: Any, rc, writer: callable = print) -> None:
     """ """
     global LOG_WRITER
     if rc != 0:
@@ -42,7 +43,7 @@ def on_disconnect(client, userdata, rc, writer: callable = print):
         writer(result)
 
 
-def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
+def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
     """ """
     global LOG_WRITER
     if setting_scope == SettingScopeEnum.user:
@@ -56,7 +57,7 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
             / f"{PROJECT_NAME}_publisher.log"
         )
     LOG_WRITER.open()
-    client = mqtt.Client()
+    client = mqtt.Client(HOSTNAME)
     client.on_publish = on_publish
     client.on_disconnect = on_disconnect
 
@@ -79,7 +80,13 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
 
     client.loop_start()
 
-    sensor_data = NOD({HOSTNAME: pull_gpu_info()})
+    sensor_data = NOD(
+        {
+            HOSTNAME: NOD(
+                {"gpu_stats": pull_gpu_info(), "du_stats": pull_disk_usage_info()}
+            )
+        }
+    )
 
     if True:  # with IgnoreInterruptSignal():
         print("Publisher started")

@@ -23,6 +23,14 @@ GPU_TABLES_ID = "gpu-tables"
 GPU_INTERVAL_ID = "gpu-interval"
 GPU_INTERVAL_MS = MQTT_PUBLISH_INTERVAL_SEC * 1000
 
+DU_TABLES_ID = "du-tables"
+DU_INTERVAL_ID = "du-interval"
+DU_INTERVAL_MS = MQTT_PUBLISH_INTERVAL_SEC * 1000 * 10
+
+TEAMS_STATUS_ID = "teams-status"
+TEAMS_STATUS_INTERVAL_ID = "teams-status-interval"
+TEAMS_STATUS_INTERVAL_MS = MQTT_PUBLISH_INTERVAL_SEC * 1000 * 10
+
 INT_COLUMNS = ["device_idx", "pid"]  # "cpu_num", "num_threads"]
 PERCENT_COLUMNS = ["cpu_percent", "memory_percent"]
 MB_COLUMNS = ["used_gpu_mem"]

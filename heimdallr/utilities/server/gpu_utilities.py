@@ -1,13 +1,16 @@
-"""Function to get GPU infomations.
+"""Function to get GPU information.
 """
-from typing import Mapping, Sequence
+
+from typing import List, Mapping, Sequence
 
 import numpy
 import pandas
+from dash import html
 from dash.dcc import Graph
 from dash.html import Div, H3
 from pandas import DataFrame
 from plotly import graph_objs
+from warg import Number
 
 from heimdallr.configuration.heimdallr_config import (
     DROP_COLUMNS,
@@ -16,11 +19,9 @@ from heimdallr.configuration.heimdallr_config import (
     PERCENT_COLUMNS,
 )
 from heimdallr.utilities.date_tools import timestamp_to_datetime
-from warg import Number
+from heimdallr.utilities.publisher.unpacking import pull_gpu_info
 
-from heimdallr.utilities.unpacking import pull_gpu_info
-
-MB_DIVISOR = int(1024 ** 2)
+MB_DIVISOR = int(1024**2)
 
 __all__ = [
     "to_overall_gpu_process_df",
@@ -65,7 +66,9 @@ def to_overall_gpu_process_df(gpu_stats: Mapping) -> DataFrame:
     return out_df
 
 
-def per_machine_per_device_pie_charts(gpu_stats: Mapping, keep_alive: Sequence[Number]):
+def per_machine_per_device_pie_charts(
+    gpu_stats: Mapping, keep_alive: Sequence[Number]
+) -> List[html.Div]:
     """ """
     compute_machines = []
     for machine_name, machine in gpu_stats.items():
@@ -73,7 +76,6 @@ def per_machine_per_device_pie_charts(gpu_stats: Mapping, keep_alive: Sequence[N
         devices = machine["devices"]
 
         for i, d in enumerate(devices):
-
             used = d["used"] // MB_DIVISOR
             total = d["total"] // MB_DIVISOR
 
