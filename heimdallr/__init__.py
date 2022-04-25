@@ -22,7 +22,7 @@ Created on 27/04/2019
 
 def dist_is_editable(dist):
     """
-    Return True if given Distribution is an editable install."""
+    Return True if given Distribution is an editable installation."""
     import sys
     from pathlib import Path
 

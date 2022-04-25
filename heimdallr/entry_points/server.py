@@ -18,6 +18,7 @@ from flask import Response
 from paho import mqtt
 from paho.mqtt.client import Client
 from pandas import DataFrame
+from waitress import serve
 from warg import NOD
 
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
@@ -35,6 +36,7 @@ from heimdallr.utilities.server import (
 
 __all__ = ["main"]
 
+from heimdallr.utilities.server.du_utilities import to_overall_du_process_df
 from heimdallr.utilities.server.teams_status import team_members_status
 
 log = logging.getLogger("werkzeug")
@@ -78,7 +80,9 @@ DASH_APP = Dash(
     external_scripts=external_scripts,
     external_stylesheets=external_stylesheets,
 )
-DASH_APP.layout = get_root_layout()
+
+DEVELOPMENT = False
+DASH_APP.layout = get_root_layout(DEVELOPMENT)
 LOG_WRITER: Writer = MockWriter()
 
 
@@ -206,7 +210,7 @@ def update_table(n: int) -> Div:
     compute_machines = []
 
     if DU_STATS:
-        df = to_overall_gpu_process_df(copy.deepcopy(DU_STATS))
+        df = to_overall_du_process_df(copy.deepcopy(DU_STATS))
     else:
         df = DataFrame(["No data"], columns=("data",))
 
@@ -255,10 +259,13 @@ def on_post_config() -> Response:
     Returns:
 
     """
-    settings = HeimdallrSettings()
-    for k, v in flask.request.form.items():
-        if v != "":
-            setattr(settings, k, v)
+    if DEVELOPMENT:
+        settings = HeimdallrSettings()
+        for k, v in flask.request.form.items():
+            if v != "":
+                setattr(settings, k, v)
+    else:
+        print("Not in development mode")
     return flask.redirect("/")
 
 
@@ -314,9 +321,15 @@ def setup_mqtt_connection(settings) -> None:
         # raise e
 
 
-def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
+def main(
+    *args,
+    setting_scope: SettingScopeEnum = SettingScopeEnum.user,
+    development=False,
+    **kwargs,
+) -> None:
     """ """
-    global LOG_WRITER
+    global LOG_WRITER, DEVELOPMENT
+
     if setting_scope == SettingScopeEnum.user:
         LOG_WRITER = LogWriter(
             ensure_existence(PROJECT_APP_PATH.user_log) / f"{PROJECT_NAME}_server.log"
@@ -335,16 +348,25 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user):
 
     DASH_APP.title = ALL_CONSTANTS.HTML_TITLE
     DASH_APP.update_title = ALL_CONSTANTS.HTML_TITLE
+    host = ALL_CONSTANTS.SERVER_ADDRESS
+    port = ALL_CONSTANTS.SERVER_PORT
 
-    DASH_APP.run_server(
-        host=ALL_CONSTANTS.SERVER_ADDRESS,
-        port=ALL_CONSTANTS.SERVER_PORT,
-        debug=ALL_CONSTANTS.DEBUG,
-        dev_tools_hot_reload=ALL_CONSTANTS.DEBUG,
-    )
+    DEVELOPMENT = development
+    DASH_APP.layout = get_root_layout(DEVELOPMENT)
+
+    if development:
+        DASH_APP.run_server(
+            host=host,
+            port=port,
+            debug=ALL_CONSTANTS.DEBUG,
+            dev_tools_hot_reload=ALL_CONSTANTS.DEBUG,
+        )
+    else:
+        # DASH_APP.run_server(host=host, port=port)
+        serve(DASH_APP.server, **kwargs)
 
     LOG_WRITER.close()
 
 
 if __name__ == "__main__":
-    main()
+    main(development=True)

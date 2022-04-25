@@ -4,10 +4,12 @@
 __author__ = "Christian Heider Nielsen"
 __doc__ = ""
 
+import os
+
 from warg import NOD
 
-SERVER_ADDRESS = "0.0.0.0"
-SERVER_PORT = 5555
+SERVER_ADDRESS = "localhost"
+SERVER_PORT = int(os.environ.get("PORT", 5555))
 
 TABLE_PAGE_SIZE = 30
 TIMEOUT_MACHINES_SEC = 20  # SECONDS
