@@ -31,7 +31,7 @@ __all__ = ["get_body"]
 
 
 def get_body() -> List[html.Div]:
-    """ """
+    """description"""
     return [
         html.Div(
             [

@@ -52,7 +52,7 @@ def get_list_of_process_sorted_by_memory(
 if __name__ == "__main__":
 
     def main():
-        """ """
+        """description"""
         print("*** Iterate over all running process and print process ID & Name ***")
         for proc in psutil.process_iter():
             try:
@@ -64,7 +64,7 @@ if __name__ == "__main__":
         print("*** Create a list of all running processes ***")
 
     def all_info_procs():
-        """ """
+        """description"""
         list_of_process_names = list()
         for proc in psutil.process_iter():
             p_info_dict = proc.as_dict()

@@ -1,4 +1,11 @@
-"""Function to get GPU information.
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "Christian"
+__doc__ = r"""
+
+           Created on 29/03/2020
+           Function to get GPU information.
 """
 
 from typing import List, Mapping, Sequence
@@ -32,7 +39,7 @@ __all__ = [
 def to_overall_gpu_process_df(
     gpu_stats: Mapping, sort_by_key="used_gpu_mem"
 ) -> DataFrame:
-    """ """
+    """description"""
     resulta = []
     columns = []
     if len(gpu_stats):
@@ -72,7 +79,7 @@ def to_overall_gpu_process_df(
 def per_machine_per_device_pie_charts(
     gpu_stats: Mapping, keep_alive: Sequence[Number]
 ) -> List[html.Div]:
-    """ """
+    """description"""
     compute_machines = []
     for machine_name, machine in gpu_stats.items():
         machine_devices = []

@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "Christian"
+__doc__ = r"""
+
+           Created on 29/03/2020
+           """
 from typing import Mapping
 
 import numpy
@@ -20,7 +28,7 @@ __all__ = [
 
 
 def to_overall_du_process_df(gpu_stats: Mapping) -> DataFrame:
-    """ """
+    """description"""
     resulta = []
     columns = []
     if len(gpu_stats):

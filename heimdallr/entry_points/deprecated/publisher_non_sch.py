@@ -22,20 +22,20 @@ LOG_WRITER: Writer = MockWriter()
 
 
 def on_publish(client, userdata, result) -> None:
-    """ """
+    """description"""
     global LOG_WRITER
     LOG_WRITER(result)
 
 
 def on_disconnect(client, userdata, rc):
-    """ """
+    """description"""
     if rc != 0:
         print("Unexpected MQTT disconnection. Will auto-reconnect")
         client.reconnect()
 
 
 def main(is_user: bool = False):
-    """ """
+    """description"""
     global LOG_WRITER
     if is_user:
         LOG_WRITER = LogWriter(

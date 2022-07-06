@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "Christian"
+__doc__ = r"""
+
+           Created on 29/03/2020
+           """
+
 # https://github.com/pulls?q=is%3Aopen+is%3Apr+user%3Aaivclab+archived%3Afalse+
 # https://github.com/pulls?user=aivclab
 from datetime import datetime, timedelta

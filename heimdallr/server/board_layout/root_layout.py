@@ -9,7 +9,7 @@ from dash import html
 
 
 def get_root_layout(development=False) -> html.Div:
-    """ """
+    """description"""
     return html.Div(
         [
             get_header(),

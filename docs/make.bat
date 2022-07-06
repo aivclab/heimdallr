@@ -8,8 +8,8 @@ if "%SPHINXBUILD%" == "" (
 	set SPHINXBUILD=sphinx-build
 )
 set SOURCEDIR=source
-set BUILDDIR=build
-set SPHINXPROJ=warg
+set BUILDDIR=../docs/github
+set SPHINXPROJ=heimdallr
 
 if "%1" == "" goto help
 

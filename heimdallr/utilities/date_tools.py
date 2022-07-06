@@ -9,16 +9,16 @@ __doc__ = r"""
 
 import datetime
 
-from draugr import default_datetime_repr
-
 __all__ = ["timestamp_to_datetime", "iso_dt_to_datetime"]
+
+from warg import default_datetime_repr
 
 
 def timestamp_to_datetime(t: int) -> str:
-    """ """
+    """description"""
     return default_datetime_repr(datetime.datetime.fromtimestamp(t))
 
 
 def iso_dt_to_datetime(t: str) -> str:
-    """ """
+    """description"""
     return default_datetime_repr(datetime.datetime.fromisoformat(t[:-1]))

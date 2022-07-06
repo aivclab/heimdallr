@@ -26,7 +26,7 @@ LOG_WRITER: Writer = MockWriter()
 
 
 def on_publish(client: Any, userdata: Any, result, writer: callable = None) -> None:
-    """ """
+    """description"""
     global LOG_WRITER
     LOG_WRITER(result)
     if writer:
@@ -34,7 +34,7 @@ def on_publish(client: Any, userdata: Any, result, writer: callable = None) -> N
 
 
 def on_disconnect(client: Any, userdata: Any, rc, writer: callable = print) -> None:
-    """ """
+    """description"""
     global LOG_WRITER
     if rc != 0:
         client.reconnect()
@@ -44,7 +44,7 @@ def on_disconnect(client: Any, userdata: Any, rc, writer: callable = print) -> N
 
 
 def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
-    """ """
+    """description"""
     global LOG_WRITER
     if setting_scope == SettingScopeEnum.user:
         LOG_WRITER = LogWriter(
@@ -88,7 +88,7 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
         print("Publisher started")
 
         def job():
-            """ """
+            """description"""
             sensor_data[HOSTNAME]["gpu_stats"] = pull_gpu_info()
             sensor_data[HOSTNAME]["du_stats"] = pull_disk_usage_info()
             client.publish(

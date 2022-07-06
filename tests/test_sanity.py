@@ -22,3 +22,7 @@ def test_print(capsys):
     captured = capsys.readouterr()
     assert text in captured.out
     assert err in captured.err
+
+
+if __name__ == "__main__":
+    test_sanity()
