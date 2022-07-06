@@ -10,14 +10,14 @@ if sys.platform == "linux":
 @pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 @pytest.fixture(scope="module")
 def smi(request):
-    """ """
+    """description"""
     return NvidiaSMI.getInstance()
 
 
 @pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
 @pytest.fixture
 def ngpus(smi):
-    """ """
+    """description"""
     result = smi.DeviceQuery("count")["count"]
     assert result > 0
     print("[" + str(result) + " GPUs]", end=" ")

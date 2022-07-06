@@ -1,4 +1,6 @@
 devpack
+warg
+draugr
 numpy
 six
 psutil

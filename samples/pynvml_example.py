@@ -30,16 +30,50 @@
 # Sample script to demonstrate the usage of NVML API python bindings
 #
 
-# To Run:
-# $ python ./example.py
-
-from pynvml import *
-
-
 #
 # Helper function
 #
-def StrVirt(mode):
+from pynvml import (
+    nvmlDeviceGetUUID,
+    nvmlSystemGetDriverVersion,
+    NVML_BRAND_GRID,
+    NVML_BRAND_TITAN_RTX,
+    nvmlDeviceGetName,
+    NVML_BRAND_NVIDIA_RTX,
+    NVML_BRAND_NVIDIA_VGAMING,
+    NVML_BRAND_NVIDIA_VAPPS,
+    nvmlDeviceGetHandleByIndex,
+    NVML_BRAND_TITAN,
+    NVMLError,
+    NVML_GPU_VIRTUALIZATION_MODE_NONE,
+    NVML_BRAND_GEFORCE_RTX,
+    NVML_BRAND_NVIDIA_VWS,
+    NVML_GPU_VIRTUALIZATION_MODE_HOST_VSGA,
+    NVML_BRAND_NVIDIA,
+    NVML_GPU_VIRTUALIZATION_MODE_VGPU,
+    nvmlDeviceGetSerial,
+    NVML_GPU_VIRTUALIZATION_MODE_PASSTHROUGH,
+    nvmlInit,
+    NVML_ERROR_NOT_SUPPORTED,
+    nvmlDeviceGetBrand,
+    nvmlDeviceGetPciInfo,
+    NVML_BRAND_TESLA,
+    nvmlDeviceGetCount,
+    nvmlDeviceGetGridLicensableFeatures,
+    nvmlDeviceGetVirtualizationMode,
+    NVML_BRAND_NVS,
+    NVML_BRAND_QUADRO_RTX,
+    NVML_GPU_VIRTUALIZATION_MODE_HOST_VGPU,
+    NVML_BRAND_GEFORCE,
+    nvmlShutdown,
+    NVML_BRAND_UNKNOWN,
+    NVML_BRAND_NVIDIA_VCS,
+    NVML_BRAND_QUADRO,
+    NVML_BRAND_NVIDIA_VPC,
+)
+
+
+def str_virt(mode):
     """
 
     Args:
@@ -65,7 +99,7 @@ def StrVirt(mode):
 #
 # Converts errors into string messages
 #
-def handleError(err):
+def handle_error(err):
     """
 
     Args:
@@ -81,38 +115,38 @@ def handleError(err):
 
 
 #######
-def deviceQuery():
+def device_query():
     """
 
     Returns:
 
     """
-    strResult = ""
+    str_result = ""
     try:
         #
         # Initialize NVML
         #
         nvmlInit()
 
-        strResult += (
+        str_result += (
             f"  <driver_version>{str(nvmlSystemGetDriverVersion())}</driver_version>\n"
         )
 
-        deviceCount = nvmlDeviceGetCount()
-        strResult += f"  <attached_gpus>{str(deviceCount)}</attached_gpus>\n"
+        device_count = nvmlDeviceGetCount()
+        str_result += f"  <attached_gpus>{str(device_count)}</attached_gpus>\n"
 
-        for i in range(0, deviceCount):
+        for i in range(0, device_count):
             handle = nvmlDeviceGetHandleByIndex(i)
 
             pciInfo = nvmlDeviceGetPciInfo(handle)
 
-            strResult += f'  <gpu id="{pciInfo.busId}">\n'
+            str_result += f'  <gpu id="{pciInfo.busId}">\n'
 
-            strResult += (
+            str_result += (
                 f"    <product_name>{str(nvmlDeviceGetName(handle))}</product_name>\n"
             )
 
-            brandNames = {
+            brand_names = {
                 NVML_BRAND_UNKNOWN: "Unknown",
                 NVML_BRAND_QUADRO: "Quadro",
                 NVML_BRAND_TESLA: "Tesla",
@@ -134,41 +168,41 @@ def deviceQuery():
 
             try:
                 # If nvmlDeviceGetBrand() succeeds it is guaranteed to be in the dictionary
-                brandName = brandNames[nvmlDeviceGetBrand(handle)]
+                brand_name = brand_names[nvmlDeviceGetBrand(handle)]
             except NVMLError as err:
-                brandName = handleError(err)
+                brand_name = handle_error(err)
 
-            strResult += f"    <product_brand>{brandName}</product_brand>\n"
+            str_result += f"    <product_brand>{brand_name}</product_brand>\n"
 
             try:
                 serial = nvmlDeviceGetSerial(handle)
             except NVMLError as err:
-                serial = handleError(err)
+                serial = handle_error(err)
 
-            strResult += f"    <serial>{serial}</serial>\n"
+            str_result += f"    <serial>{serial}</serial>\n"
 
             try:
                 uuid = nvmlDeviceGetUUID(handle)
             except NVMLError as err:
-                uuid = handleError(err)
+                uuid = handle_error(err)
 
-            strResult += f"    <uuid>{str(uuid)}</uuid>\n"
+            str_result += f"    <uuid>{str(uuid)}</uuid>\n"
 
-            strResult += "    <gpu_virtualization_mode>\n"
+            str_result += "    <gpu_virtualization_mode>\n"
             try:
-                mode = StrVirt(nvmlDeviceGetVirtualizationMode(handle))
+                mode = str_virt(nvmlDeviceGetVirtualizationMode(handle))
             except NVMLError as err:
-                mode = handleError(err)
-            strResult += f"      <virtualization_mode>{mode}</virtualization_mode>\n"
-            strResult += "    </gpu_virtualization_mode>\n"
+                mode = handle_error(err)
+            str_result += f"      <virtualization_mode>{mode}</virtualization_mode>\n"
+            str_result += "    </gpu_virtualization_mode>\n"
 
             try:
-                gridLicensableFeatures = nvmlDeviceGetGridLicensableFeatures(handle)
-                if gridLicensableFeatures.isGridLicenseSupported == 1:
-                    strResult += "    <vgpu_software_licensed_product>\n"
-                    for i in range(gridLicensableFeatures.licensableFeaturesCount):
+                grid_licensable_features = nvmlDeviceGetGridLicensableFeatures(handle)
+                if grid_licensable_features.isGridLicenseSupported == 1:
+                    str_result += "    <vgpu_software_licensed_product>\n"
+                    for i in range(grid_licensable_features.licensableFeaturesCount):
                         if (
-                            gridLicensableFeatures.gridLicensableFeatures[
+                            grid_licensable_features.gridLicensableFeatures[
                                 i
                             ].featureState
                             == 0
@@ -177,42 +211,30 @@ def deviceQuery():
                                 nvmlDeviceGetVirtualizationMode(handle)
                                 == NVML_GPU_VIRTUALIZATION_MODE_PASSTHROUGH
                             ):
-                                strResult += "        <licensed_product_name>NVIDIA Virtual Applications</licensed_product_name>\n"
-                                strResult += "        <license_status>Licensed</license_status>\n"
+                                str_result += "        <licensed_product_name>NVIDIA Virtual Applications</licensed_product_name>\n"
+                                str_result += "        <license_status>Licensed</license_status>\n"
                             else:
-                                strResult += (
-                                    "        <licensed_product_name>"
-                                    + gridLicensableFeatures.gridLicensableFeatures[
-                                        i
-                                    ].productName
-                                    + "</licensed_product_name>\n"
-                                )
-                                strResult += "        <license_status>Unlicensed</license_status>\n"
+                                str_result += f"        <licensed_product_name>{str(grid_licensable_features.gridLicensableFeatures[i].productName)}</licensed_product_name>\n"
+                                str_result += "        <license_status>Unlicensed</license_status>\n"
                         else:
-                            strResult += (
-                                "        <licensed_product_name>"
-                                + gridLicensableFeatures.gridLicensableFeatures[
-                                    i
-                                ].productName
-                                + "</licensed_product_name>\n"
-                            )
-                            strResult += (
+                            str_result += f"        <licensed_product_name>{str(grid_licensable_features.gridLicensableFeatures[i].productName)}</licensed_product_name>\n"
+                            str_result += (
                                 "        <license_status>Licensed</license_status>\n"
                             )
-                    strResult += "    </vgpu_software_licensed_product>\n"
+                    str_result += "    </vgpu_software_licensed_product>\n"
             except NVMLError as err:
-                gridLicensableFeatures = handleError(err)
+                grid_licensable_features = handle_error(err)
 
-            strResult += "  </gpu>\n"
+            str_result += "  </gpu>\n"
 
     except NVMLError as err:
-        strResult += f"example.py: {err.__str__()}\n"
+        str_result += f"example.py: {err.__str__()}\n"
 
     nvmlShutdown()
 
-    return strResult
+    return str_result
 
 
 # If this is not exectued when module is imported
 if __name__ == "__main__":
-    print(deviceQuery())
+    print(device_query())

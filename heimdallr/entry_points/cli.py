@@ -31,9 +31,11 @@ underline = "_" * width
 indent = " " * margin
 sponsors = "Alexandra Institute"
 
+__all__ = []
+
 
 class ServiceOption(Enum):
-    """ """
+    """description"""
 
     (
         install,
@@ -49,13 +51,13 @@ class ServiceOption(Enum):
 
 
 class HeimdallrMode(Enum):
-    """ """
+    """description"""
 
     server, publisher = assigned_names()
 
 
 class HeimdallrCLI:
-    """ """
+    """description"""
 
     def __init__(self, *, setting_scope: SettingScopeEnum = SettingScopeEnum.user):
         try:
@@ -244,6 +246,7 @@ class HeimdallrCLI:
 
     @staticmethod
     def shell():
+        """ """
         from heimdallr.entry_points import repl
 
         repl.main()
@@ -252,14 +255,14 @@ class HeimdallrCLI:
 def draw_cli_header(
     *, title: str = "Heimdallr", font: str = "big", drawer: callable = print
 ):
-    """ """
+    """description"""
     drawer(
-        f"{Figlet(font=font, justify='center', width=terminal_width).renderText(title)}{underline}\n"
+        f"{Figlet(font = font, justify = 'center', width = terminal_width).renderText(title)}{underline}\n"
     )
 
 
 def main(*, always_draw_header: bool = False):
-    """ """
+    """description"""
     if always_draw_header:
         draw_cli_header()
     fire.Fire(HeimdallrCLI, name="heimdallr")

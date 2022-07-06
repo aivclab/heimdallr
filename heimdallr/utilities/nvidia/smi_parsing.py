@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "Christian"
+__doc__ = r"""
+
+           Created on 29/03/2020
+           """
+
+
 # ============================================================================ #
 # Copyright (c) 2011-2019, NVIDIA Corporation.  All rights reserved.
 #
@@ -341,13 +351,13 @@ class NVMLError_NotSupported(Exception):
 
 
 class NvidiaSMI:
-    """ """
+    """description"""
 
     __instance = None
     __handles = None
 
     class loop_async:
-        """ """
+        """description"""
 
         __last_result = None
         __task = None
@@ -394,17 +404,17 @@ class NvidiaSMI:
                 self.__callback_chain(self, result)
 
         def cancel(self):
-            """ """
+            """description"""
             self.__abort = True
             if self.__task is not None:
                 self.__task.join()
 
         def is_aborted(self):
-            """ """
+            """description"""
             return self.__abort
 
         def result(self):
-            """ """
+            """description"""
             return self.__last_result
 
     @staticmethod
@@ -416,7 +426,7 @@ class NvidiaSMI:
 
     @staticmethod
     def loop(time_in_milliseconds=1, filter=None, callback=None):
-        """ """
+        """description"""
         return NvidiaSMI.loop_async(time_in_milliseconds, filter, callback)
 
     def __init__(self):
@@ -3413,7 +3423,7 @@ class NvidiaSMI:
         return strResults
 
     def format(self, results):
-        """ """
+        """description"""
         if type(results) is str:
             return results
 
@@ -3424,7 +3434,7 @@ class NvidiaSMI:
 if __name__ == "__main__":
 
     def main():
-        """ """
+        """description"""
         # evaluate arguments
         as_xml = False
         query_gpu_args = None
@@ -3441,7 +3451,6 @@ if __name__ == "__main__":
             results = nvsmi.XmlDeviceQuery(query_gpu_args)
         else:
             results = nvsmi.DeviceQuery(query_gpu_args)
-
-        print(nvsmi.format(results))
+            print(nvsmi.format(results))
 
     main()

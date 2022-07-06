@@ -12,7 +12,7 @@ from dash import Dash
 from dash.dash_table import DataTable
 from dash.dependencies import Input, Output
 from dash.html import Div
-from draugr.python_utilities import default_datetime_repr
+from warg import default_datetime_repr
 from draugr.writers import LogWriter, MockWriter, Writer
 from flask import Response
 from paho import mqtt
@@ -91,7 +91,7 @@ LOG_WRITER: Writer = MockWriter()
     [Input(ALL_CONSTANTS.TIME_INTERVAL_ID, "n_intervals")],
 )
 def update_time(n: int) -> str:
-    """ """
+    """description"""
     global GPU_STATS
     global KEEP_ALIVE
     for k, v in KEEP_ALIVE.items():
@@ -115,7 +115,7 @@ def update_time(n: int) -> str:
     [Input(ALL_CONSTANTS.CALENDAR_INTERVAL_ID, "n_intervals")],
 )
 def update_calendar_live(n: int) -> DataTable:
-    """ """
+    """description"""
     df = get_calender_df(
         HeimdallrSettings().google_calendar_id,
         HeimdallrSettings()._credentials_base_path,
@@ -143,7 +143,7 @@ def update_calendar_live(n: int) -> DataTable:
     [Input(ALL_CONSTANTS.TEAMS_STATUS_INTERVAL_ID, "n_intervals")],
 )
 def update_teams_status_live(n: int) -> Div:
-    """ """
+    """description"""
 
     return Div(team_members_status(None), className="row")
 
@@ -153,7 +153,7 @@ def update_teams_status_live(n: int) -> Div:
     [Input(ALL_CONSTANTS.GPU_INTERVAL_ID, "n_intervals")],
 )
 def update_graph(n: int) -> Div:
-    """ """
+    """description"""
     global GPU_STATS
     global KEEP_ALIVE
     compute_machines = []
@@ -169,7 +169,7 @@ def update_graph(n: int) -> Div:
     [Input(ALL_CONSTANTS.GPU_INTERVAL_ID, "n_intervals")],
 )
 def update_table(n: int) -> Div:
-    """ """
+    """description"""
     MQTT_CLIENT.loop()
 
     compute_machines = []
@@ -204,7 +204,7 @@ def update_table(n: int) -> Div:
     [Input(ALL_CONSTANTS.DU_INTERVAL_ID, "n_intervals")],
 )
 def update_table(n: int) -> Div:
-    """ """
+    """description"""
     MQTT_CLIENT.loop()
 
     compute_machines = []
@@ -270,7 +270,7 @@ def on_post_config() -> Response:
 
 
 def on_message(client: Any, userdata: Any, result: mqtt.client.MQTTMessage) -> None:
-    """ """
+    """description"""
     global LOG_WRITER
     global GPU_STATS
     global KEEP_ALIVE
@@ -290,7 +290,7 @@ def on_message(client: Any, userdata: Any, result: mqtt.client.MQTTMessage) -> N
 
 
 def on_disconnect(client: Any, userdata: Any, rc: Any) -> None:
-    """ """
+    """description"""
     if rc != 0:
         print("Unexpected MQTT disconnection. Will auto-reconnect")
         client.reconnect()
@@ -298,6 +298,11 @@ def on_disconnect(client: Any, userdata: Any, rc: Any) -> None:
 
 
 def setup_mqtt_connection(settings) -> None:
+    """
+
+    :param settings:
+    :type settings:
+    """
     if (
         False
         # settings.mqtt_access_token and False
@@ -327,7 +332,7 @@ def main(
     development=False,
     **kwargs,
 ) -> None:
-    """ """
+    """description"""
     global LOG_WRITER, DEVELOPMENT
 
     if setting_scope == SettingScopeEnum.user:

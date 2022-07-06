@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI &#8212; heimdallr 0.2.7 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="canonical" href="aivclab.github.io/heimdallr/generated/heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="heimdallr.utilities.nvidia.smi_parsing.NVMLError_NotSupported" href="heimdallr.utilities.nvidia.smi_parsing.NVMLError_NotSupported.html" />
+    <link rel="prev" title="heimdallr.utilities.nvidia.smi_parsing" href="heimdallr.utilities.nvidia.smi_parsing.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="heimdallr-utilities-nvidia-smi-parsing-nvidiasmi">
+<h1>heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI<a class="headerlink" href="#heimdallr-utilities-nvidia-smi-parsing-nvidiasmi" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">heimdallr.utilities.nvidia.smi_parsing.</span></span><span class="sig-name descname"><span class="pre">NvidiaSMI</span></span><a class="reference internal" href="../_modules/heimdallr/utilities/nvidia/smi_parsing.html#NvidiaSMI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>description</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heimdallr/utilities/nvidia/smi_parsing.html#NvidiaSMI.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Virtually private constructor.</p>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.DeviceQuery" title="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.DeviceQuery"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeviceQuery</span></code></a>([filter])</p></td>
+<td><p>Provides a Python interface to GPU management and monitoring functions.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.XmlDeviceQuery" title="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.XmlDeviceQuery"><code class="xref py py-obj docutils literal notranslate"><span class="pre">XmlDeviceQuery</span></code></a>([filter])</p></td>
+<td><p>Provides a Python interface to GPU management and monitoring functions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.__init__" title="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>()</p></td>
+<td><p>Virtually private constructor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.format" title="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.format"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format</span></code></a>(results)</p></td>
+<td><p>description</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.getInstance" title="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.getInstance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">getInstance</span></code></a>()</p></td>
+<td><p>Static access method.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.loop" title="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.loop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">loop</span></code></a>([time_in_milliseconds, filter, callback])</p></td>
+<td><p>description</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.DeviceQuery">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DeviceQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heimdallr/utilities/nvidia/smi_parsing.html#NvidiaSMI.DeviceQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.DeviceQuery" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a Python interface to GPU management and monitoring functions.</p>
+<p>This is a wrapper around the NVML library.
+For information about the NVML library, see the NVML developer page
+<a class="reference external" href="http://developer.nvidia.com/nvidia-management-library-nvml">http://developer.nvidia.com/nvidia-management-library-nvml</a></p>
+<p>For all elements as a list of dictionaries.  Similiar to nvisia-smi -q -x</p>
+<p>$ DeviceQuery()</p>
+<p>For a list of filtered dictionary elements by string name.
+Similiar ot nvidia-smi –query-gpu=pci.bus_id,memory.total,memory.free
+See help_query_gpu.txt or DeviceQuery(”–help_query_gpu”) for available filter elements</p>
+<p>$ DeviceQuery(“pci.bus_id,memory.total,memory.free”)</p>
+<p>For a list of filtered dictionary elements by enumeration value.
+See help_query_gpu.txt or DeviceQuery(”–help_query_gpu”) for available filter elements</p>
+<p>$ DeviceQuery([NVSMI_PCI_BUS_ID, NVSMI_MEMORY_TOTAL, NVSMI_MEMORY_FREE])</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.XmlDeviceQuery">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">XmlDeviceQuery</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heimdallr/utilities/nvidia/smi_parsing.html#NvidiaSMI.XmlDeviceQuery"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.XmlDeviceQuery" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides a Python interface to GPU management and monitoring functions.</p>
+<p>This is a wrapper around the NVML library.
+For information about the NVML library, see the NVML developer page
+<a class="reference external" href="http://developer.nvidia.com/nvidia-management-library-nvml">http://developer.nvidia.com/nvidia-management-library-nvml</a></p>
+<p>For all elements as in XML format.  Similiar to nvisia-smi -q -x</p>
+<p>$ XmlDeviceQuery()</p>
+<p>For XML of filtered elements by string name.
+Similiar ot nvidia-smi –query-gpu=pci.bus_id,memory.total,memory.free
+See help_query_gpu.txt or XmlDeviceQuery(”–help_query_gpu”) for available filter elements</p>
+<p>$ XmlDeviceQuery(“pci.bus_id,memory.total,memory.free”)</p>
+<p>For XML of filtered elements by enumeration value.
+See help_query_gpu.txt or XmlDeviceQuery(”–help_query_gpu”) for available filter elements</p>
+<p>$ XmlDeviceQuery([NVSMI_PCI_BUS_ID, NVSMI_MEMORY_TOTAL, NVSMI_MEMORY_FREE])</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.format">
+<span class="sig-name descname"><span class="pre">format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heimdallr/utilities/nvidia/smi_parsing.html#NvidiaSMI.format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>description</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.getInstance">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getInstance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heimdallr/utilities/nvidia/smi_parsing.html#NvidiaSMI.getInstance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.getInstance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Static access method.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.loop">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">loop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_in_milliseconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heimdallr/utilities/nvidia/smi_parsing.html#NvidiaSMI.loop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.loop" title="Permalink to this definition">¶</a></dt>
+<dd><p>description</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.loop_async">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">loop_async</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time_in_milliseconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heimdallr/utilities/nvidia/smi_parsing.html#NvidiaSMI.loop_async"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.loop_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>description</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.loop_async.cancel">
+<span class="sig-name descname"><span class="pre">cancel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heimdallr/utilities/nvidia/smi_parsing.html#NvidiaSMI.loop_async.cancel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.loop_async.cancel" title="Permalink to this definition">¶</a></dt>
+<dd><p>description</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.loop_async.is_aborted">
+<span class="sig-name descname"><span class="pre">is_aborted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heimdallr/utilities/nvidia/smi_parsing.html#NvidiaSMI.loop_async.is_aborted"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.loop_async.is_aborted" title="Permalink to this definition">¶</a></dt>
+<dd><p>description</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.loop_async.result">
+<span class="sig-name descname"><span class="pre">result</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/heimdallr/utilities/nvidia/smi_parsing.html#NvidiaSMI.loop_async.result"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.loop_async.result" title="Permalink to this definition">¶</a></dt>
+<dd><p>description</p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">heimdallr</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="heimdallr.html">heimdallr</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="heimdallr.dist_is_editable.html">heimdallr.dist_is_editable</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heimdallr.get_version.html">heimdallr.get_version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heimdallr.configuration.html">heimdallr.configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heimdallr.entry_points.html">heimdallr.entry_points</a></li>
+<li class="toctree-l2"><a class="reference internal" href="heimdallr.server.html">heimdallr.server</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="heimdallr.utilities.html">heimdallr.utilities</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="heimdallr.utilities.date_tools.html">heimdallr.utilities.date_tools</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="heimdallr.utilities.nvidia.html">heimdallr.utilities.nvidia</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="heimdallr.utilities.nvidia.bindings.html">heimdallr.utilities.nvidia.bindings</a></li>
+<li class="toctree-l4"><a class="reference internal" href="heimdallr.utilities.nvidia.packing.html">heimdallr.utilities.nvidia.packing</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="heimdallr.utilities.nvidia.smi_parsing.html">heimdallr.utilities.nvidia.smi_parsing</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI</a></li>
+<li class="toctree-l5"><a class="reference internal" href="heimdallr.utilities.nvidia.smi_parsing.NVMLError_NotSupported.html">heimdallr.utilities.nvidia.smi_parsing.NVMLError_NotSupported</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="heimdallr.utilities.publisher.html">heimdallr.utilities.publisher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="heimdallr.utilities.server.html">heimdallr.utilities.server</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="heimdallr.html">heimdallr</a><ul>
+  <li><a href="heimdallr.utilities.html">heimdallr.utilities</a><ul>
+  <li><a href="heimdallr.utilities.nvidia.html">heimdallr.utilities.nvidia</a><ul>
+  <li><a href="heimdallr.utilities.nvidia.smi_parsing.html">heimdallr.utilities.nvidia.smi_parsing</a><ul>
+      <li>Previous: <a href="heimdallr.utilities.nvidia.smi_parsing.html" title="previous chapter">heimdallr.utilities.nvidia.smi_parsing</a></li>
+      <li>Next: <a href="heimdallr.utilities.nvidia.smi_parsing.NVMLError_NotSupported.html" title="next chapter">heimdallr.utilities.nvidia.smi_parsing.NVMLError_NotSupported</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/generated/heimdallr.utilities.nvidia.smi_parsing.NvidiaSMI.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

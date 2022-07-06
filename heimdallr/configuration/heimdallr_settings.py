@@ -14,7 +14,7 @@ import shelve
 from enum import Enum
 from typing import Union
 
-from warg.os_platform import is_nix
+from warg import is_nix
 
 if is_nix():
     try:
@@ -40,19 +40,19 @@ __all__ = [
 
 
 class SettingScopeEnum(Enum):
-    """ """
+    """description"""
 
     user, site, root = assigned_names()
 
 
 class EnvironmentVariablePreference(Enum):
-    """ """
+    """description"""
 
     prefer, if_missing, ignore = assigned_names()
 
 
 class HeimdallrSettings(PropertySettings):
-    """ """
+    """description"""
 
     _setting_scope = None
     _google_settings_path = None
@@ -112,7 +112,7 @@ class HeimdallrSettings(PropertySettings):
 
     @property
     def teams_config(self) -> Union[object, dict, None]:
-        """ """
+        """description"""
         key = inspect.currentframe().f_code.co_name
         if (
             self._look_up_env_on_missing == EnvironmentVariablePreference.prefer
@@ -147,7 +147,7 @@ class HeimdallrSettings(PropertySettings):
 
     @property
     def google_calendar_id(self) -> Union[object, str, None]:
-        """ """
+        """description"""
         key = inspect.currentframe().f_code.co_name
         if (
             self._look_up_env_on_missing == EnvironmentVariablePreference.prefer
@@ -198,7 +198,7 @@ class HeimdallrSettings(PropertySettings):
 
     @property
     def github_token(self) -> Union[object, str, None]:
-        """ """
+        """description"""
         key = inspect.currentframe().f_code.co_name
         if (
             self._look_up_env_on_missing == EnvironmentVariablePreference.prefer
@@ -250,27 +250,27 @@ class HeimdallrSettings(PropertySettings):
     '''
 @property
 def mqtt_access_token(self) -> Optional[str]:
-  """ """
-  key = inspect.currentframe().f_code.co_name
-  if self._look_up_env_on_missing == EnvironmentVariablePreference.prefer and key in os.environ:
-          return os.environ.get(key)
-  with shelve.open(str(HeimdallrSettings._mqtt_settings_path)) as d:
-      if key in d:
-          return d[key]
-  if self._look_up_env_on_missing == EnvironmentVariablePreference.if_missing and key in os.environ:
+""" description """
+key = inspect.currentframe().f_code.co_name
+if self._look_up_env_on_missing == EnvironmentVariablePreference.prefer and key in os.environ:
       return os.environ.get(key)
-  return None
+with shelve.open(str(HeimdallrSettings._mqtt_settings_path)) as d:
+  if key in d:
+      return d[key]
+if self._look_up_env_on_missing == EnvironmentVariablePreference.if_missing and key in os.environ:
+  return os.environ.get(key)
+return None
 
 @mqtt_access_token.setter
 def mqtt_access_token(self, token: str) -> None:
-  key = inspect.currentframe().f_code.co_name
-  with shelve.open(str(HeimdallrSettings._mqtt_settings_path), writeback=True) as d:
-      d[key] = token
+key = inspect.currentframe().f_code.co_name
+with shelve.open(str(HeimdallrSettings._mqtt_settings_path), writeback=True) as d:
+  d[key] = token
 '''
 
     @property
     def mqtt_username(self) -> Union[object, str, None]:
-        """ """
+        """description"""
         key = inspect.currentframe().f_code.co_name
         if (
             self._look_up_env_on_missing == EnvironmentVariablePreference.prefer
@@ -318,7 +318,7 @@ def mqtt_access_token(self, token: str) -> None:
 
     @property
     def mqtt_password(self) -> Union[object, str, None]:
-        """ """
+        """description"""
         key = inspect.currentframe().f_code.co_name
         if (
             self._look_up_env_on_missing == EnvironmentVariablePreference.prefer
@@ -366,7 +366,7 @@ def mqtt_access_token(self, token: str) -> None:
 
     @property
     def mqtt_broker(self) -> Union[object, str, None]:
-        """ """
+        """description"""
         key = inspect.currentframe().f_code.co_name
         if (
             self._look_up_env_on_missing == EnvironmentVariablePreference.prefer
@@ -414,7 +414,7 @@ def mqtt_access_token(self, token: str) -> None:
 
     @property
     def mqtt_port(self) -> Union[object, str, None]:
-        """ """
+        """description"""
         key = inspect.currentframe().f_code.co_name
         if (
             self._look_up_env_on_missing == EnvironmentVariablePreference.prefer
@@ -467,7 +467,7 @@ def set_all_heimdallr_settings(
     _lower_keys: bool = True,
     **kwargs,
 ):
-    """ """
+    """description"""
     HEIMDALLR_SETTINGS = HeimdallrSettings(setting_scope)
     # print(f"current heimdallr settings: {HEIMDALLR_SETTINGS}")
     if _lower_keys:
@@ -492,9 +492,9 @@ if __name__ == "__main__":
 
     """
 set_all_heimdallr_settings(
-  **{
-      k: getattr(settings, k) if getattr(settings, k) else None
-      for k in iter(settings)
-  }
+**{
+  k: getattr(settings, k) if getattr(settings, k) else None
+  for k in iter(settings)
+}
 )
 """

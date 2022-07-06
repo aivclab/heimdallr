@@ -23,7 +23,7 @@ __all__ = ["get_header"]
 
 
 def get_header() -> html.Div:
-    """ """
+    """description"""
     svg_p = Path(heimdallr.__file__).parent / "entry_points" / "assets" / "aivclab.svg"
     if svg_p.exists():
         with open(
