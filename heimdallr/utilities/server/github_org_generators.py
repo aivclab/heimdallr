@@ -229,5 +229,5 @@ if __name__ == "__main__":
     else:
         print("rate limited")
 
-        print(f"reset in {timedelta(seconds=reset_seconds)} ")
+        print(f"reset in {timedelta(seconds = reset_seconds)} ")
     # print(list(yield_org_prs(gthb, 'aivclab')))

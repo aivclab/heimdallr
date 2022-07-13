@@ -3,7 +3,7 @@
 from heimdallr.server.board_layout import get_body, get_footer, get_header, get_menu
 
 __author__ = "Christian Heider Nielsen"
-__doc__ = ""
+__doc__ = """ description """
 
 from dash import html
 

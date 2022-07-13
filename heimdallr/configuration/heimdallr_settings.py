@@ -253,19 +253,19 @@ def mqtt_access_token(self) -> Optional[str]:
 """ description """
 key = inspect.currentframe().f_code.co_name
 if self._look_up_env_on_missing == EnvironmentVariablePreference.prefer and key in os.environ:
-      return os.environ.get(key)
+    return os.environ.get(key)
 with shelve.open(str(HeimdallrSettings._mqtt_settings_path)) as d:
-  if key in d:
-      return d[key]
+if key in d:
+    return d[key]
 if self._look_up_env_on_missing == EnvironmentVariablePreference.if_missing and key in os.environ:
-  return os.environ.get(key)
+return os.environ.get(key)
 return None
 
 @mqtt_access_token.setter
 def mqtt_access_token(self, token: str) -> None:
 key = inspect.currentframe().f_code.co_name
 with shelve.open(str(HeimdallrSettings._mqtt_settings_path), writeback=True) as d:
-  d[key] = token
+d[key] = token
 '''
 
     @property
@@ -493,8 +493,8 @@ if __name__ == "__main__":
     """
 set_all_heimdallr_settings(
 **{
-  k: getattr(settings, k) if getattr(settings, k) else None
-  for k in iter(settings)
+k: getattr(settings, k) if getattr(settings, k) else None
+for k in iter(settings)
 }
 )
 """

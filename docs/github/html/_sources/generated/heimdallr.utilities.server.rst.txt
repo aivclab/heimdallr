@@ -1,4 +1,4 @@
-﻿heimdallr.utilities.server
+heimdallr.utilities.server
 ==========================
 
 .. automodule:: heimdallr.utilities.server

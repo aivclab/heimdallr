@@ -246,7 +246,7 @@ class HeimdallrCLI:
 
     @staticmethod
     def shell():
-        """ """
+        """description"""
         from heimdallr.entry_points import repl
 
         repl.main()

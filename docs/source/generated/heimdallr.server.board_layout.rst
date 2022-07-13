@@ -1,4 +1,4 @@
-﻿heimdallr.server.board\_layout
+heimdallr.server.board\_layout
 ==============================
 
 .. automodule:: heimdallr.server.board_layout

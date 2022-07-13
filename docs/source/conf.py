@@ -20,6 +20,7 @@
 
 import sys
 from pathlib import Path
+
 from warg import cprint
 
 PACKAGE_ROOT = Path(__file__).parent.parent.parent
@@ -134,7 +135,12 @@ html_theme = "alabaster"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named 'default.css' will overwrite the builtin 'default.css'.
-html_static_path = []
+html_static_path = ["../../.github/images"]
+html_logo = "../../.github/images/horn.svg"
+html_theme_options = {
+    # "logo_only": True,
+    # "display_version": False,
+}
 
 html_baseurl = f"aivclab.github.io/{PROJECT_NAME}"
 

@@ -12,14 +12,13 @@ from dash import Dash
 from dash.dash_table import DataTable
 from dash.dependencies import Input, Output
 from dash.html import Div
-from warg import default_datetime_repr
 from draugr.writers import LogWriter, MockWriter, Writer
 from flask import Response
 from paho import mqtt
 from paho.mqtt.client import Client
 from pandas import DataFrame
 from waitress import serve
-from warg import NOD
+from warg import NOD, default_datetime_repr
 
 from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS

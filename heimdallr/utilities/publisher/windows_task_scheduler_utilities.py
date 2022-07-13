@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "Christian"
+__doc__ = r"""
+
+           Created on 29/03/2020
+           """
+
 __all__ = ["disable_service", "remove_service", "install_service", "enable_service"]
 
 from pathlib import Path

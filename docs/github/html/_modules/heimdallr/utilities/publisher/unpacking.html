@@ -34,39 +34,48 @@
           <div class="body" role="main">
             
   <h1>Source code for heimdallr.utilities.publisher.unpacking</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">warg</span> <span class="kn">import</span> <span class="n">NOD</span>
+<span></span><span class="c1"># !/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Christian&quot;</span>
+<span class="vm">__doc__</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;&quot;&quot;</span>
+
+<span class="s2">           Created on 29/03/2020</span>
+<span class="s2">           &quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">warg</span> <span class="kn">import</span> <span class="n">NOD</span>
 
 <span class="kn">from</span> <span class="nn">heimdallr.utilities.nvidia.packing</span> <span class="kn">import</span> <span class="n">get_nv_info</span>
 
 
 <div class="viewcode-block" id="pull_gpu_info"><a class="viewcode-back" href="../../../../generated/heimdallr.utilities.publisher.unpacking.pull_gpu_info.html#heimdallr.utilities.publisher.unpacking.pull_gpu_info">[docs]</a><span class="k">def</span> <span class="nf">pull_gpu_info</span><span class="p">(</span><span class="n">include_graphics_processes</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Get all information about all your graphics cards.</span>
+  <span class="sd">&quot;&quot;&quot;Get all information about all your graphics cards.</span>
 
-<span class="sd">    Returns:</span>
-<span class="sd">      dict: The returned result is a dict with 3 keys: count, driver_version and devices:</span>
-<span class="sd">          count: Number of gpus found</span>
-<span class="sd">          driver_version: The version of the system’s graphics driver</span>
-<span class="sd">          devices: It&#39;s a list and every item is a namedtuple Device which has 10 fields, for exzample id,</span>
-<span class="sd">          name and fan_speed etc.</span>
-<span class="sd">                   It should be noted that the Process field is also a namedtuple which has 11 fields.&quot;&quot;&quot;</span>
+<span class="sd">  Returns:</span>
+<span class="sd">    dict: The returned result is a dict with 3 keys: count, driver_version and devices:</span>
+<span class="sd">        count: Number of gpus found</span>
+<span class="sd">        driver_version: The version of the system’s graphics driver</span>
+<span class="sd">        devices: It&#39;s a list and every item is a namedtuple Device which has 10 fields, for exzample id,</span>
+<span class="sd">        name and fan_speed etc.</span>
+<span class="sd">                 It should be noted that the Process field is also a namedtuple which has 11 fields.&quot;&quot;&quot;</span>
 
-    <span class="n">driver_version</span><span class="p">,</span> <span class="n">devices</span> <span class="o">=</span> <span class="n">get_nv_info</span><span class="p">(</span><span class="n">include_graphics_processes</span><span class="p">)</span>
+  <span class="n">driver_version</span><span class="p">,</span> <span class="n">devices</span> <span class="o">=</span> <span class="n">get_nv_info</span><span class="p">(</span><span class="n">include_graphics_processes</span><span class="p">)</span>
 
-    <span class="n">info</span> <span class="o">=</span> <span class="n">NOD</span><span class="p">()</span>
+  <span class="n">info</span> <span class="o">=</span> <span class="n">NOD</span><span class="p">()</span>
 
-    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">devices</span><span class="p">)</span>
-    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;driver_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">driver_version</span>
-    <span class="n">info</span><span class="p">[</span><span class="s2">&quot;devices&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">devices</span>
-    <span class="k">return</span> <span class="n">info</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span></div>
+  <span class="n">info</span><span class="p">[</span><span class="s2">&quot;count&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">devices</span><span class="p">)</span>
+  <span class="n">info</span><span class="p">[</span><span class="s2">&quot;driver_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">driver_version</span>
+  <span class="n">info</span><span class="p">[</span><span class="s2">&quot;devices&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">devices</span>
+  <span class="k">return</span> <span class="n">info</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="pull_disk_usage_info"><a class="viewcode-back" href="../../../../generated/heimdallr.utilities.publisher.unpacking.pull_disk_usage_info.html#heimdallr.utilities.publisher.unpacking.pull_disk_usage_info">[docs]</a><span class="k">def</span> <span class="nf">pull_disk_usage_info</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+  <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="sd">    :return:</span>
-<span class="sd">    :rtype:</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;disk_usage&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;total&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;free&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}}</span></div>
+<span class="sd">  :return:</span>
+<span class="sd">  :rtype:</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;disk_usage&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;total&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;used&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;free&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}}</span></div>
 </pre></div>
 
           </div>
@@ -75,6 +84,9 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../../../index.html">
+              <img class="logo" src="../../../../_static/horn.svg" alt="Logo"/>
+            </a></p>
 <h1 class="logo"><a href="../../../../index.html">heimdallr</a></h1>
 
 

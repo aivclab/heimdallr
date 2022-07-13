@@ -7,7 +7,6 @@ __doc__ = r"""
            Created on 29/03/2020
            """
 
-
 # ============================================================================ #
 # Copyright (c) 2011-2019, NVIDIA Corporation.  All rights reserved.
 #
@@ -1531,7 +1530,7 @@ class NvidiaSMI:
                             )
                         pciBridgeChip += (
                             "        <bridge_chip_fw>%s</bridge_chip_fw>\n"
-                            % (strFwVersion)
+                            % strFwVersion
                         )
                     except NVMLError as err:
                         pciBridgeChip += (
@@ -2656,7 +2655,7 @@ class NvidiaSMI:
                     includePci = True
 
                 if NVSMI_ALL in filter or NVSMI_PCI_DEVICE_ID in filter:
-                    pci["pci_device_id"] = "%08X" % (pciInfo.pciDeviceId)
+                    pci["pci_device_id"] = "%08X" % pciInfo.pciDeviceId
                     includePci = True
 
                 if NVSMI_ALL in filter or NVSMI_PCI_BUS_ID in filter:
@@ -2664,7 +2663,7 @@ class NvidiaSMI:
                     includePci = True
 
                 if NVSMI_ALL in filter or NVSMI_PCI_SUBDEVICE_ID in filter:
-                    pci["pci_sub_system_id"] = "%08X" % (pciInfo.pciSubSystemId)
+                    pci["pci_sub_system_id"] = "%08X" % pciInfo.pciSubSystemId
                     includePci = True
 
                 pciGpuLinkInfo = {}
@@ -3383,13 +3382,13 @@ class NvidiaSMI:
             for key, val in value.items():
                 if isinstance(val, collections.Mapping):
                     if len(val.values()) > 0:
-                        strResults += ("%s%s:\n") % (indent, key)
+                        strResults += "%s%s:\n" % (indent, key)
                         strResults += self.__to_str_dictionary(val, "  " + indent)
                     else:
-                        strResults += ("%s%s: %s\n") % (indent, key, "None")
+                        strResults += "%s%s: %s\n" % (indent, key, "None")
                 elif (type(val) is list) and (isinstance(val[0], collections.Mapping)):
                     for i in range(0, len(val)):
-                        strResults += ("%s%s: [%d of %d]\n") % (
+                        strResults += "%s%s: [%d of %d]\n" % (
                             indent,
                             key,
                             i + 1,
@@ -3397,7 +3396,7 @@ class NvidiaSMI:
                         )
                         strResults += self.__to_str_dictionary(val[i], "  " + indent)
                 else:
-                    strResults += ("%s%s: %s\n") % (indent, key, str(val))
+                    strResults += "%s%s: %s\n" % (indent, key, str(val))
 
         except Exception as e:
             strResults += "\n[Error] " + str(e)
@@ -3410,7 +3409,7 @@ class NvidiaSMI:
         for key, val in results.items():
             if type(val) is list:
                 for i in range(0, len(val)):
-                    strResults += ("%s%s: [%d of %d]\n") % (
+                    strResults += "%s%s: [%d of %d]\n" % (
                         indent,
                         key,
                         i + 1,
@@ -3418,7 +3417,7 @@ class NvidiaSMI:
                     )
                     strResults += self.__to_str_dictionary(val[i], "  " + indent)
             else:
-                strResults += ("%s%s: %s\n") % (indent, key, str(val))
+                strResults += "%s%s: %s\n" % (indent, key, str(val))
 
         return strResults
 

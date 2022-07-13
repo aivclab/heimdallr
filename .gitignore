@@ -13,7 +13,7 @@ downloads
 eggs
 parts
 *.egg-info
-
+*.out
 *.py[cod]
 
 .pytest_cache

@@ -2110,7 +2110,7 @@ def nvmlDeviceGetSamples(device, sampling_type, timeStamp):
         c_samples,
     )
     check_return(ret)
-    return (c_sample_value_type.value, c_samples[0 : c_sample_count.value])
+    return c_sample_value_type.value, c_samples[0 : c_sample_count.value]
 
 
 def nvmlDeviceGetViolationStatus(device, perfPolicyType):

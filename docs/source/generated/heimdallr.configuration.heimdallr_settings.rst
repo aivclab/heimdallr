@@ -1,4 +1,4 @@
-﻿heimdallr.configuration.heimdallr\_settings
+heimdallr.configuration.heimdallr\_settings
 ===========================================
 
 .. automodule:: heimdallr.configuration.heimdallr_settings
