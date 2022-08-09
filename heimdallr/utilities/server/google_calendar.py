@@ -18,7 +18,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 try:
     from googleapiclient.discovery import build
 except:
-    print("try upgrade googleapiclient")
+    print("try upgrade google-api-python-client")
 
 from apppath import ensure_existence
 from heimdallr.configuration.heimdallr_settings import HeimdallrSettings

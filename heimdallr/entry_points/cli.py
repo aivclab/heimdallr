@@ -13,10 +13,10 @@ from pathlib import Path
 from typing import Any
 
 import fire
-from draugr.python_utilities import get_terminal_size
+
 from pyfiglet import Figlet
 from sorcery import assigned_names
-
+import warg
 from heimdallr import get_version
 from heimdallr.configuration.heimdallr_settings import (
     HeimdallrSettings,
@@ -24,7 +24,7 @@ from heimdallr.configuration.heimdallr_settings import (
 )
 
 margin_percentage = 0 / 6
-terminal_width = get_terminal_size().columns
+terminal_width = warg.get_terminal_size().columns
 margin = int(margin_percentage * terminal_width)
 width = terminal_width - 2 * margin
 underline = "_" * width

@@ -5,7 +5,7 @@ import time
 import paho.mqtt.client as mqtt
 from apppath import ensure_existence
 from draugr import IgnoreInterruptSignal
-from draugr.python_utilities.business import busy_indicator
+from warg import busy_indicator
 from draugr.writers import LogWriter, MockWriter, Writer
 from warg import NOD
 

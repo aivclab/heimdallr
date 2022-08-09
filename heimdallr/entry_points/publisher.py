@@ -6,7 +6,7 @@ from typing import Any
 import paho.mqtt.client as mqtt
 import schedule
 from apppath import ensure_existence
-from draugr.python_utilities.business import busy_indicator
+from warg import busy_indicator
 from draugr.writers import LogWriter, MockWriter, Writer
 from warg import NOD
 
