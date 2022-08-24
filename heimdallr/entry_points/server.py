@@ -93,18 +93,22 @@ def update_time(n: int) -> str:
     """description"""
     global GPU_STATS
     global KEEP_ALIVE
-    for k, v in KEEP_ALIVE.items():
-        if v > ALL_CONSTANTS.TIMEOUT_MACHINES_SEC:
-            if k in GPU_STATS.keys():
-                GPU_STATS.pop(k)
-                print(f"deleting {k} from stats")
+    try:
+        for k, v in KEEP_ALIVE.items():
+            if v > ALL_CONSTANTS.TIMEOUT_MACHINES_SEC:
+                if k in GPU_STATS.keys():
+                    GPU_STATS.pop(k)
+                    print(f"deleting {k} from stats")
 
-    for key in list(KEEP_ALIVE.keys()):
-        if key in GPU_STATS.keys():
-            KEEP_ALIVE[key] = KEEP_ALIVE[key] + 1
-        else:
-            KEEP_ALIVE.pop(key)
-            print(f"deleting {key} from keep alive")
+        for key in list(KEEP_ALIVE.keys()):
+            if key in GPU_STATS.keys():
+                KEEP_ALIVE[key] = KEEP_ALIVE[key] + 1
+            else:
+                KEEP_ALIVE.pop(key)
+                print(f"deleting {key} from keep alive")
+
+    except Exception as e:
+        print(e)
 
     return default_datetime_repr(datetime.datetime.now())
 
@@ -115,26 +119,29 @@ def update_time(n: int) -> str:
 )
 def update_calendar_live(n: int) -> DataTable:
     """description"""
-    df = get_calender_df(
-        HeimdallrSettings().google_calendar_id,
-        HeimdallrSettings()._credentials_base_path,
-        num_entries=ALL_CONSTANTS.TABLE_PAGE_SIZE,
-    )
+    try:
+        df = get_calender_df(
+            HeimdallrSettings().google_calendar_id,
+            HeimdallrSettings()._credentials_base_path,
+            num_entries=ALL_CONSTANTS.TABLE_PAGE_SIZE,
+        )
 
-    return DataTable(
-        id="calender-table-0",
-        columns=[{"name": i, "id": i} for i in df.columns],
-        data=df.to_dict("records"),
-        page_size=ALL_CONSTANTS.TABLE_PAGE_SIZE,
-        style_as_list_view=True,
-        style_data_conditional=[
-            {
-                "if": {"column_id": "start", "filter_query": "{start} > 3.9"},
-                "backgroundColor": "green",
-                "color": "white",
-            },
-        ],  # TODO: MAKE GRADIENT TO ORANGE FOR WHEN NEARING START, and GREEN WHEN IN PROGRESS
-    )
+        return DataTable(
+            id="calender-table-0",
+            columns=[{"name": i, "id": i} for i in df.columns],
+            data=df.to_dict("records"),
+            page_size=ALL_CONSTANTS.TABLE_PAGE_SIZE,
+            style_as_list_view=True,
+            style_data_conditional=[
+                {
+                    "if": {"column_id": "start", "filter_query": "{start} > 3.9"},
+                    "backgroundColor": "green",
+                    "color": "white",
+                },
+            ],  # TODO: MAKE GRADIENT TO ORANGE FOR WHEN NEARING START, and GREEN WHEN IN PROGRESS
+        )
+    except Exception as e:
+        return Div([f"Error: {e}"])
 
 
 @DASH_APP.callback(

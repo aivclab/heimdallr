@@ -39,7 +39,9 @@ __all__ = [
 def to_overall_gpu_process_df(
     gpu_stats: Mapping, sort_by_key="used_gpu_mem"
 ) -> DataFrame:
-    """description"""
+    """
+    to overall gpu usage process df
+    """
     resulta = []
     columns = []
     if len(gpu_stats):
@@ -79,7 +81,9 @@ def to_overall_gpu_process_df(
 def per_machine_per_device_pie_charts(
     gpu_stats: Mapping, keep_alive: Sequence[Number]
 ) -> List[html.Div]:
-    """description"""
+    """
+    per machine per device pie charts
+    """
     compute_machines = []
     for machine_name, machine in gpu_stats.items():
         machine_devices = []

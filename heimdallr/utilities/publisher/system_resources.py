@@ -16,6 +16,7 @@ __all__ = ["get_list_of_process_sorted_by_memory"]
 
 def select(mapping: Mapping, *a) -> Mapping:
     """
+    Select keys from mapping if in a
 
     Args:
       mapping:

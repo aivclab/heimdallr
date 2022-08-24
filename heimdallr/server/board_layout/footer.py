@@ -18,7 +18,9 @@ __all__ = ["get_footer"]
 
 
 def get_footer() -> html.Footer:
-    """description"""
+    """
+    footer
+    """
     return html.Footer(
         [
             html.Div(

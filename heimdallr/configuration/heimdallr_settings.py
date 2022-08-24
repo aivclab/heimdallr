@@ -16,13 +16,6 @@ from typing import Union
 
 from warg import is_nix
 
-if is_nix():
-    try:
-        import sh
-    except (ImportError, ModuleNotFoundError) as e:
-        print(e)
-        print("Please install sh and dependencies")
-
 from sorcery import assigned_names
 
 from apppath import ensure_existence
@@ -34,6 +27,13 @@ __all__ = [
     "SettingScopeEnum",  # Setting scope Enum
     "set_all_heimdallr_settings",  # Set settings function
 ]
+
+if is_nix():
+    try:
+        import sh
+    except (ImportError, ModuleNotFoundError) as e:
+        print(e)
+        print("Please install sh and dependencies")
 
 
 # PropertySettings.raise_exception_on_none = False
@@ -253,10 +253,10 @@ def mqtt_access_token(self) -> Optional[str]:
 """ description """
 key = inspect.currentframe().f_code.co_name
 if self._look_up_env_on_missing == EnvironmentVariablePreference.prefer and key in os.environ:
-    return os.environ.get(key)
+  return os.environ.get(key)
 with shelve.open(str(HeimdallrSettings._mqtt_settings_path)) as d:
 if key in d:
-    return d[key]
+  return d[key]
 if self._look_up_env_on_missing == EnvironmentVariablePreference.if_missing and key in os.environ:
 return os.environ.get(key)
 return None

@@ -18,15 +18,16 @@ from heimdallr.configuration.heimdallr_settings import (
 )
 from heimdallr.utilities.publisher.unpacking import pull_disk_usage_info, pull_gpu_info
 
-HOSTNAME = socket.gethostname()
-
 __all__ = ["main"]
 
+HOSTNAME = socket.gethostname()
 LOG_WRITER: Writer = MockWriter()
 
 
 def on_publish(client: Any, userdata: Any, result, writer: callable = None) -> None:
-    """description"""
+    """
+    publisher callback
+    """
     global LOG_WRITER
     LOG_WRITER(result)
     if writer:
@@ -34,7 +35,9 @@ def on_publish(client: Any, userdata: Any, result, writer: callable = None) -> N
 
 
 def on_disconnect(client: Any, userdata: Any, rc, writer: callable = print) -> None:
-    """description"""
+    """
+    disconnect callback
+    """
     global LOG_WRITER
     if rc != 0:
         client.reconnect()
@@ -44,7 +47,9 @@ def on_disconnect(client: Any, userdata: Any, rc, writer: callable = print) -> N
 
 
 def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
-    """description"""
+    """
+    main entry point
+    """
     global LOG_WRITER
     if setting_scope == SettingScopeEnum.user:
         LOG_WRITER = LogWriter(

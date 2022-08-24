@@ -29,7 +29,9 @@ __all__ = [
 
 
 def to_overall_du_process_df(gpu_stats: Mapping) -> DataFrame:
-    """description"""
+    """
+    to overall disk usage process df
+    """
     resulta = []
     columns = []
     if len(gpu_stats):

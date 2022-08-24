@@ -15,10 +15,14 @@ from warg import default_datetime_repr
 
 
 def timestamp_to_datetime(t: int) -> str:
-    """description"""
+    """
+    time stamp to datetime
+    """
     return default_datetime_repr(datetime.datetime.fromtimestamp(t))
 
 
 def iso_dt_to_datetime(t: str) -> str:
-    """description"""
+    """
+    iso datetime to datetime
+    """
     return default_datetime_repr(datetime.datetime.fromisoformat(t[:-1]))

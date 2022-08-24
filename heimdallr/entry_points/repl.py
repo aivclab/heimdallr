@@ -7,7 +7,6 @@ __doc__ = r"""
            Created on 19/01/2020
            """
 
-from draugr import ConfigShell
 
 from pyfiglet import Figlet
 
@@ -15,10 +14,11 @@ from heimdallr.configuration.heimdallr_settings import (
     HeimdallrSettings,
     SettingScopeEnum,
 )
-import warg
+
+from warg import ConfigShell, get_terminal_size
 
 margin_percentage = 0 / 6
-terminal_width = warg.get_terminal_size().columns
+terminal_width = get_terminal_size().columns
 margin = int(margin_percentage * terminal_width)
 width = terminal_width - 2 * margin
 underline = "_" * width

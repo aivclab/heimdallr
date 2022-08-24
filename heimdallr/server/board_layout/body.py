@@ -7,6 +7,8 @@ __doc__ = r"""
            Created on 15/03/2020
            """
 
+__all__ = ["get_body"]
+
 from typing import List
 
 from dash import dcc, html
@@ -27,11 +29,11 @@ from heimdallr.configuration.heimdallr_config import (
     TEAMS_STATUS_INTERVAL_MS,
 )
 
-__all__ = ["get_body"]
-
 
 def get_body() -> List[html.Div]:
-    """description"""
+    """
+    body
+    """
     return [
         html.Div(
             [

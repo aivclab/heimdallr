@@ -22,7 +22,9 @@ except Exception as e:
 
 
 def get_nv_info(include_graphics_processes: bool = True) -> Tuple[str, List]:
-    """description"""
+    """
+    Get NVidia GPU information
+    """
     devices = []
     try:
         driver_version = bindings.nvmlSystemGetDriverVersion().decode()

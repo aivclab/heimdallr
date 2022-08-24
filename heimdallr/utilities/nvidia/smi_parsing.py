@@ -350,7 +350,9 @@ class NVMLError_NotSupported(Exception):
 
 
 class NvidiaSMI:
-    """description"""
+    """
+    NvidiaSMI is a class for querying the NVIDIA SMI (System Management Interface)
+    """
 
     __instance = None
     __handles = None
