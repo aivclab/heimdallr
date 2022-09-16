@@ -18,7 +18,7 @@ from warg import is_nix
 
 from sorcery import assigned_names
 
-from apppath import ensure_existence
+from warg import ensure_existence
 from heimdallr import PROJECT_APP_PATH
 from warg import PropertySettings, is_windows
 
@@ -182,14 +182,11 @@ class HeimdallrSettings(PropertySettings):
 
     @google_calendar_id.deleter
     def google_calendar_id(self) -> None:
-        """
+        '''
 
-        Args:
-            calendar_id ():
-
-        Returns:
-
-        """
+        :return:
+        :rtype:
+        '''
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
             str(HeimdallrSettings._github_settings_path), writeback=True
@@ -233,14 +230,11 @@ class HeimdallrSettings(PropertySettings):
 
     @github_token.deleter
     def github_token(self) -> None:
-        """
+        '''
 
-        Args:
-            calendar_id ():
-
-        Returns:
-
-        """
+        :return:
+        :rtype:
+        '''
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
             str(HeimdallrSettings._github_settings_path), writeback=True
@@ -468,18 +462,18 @@ def set_all_heimdallr_settings(
     **kwargs,
 ):
     """description"""
-    HEIMDALLR_SETTINGS = HeimdallrSettings(setting_scope)
-    # print(f"current heimdallr settings: {HEIMDALLR_SETTINGS}")
+    heimdallr_settings = HeimdallrSettings(setting_scope)
+    # print(f"current heimdallr settings: {heimdallr_settings}")
     if _lower_keys:
         kwargs = {k.lower(): v for k, v in kwargs.items()}
 
     # for k in kwargs.keys():
-    #    assert k in HEIMDALLR_SETTINGS, f'"{k}" is not in Heimdallrs settings'
+    #    assert k in heimdallr_settings, f'"{k}" is not in Heimdallrs settings'
 
-    for k in HEIMDALLR_SETTINGS:
+    for k in heimdallr_settings:
         assert k in kwargs.keys(), f'Missing "{k}" from kwargs'
 
-    HEIMDALLR_SETTINGS.__from_dict__(kwargs)
+    heimdallr_settings.__from_dict__(kwargs)
 
     print(f"new heimdallr settings: {HeimdallrSettings()}")
 

@@ -3,8 +3,8 @@ import socket
 import time
 
 import paho.mqtt.client as mqtt
-from apppath import ensure_existence
-from draugr import IgnoreInterruptSignal
+from warg import ensure_existence
+from warg import IgnoreInterruptSignal
 from warg import busy_indicator
 from draugr.writers import LogWriter, MockWriter, Writer
 from warg import NOD
@@ -52,20 +52,20 @@ def main(is_user: bool = False):
     client.on_publish = on_publish
     client.on_disconnect = on_disconnect
 
-    HEIMDALLR_SETTINGS = HeimdallrSettings()  # TODO input scope
+    heimdallr_settings = HeimdallrSettings()  # TODO input scope
 
     client.username_pw_set(
-        HEIMDALLR_SETTINGS.mqtt_username, HEIMDALLR_SETTINGS.mqtt_password
+        heimdallr_settings.mqtt_username, heimdallr_settings.mqtt_password
     )
     try:
         client.connect(
-            HEIMDALLR_SETTINGS.mqtt_broker, HEIMDALLR_SETTINGS.mqtt_port, keepalive=60
+            heimdallr_settings.mqtt_broker, heimdallr_settings.mqtt_port, keepalive=60
         )
     except ValueError as ve:
         raise ValueError(
-            f"{HEIMDALLR_SETTINGS._mqtt_settings_path},"
-            f"{HEIMDALLR_SETTINGS.mqtt_broker},"
-            f"{HEIMDALLR_SETTINGS.mqtt_port},"
+            f"{heimdallr_settings._mqtt_settings_path},"
+            f"{heimdallr_settings.mqtt_broker},"
+            f"{heimdallr_settings.mqtt_port},"
             f"{ve}"
         )
     client.loop_start()

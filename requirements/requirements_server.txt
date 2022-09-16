@@ -7,7 +7,7 @@ pandas
 scikit-learn
 torch
 psutil
-dash
+dash>=2.6.1
 #dash_bootstrap_components
 plotly
 google_auth_oauthlib

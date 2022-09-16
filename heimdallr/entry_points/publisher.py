@@ -1,3 +1,13 @@
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "Christian Heider Nielsen"
+__doc__ = r"""
+
+           Created on 19/03/2020
+           """
+
 import json
 import socket
 import time
@@ -5,7 +15,7 @@ from typing import Any
 
 import paho.mqtt.client as mqtt
 import schedule
-from apppath import ensure_existence
+from warg import ensure_existence
 from warg import busy_indicator
 from draugr.writers import LogWriter, MockWriter, Writer
 from warg import NOD
@@ -66,20 +76,20 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
     client.on_publish = on_publish
     client.on_disconnect = on_disconnect
 
-    HEIMDALLR_SETTINGS = HeimdallrSettings(setting_scope)
+    heimdallr_settings = HeimdallrSettings(setting_scope)
 
     client.username_pw_set(
-        HEIMDALLR_SETTINGS.mqtt_username, HEIMDALLR_SETTINGS.mqtt_password
+        heimdallr_settings.mqtt_username, heimdallr_settings.mqtt_password
     )
     try:
         client.connect(
-            HEIMDALLR_SETTINGS.mqtt_broker, HEIMDALLR_SETTINGS.mqtt_port, keepalive=60
+            heimdallr_settings.mqtt_broker, heimdallr_settings.mqtt_port, keepalive=60
         )
     except ValueError as ve:
         raise ValueError(
-            f"{HEIMDALLR_SETTINGS._mqtt_settings_path},"
-            f"{HEIMDALLR_SETTINGS.mqtt_broker},"
-            f"{HEIMDALLR_SETTINGS.mqtt_port},"
+            f"{heimdallr_settings._mqtt_settings_path},"
+            f"{heimdallr_settings.mqtt_broker},"
+            f"{heimdallr_settings.mqtt_port},"
             f"{ve}"
         )
 

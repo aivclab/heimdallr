@@ -9,8 +9,6 @@ __doc__ = r"""
 
 __all__ = ["disable_service", "remove_service", "install_service", "enable_service"]
 
-from pathlib import Path
-
 from draugr.os_utilities.windows_utilities import (
     delete_task,
     new_user_logon_execute_task,

@@ -90,7 +90,7 @@ class HeimdallrCLI:
         """Setting options: [mqtt_access_token, mqtt_username, mqtt_password, mqtt_broker, mqtt_port]"""
         print(self.setting_scope)
         settings = HeimdallrSettings(setting_scope=self.setting_scope)
-        print(settings._mqtt_settings_path)
+        print(settings._mqtt_settings_path) #TODO: ACCESS TO protected member
         settings.__setattr__(setting, value)
 
     def multi_set(self, **kw) -> None:

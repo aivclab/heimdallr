@@ -121,7 +121,7 @@ if sys.platform == "linux" and not SKIP_TEST:
 
     # Test pynvml.nvmlSystemGetNVMLVersion
     @pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
-    def test_nvmlSystemGetNVMLVersion(nvml):
+    def test_nvml_system_get_nvml_version(nvml):
         vsn = 0.0
         vsn = pynvml.nvmlSystemGetNVMLVersion().decode()
         print("[NVML Version: " + vsn + "]", end=" ")
@@ -129,7 +129,7 @@ if sys.platform == "linux" and not SKIP_TEST:
 
     # Test pynvml.nvmlSystemGetProcessName
     @pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
-    def test_nvmlSystemGetProcessName(nvml):
+    def test_nvml_system_get_process_name(nvml):
         procname = None
         procname = pynvml.nvmlSystemGetProcessName(os.getpid())
         print("[Process: " + str(procname.decode()) + "]", end=" ")
@@ -137,7 +137,7 @@ if sys.platform == "linux" and not SKIP_TEST:
 
     # Test pynvml.nvmlSystemGetDriverVersion
     @pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
-    def test_nvmlSystemGetDriverVersion(nvml):
+    def test_nvml_system_get_driver_version(nvml):
         vsn = 0.0
         vsn = pynvml.nvmlSystemGetDriverVersion().decode()
         print("[Driver Version: " + vsn + "]", end=" ")
@@ -149,19 +149,19 @@ if sys.platform == "linux" and not SKIP_TEST:
 
     # Test pynvml.nvmlDeviceGetHandleBySerial
     @pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
-    def test_nvmlDeviceGetHandleBySerial(ngpus, serials):
+    def test_nvml_device_get_handle_by_serial(ngpus, serials):
         handles = [pynvml.nvmlDeviceGetHandleBySerial(serials[i]) for i in range(ngpus)]
         assert len(handles) == ngpus
 
     # Test pynvml.nvmlDeviceGetHandleByUUID
     @pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
-    def test_nvmlDeviceGetHandleByUUID(ngpus, uuids):
+    def test_nvml_device_get_handle_by_uuid(ngpus, uuids):
         handles = [pynvml.nvmlDeviceGetHandleByUUID(uuids[i]) for i in range(ngpus)]
         assert len(handles) == ngpus
 
     # Test pynvml.nvmlDeviceGetHandleByPciBusId
     @pytest.mark.skipif(sys.platform != "linux", reason="Test only on linux")
-    def test_nvmlDeviceGetHandleByPciBusId(ngpus, pci_info):
+    def test_nvml_device_get_handle_by_pci_bus_id(ngpus, pci_info):
         handles = [
             pynvml.nvmlDeviceGetHandleByPciBusId(pci_info[i].busId)
             for i in range(ngpus)

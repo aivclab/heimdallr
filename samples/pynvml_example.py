@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "Christian Heider Nielsen"
+__doc__ = r"""
+
+           Created on 02-12-2020
+           """
+
 #################################################################################
 # Copyright (c) 2020, NVIDIA Corporation.  All rights reserved.                 #
 #                                                                               #
@@ -138,9 +147,9 @@ def device_query():
         for i in range(0, device_count):
             handle = nvmlDeviceGetHandleByIndex(i)
 
-            pciInfo = nvmlDeviceGetPciInfo(handle)
+            pci_nfo = nvmlDeviceGetPciInfo(handle)
 
-            str_result += f'  <gpu id="{pciInfo.busId}">\n'
+            str_result += f'  <gpu id="{pci_nfo.busId}">\n'
 
             str_result += (
                 f"    <product_name>{str(nvmlDeviceGetName(handle))}</product_name>\n"

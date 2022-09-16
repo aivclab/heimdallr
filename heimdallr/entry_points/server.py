@@ -1,3 +1,13 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "Christian Heider Nielsen"
+__doc__ = r"""
+
+           Created on 19/03/2020
+           """
+
+
 import copy
 import datetime
 import json
@@ -7,7 +17,7 @@ from typing import Any
 
 import dash
 import flask
-from apppath import ensure_existence
+from warg import ensure_existence
 from dash import Dash
 from dash.dash_table import DataTable
 from dash.dependencies import Input, Output
