@@ -10,7 +10,6 @@ __doc__ = r"""
 from itertools import cycle
 
 from dash import dcc, html
-
 from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
 
 # import dash_bootstrap_components #TODO

@@ -12,7 +12,6 @@ import logging
 import random
 from typing import List
 
-import msal
 import requests
 
 __all__ = ["team_members_status"]
@@ -21,7 +20,7 @@ from dash import html
 from dash.html import Div, H3, H4, H2
 
 
-def team_members_status(access_token) -> List[html.Div]:
+def slack_members_status(access_token) -> List[html.Div]:
     """
     Get the status of all teams in the tenant
     """

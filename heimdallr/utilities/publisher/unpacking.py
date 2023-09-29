@@ -7,9 +7,8 @@ __doc__ = r"""
            Created on 29/03/2020
            """
 
-from warg import NOD
-
 from heimdallr.utilities.nvidia.packing import get_nv_info
+from warg import NOD
 
 
 def pull_gpu_info(include_graphics_processes: bool = True) -> dict:
@@ -21,7 +20,8 @@ def pull_gpu_info(include_graphics_processes: bool = True) -> dict:
           driver_version: The version of the system’s graphics driver
           devices: It's a list and every item is a namedtuple Device which has 10 fields, for exzample id,
           name and fan_speed etc.
-                   It should be noted that the Process field is also a namedtuple which has 11 fields."""
+                   It should be noted that the Process field is also a namedtuple which has 11 fields.
+    """
 
     driver_version, devices = get_nv_info(include_graphics_processes)
 

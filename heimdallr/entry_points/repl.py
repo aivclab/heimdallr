@@ -8,13 +8,11 @@ __doc__ = r"""
            """
 
 
-from pyfiglet import Figlet
-
 from heimdallr.configuration.heimdallr_settings import (
     HeimdallrSettings,
     SettingScopeEnum,
 )
-
+from pyfiglet import Figlet
 from warg import ConfigShell, get_terminal_size
 
 margin_percentage = 0 / 6

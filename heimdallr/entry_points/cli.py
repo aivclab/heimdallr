@@ -13,15 +13,15 @@ from pathlib import Path
 from typing import Any
 
 import fire
-
+import warg
+from heimdallr.configuration.heimdallr_settings import (
+  HeimdallrSettings,
+  SettingScopeEnum,
+)
 from pyfiglet import Figlet
 from sorcery import assigned_names
-import warg
+
 from heimdallr import get_version
-from heimdallr.configuration.heimdallr_settings import (
-    HeimdallrSettings,
-    SettingScopeEnum,
-)
 
 margin_percentage = 0 / 6
 terminal_width = warg.get_terminal_size().columns
@@ -90,7 +90,7 @@ class HeimdallrCLI:
         """Setting options: [mqtt_access_token, mqtt_username, mqtt_password, mqtt_broker, mqtt_port]"""
         print(self.setting_scope)
         settings = HeimdallrSettings(setting_scope=self.setting_scope)
-        print(settings._mqtt_settings_path) #TODO: ACCESS TO protected member
+        print(settings._mqtt_settings_path)  # TODO: ACCESS TO protected member
         settings.__setattr__(setting, value)
 
     def multi_set(self, **kw) -> None:

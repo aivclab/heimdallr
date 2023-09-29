@@ -6,7 +6,7 @@ from typing import List, Sequence, Union
 from setuptools import find_packages, setup
 
 
-def python_version_check(major: int = 3, minor: int = 7) -> None:
+def python_version_check(major: int = 3, minor: int = 8) -> None:
     """description"""
     import sys
 

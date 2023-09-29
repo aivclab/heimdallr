@@ -11,15 +11,14 @@ from typing import Mapping
 
 import numpy
 import pandas
-from pandas import DataFrame
-
 from heimdallr.configuration.heimdallr_config import (
-    DROP_COLUMNS,
-    INT_COLUMNS,
-    MB_COLUMNS,
-    PERCENT_COLUMNS,
+  DROP_COLUMNS,
+  INT_COLUMNS,
+  MB_COLUMNS,
+  PERCENT_COLUMNS,
 )
 from heimdallr.utilities.date_tools import timestamp_to_datetime
+from pandas import DataFrame
 
 MB_DIVISOR = int(1024**2)
 

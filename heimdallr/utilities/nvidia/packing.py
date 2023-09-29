@@ -11,9 +11,8 @@ import time
 from typing import List, Tuple
 
 import psutil
-from warg import NOD
-
 from heimdallr.utilities.nvidia import bindings
+from warg import NOD
 
 try:
     bindings.nvmlInit()

@@ -959,7 +959,7 @@ class NvidiaSMI:
             )
             clocksThrottleReasons = nvmlDeviceGetCurrentClocksThrottleReasons(handle)
             strResult += "    <clocks_throttle_reasons>\n"
-            for (mask, name) in throttleReasons:
+            for mask, name in throttleReasons:
                 if name != "clocks_throttle_reason_user_defined_clocks":
                     if mask & supportedClocksThrottleReasons:
                         val = "Active" if mask & clocksThrottleReasons else "Not Active"
@@ -1001,7 +1001,7 @@ class NvidiaSMI:
                 nvmlDeviceGetSupportedClocksThrottleReasons(handle)
             )
             clocksThrottleReasons = nvmlDeviceGetCurrentClocksThrottleReasons(handle)
-            for (mask, name) in throttleReasons:
+            for mask, name in throttleReasons:
                 if name != "clocks_throttle_reason_user_defined_clocks":
                     if mask & supportedClocksThrottleReasons:
                         val = "Active" if mask & clocksThrottleReasons else "Not Active"
@@ -1654,7 +1654,6 @@ class NvidiaSMI:
                     or NVSMI_MEMORY_USED in filter
                     or NVSMI_MEMORY_FREE in filter
                 ):
-
                     includeMemoryUsage = True
                     try:
                         memInfo = nvmlDeviceGetMemoryInfo(handle)
@@ -2840,7 +2839,6 @@ class NvidiaSMI:
                     or NVSMI_MEMORY_USED in filter
                     or NVSMI_MEMORY_FREE in filter
                 ):
-
                     includeMemoryUsage = True
                     try:
                         memInfo = nvmlDeviceGetMemoryInfo(handle)
@@ -2915,7 +2913,6 @@ class NvidiaSMI:
                     or NVSMI_UTILIZATION_GPU in filter
                     or NVSMI_UTILIZATION_MEM in filter
                 ):
-
                     try:
                         util = nvmlDeviceGetUtilizationRates(handle)
                         gpu_util = util.gpu

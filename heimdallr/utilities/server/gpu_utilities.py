@@ -15,10 +15,6 @@ import pandas
 from dash import html
 from dash.dcc import Graph
 from dash.html import Div, H3
-from pandas import DataFrame
-from plotly import graph_objs
-from warg import Number
-
 from heimdallr.configuration.heimdallr_config import (
     DROP_COLUMNS,
     INT_COLUMNS,
@@ -27,6 +23,9 @@ from heimdallr.configuration.heimdallr_config import (
 )
 from heimdallr.utilities.date_tools import timestamp_to_datetime
 from heimdallr.utilities.publisher.unpacking import pull_gpu_info
+from pandas import DataFrame
+from plotly import graph_objs
+from warg import Number
 
 MB_DIVISOR = int(1024**2)
 

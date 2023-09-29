@@ -14,13 +14,12 @@ import shelve
 from enum import Enum
 from typing import Union
 
+from sorcery import assigned_names
+from warg import PropertySettings, is_windows
+from warg import ensure_existence
 from warg import is_nix
 
-from sorcery import assigned_names
-
-from warg import ensure_existence
 from heimdallr import PROJECT_APP_PATH
-from warg import PropertySettings, is_windows
 
 __all__ = [
     "HeimdallrSettings",  # Setting Class
@@ -182,11 +181,11 @@ class HeimdallrSettings(PropertySettings):
 
     @google_calendar_id.deleter
     def google_calendar_id(self) -> None:
-        '''
+        """
 
         :return:
         :rtype:
-        '''
+        """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
             str(HeimdallrSettings._github_settings_path), writeback=True
@@ -230,11 +229,11 @@ class HeimdallrSettings(PropertySettings):
 
     @github_token.deleter
     def github_token(self) -> None:
-        '''
+        """
 
         :return:
         :rtype:
-        '''
+        """
         key = inspect.currentframe().f_code.co_name
         with shelve.open(
             str(HeimdallrSettings._github_settings_path), writeback=True
