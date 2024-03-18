@@ -12,9 +12,9 @@ from pathlib import Path
 
 from dash import dcc, html
 from heimdallr.configuration.heimdallr_config import (
-  HTML_TITLE,
-  TIME_ID,
-  TIME_INTERVAL_ID,
+    HTML_TITLE,
+    TIME_ID,
+    TIME_INTERVAL_ID,
 )
 
 import heimdallr

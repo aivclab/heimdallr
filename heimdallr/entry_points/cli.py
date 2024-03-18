@@ -15,8 +15,8 @@ from typing import Any
 import fire
 import warg
 from heimdallr.configuration.heimdallr_settings import (
-  HeimdallrSettings,
-  SettingScopeEnum,
+    HeimdallrSettings,
+    SettingScopeEnum,
 )
 from pyfiglet import Figlet
 from sorcery import assigned_names
