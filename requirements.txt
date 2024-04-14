@@ -10,3 +10,4 @@ pyfiglet
 schedule
 sorcery
 setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
+black>=24.3.0 # not directly required, pinned by Snyk to avoid a vulnerability
