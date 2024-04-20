@@ -17,8 +17,8 @@ import schedule
 from draugr.writers import LogWriter, MockWriter, Writer
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
 from heimdallr.configuration.heimdallr_settings import (
-  HeimdallrSettings,
-  SettingScopeEnum,
+    HeimdallrSettings,
+    SettingScopeEnum,
 )
 from heimdallr.utilities.publisher.unpacking import pull_disk_usage_info, pull_gpu_info
 from warg import NOD
