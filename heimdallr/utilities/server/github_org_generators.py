@@ -7,6 +7,8 @@ __doc__ = r"""
            Created on 29/03/2020
            """
 
+import calendar
+
 # https://github.com/pulls?q=is%3Aopen+is%3Apr+user%3Aaivclab+archived%3Afalse+
 # https://github.com/pulls?user=aivclab
 from datetime import datetime, timedelta
@@ -202,9 +204,6 @@ def get_pull_request(g, org_name, repo_name, pull_request_number):
     )
 
 
-import calendar
-
-
 def utc_to_epoch(timestamp):  # Timestamp is a datetime object in UTC time
     """
 
@@ -229,5 +228,5 @@ if __name__ == "__main__":
     else:
         print("rate limited")
 
-        print(f"reset in {timedelta(seconds = reset_seconds)} ")
+        print(f"reset in {timedelta(seconds=reset_seconds)} ")
     # print(list(yield_org_prs(gthb, 'aivclab')))

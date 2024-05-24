@@ -9,7 +9,7 @@ except (ModuleNotFoundError, ImportError) as e:
     from importlib_resources import files
 
 from apppath import AppPath
-from warg import package_is_editable, clean_string, get_version
+from warg import clean_string, get_version, package_is_editable
 
 __project__ = "Heimdallr"
 __author__ = "Christian Heider Nielsen"
@@ -19,7 +19,6 @@ Created on 27/04/2019
 
 @author: cnheider
 """
-
 
 # __all__ = ["PROJECT_APP_PATH", "PROJECT_NAME", "PROJECT_VERSION", "get_version"]
 

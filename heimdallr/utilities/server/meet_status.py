@@ -14,13 +14,13 @@ from typing import List
 
 import requests
 
-__all__ = ["team_members_status"]
+__all__ = ["meet_members_status"]
 
 from dash import html
 from dash.html import Div, H3, H4, H2
 
 
-def meet_members_status(access_token) -> List[html.Div]:
+def meet_members_status(access_token: str) -> List[html.Div]:
     """
     Get the status of all teams in the tenant
     """
@@ -57,6 +57,7 @@ def meet_members_status(access_token) -> List[html.Div]:
 
 if __name__ == "__main__":
     from exclude.calendar_app.tutorial.set_teams_config import s
+    import msal
 
     app = msal.ConfidentialClientApplication(
         s.teams_client_id,

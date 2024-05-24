@@ -14,7 +14,7 @@ from typing import List
 
 import requests
 
-__all__ = ["team_members_status"]
+__all__ = ["slack_members_status"]
 
 from dash import html
 from dash.html import Div, H3, H4, H2
@@ -57,6 +57,8 @@ def slack_members_status(access_token) -> List[html.Div]:
 
 if __name__ == "__main__":
     from exclude.calendar_app.tutorial.set_teams_config import s
+
+    import msal
 
     app = msal.ConfidentialClientApplication(
         s.teams_client_id,
