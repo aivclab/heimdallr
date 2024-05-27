@@ -359,9 +359,12 @@ def main(
         LOG_WRITER = LogWriter(
             ensure_existence(PROJECT_APP_PATH.site_log) / f"{PROJECT_NAME}_server.log"
         )
+
     LOG_WRITER.open()
     MQTT_CLIENT.on_message = on_message
     # MQTT_CLIENT.on_disconnect = on_disconnect
+
+    print("#0")
 
     if True:
         crystallised_heimdallr_settings = HeimdallrSettings(setting_scope)
@@ -372,8 +375,12 @@ def main(
     host = ALL_CONSTANTS.SERVER_ADDRESS
     port = ALL_CONSTANTS.SERVER_PORT
 
+    print("#1")
+
     DEVELOPMENT = development
     DASH_APP.layout = get_root_layout(DEVELOPMENT)
+
+    print("#2")
 
     if development:
         DASH_APP.run_server(
