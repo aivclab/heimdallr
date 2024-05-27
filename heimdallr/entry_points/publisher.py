@@ -103,9 +103,12 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
             """description"""
             sensor_data[HOSTNAME]["gpu_stats"] = pull_gpu_info()
             sensor_data[HOSTNAME]["du_stats"] = pull_disk_usage_info()
+
+            a = sensor_data.as_dict()
+            assert a is dict
             client.publish(
                 ALL_CONSTANTS.MQTT_TOPIC,
-                json.dumps(sensor_data.as_dict()),
+                json.dumps(a),
                 ALL_CONSTANTS.MQTT_QOS,
             )
 
