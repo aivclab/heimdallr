@@ -2,17 +2,14 @@ import json
 import socket
 import time
 
-import paho.mqtt.client as mqtt
+import paho.mqtt.client
 from draugr.writers import LogWriter, MockWriter, Writer
+from warg import IgnoreInterruptSignal, NOD, busy_indicator, ensure_existence
+
+from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
 from heimdallr.configuration.heimdallr_settings import HeimdallrSettings
 from heimdallr.utilities.publisher.unpacking import pull_gpu_info
-from warg import IgnoreInterruptSignal
-from warg import NOD
-from warg import busy_indicator
-from warg import ensure_existence
-
-from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 
 HOSTNAME = socket.gethostname()
 
@@ -48,7 +45,7 @@ def main(is_user: bool = False):
             / f"{PROJECT_NAME}_publisher.log"
         )
     LOG_WRITER.open()
-    client = mqtt.Client()
+    client = paho.mqtt.client.Client()
     client.on_publish = on_publish
     client.on_disconnect = on_disconnect
 

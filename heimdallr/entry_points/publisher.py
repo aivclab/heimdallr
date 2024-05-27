@@ -12,7 +12,7 @@ import socket
 import time
 from typing import Any
 
-import paho.mqtt.client as mqtt
+import paho.mqtt.client
 import schedule  # TODO: USE PENDULUM INSTEAD
 from draugr.writers import LogWriter, MockWriter, Writer
 from warg import NOD, busy_indicator, ensure_existence
@@ -69,17 +69,17 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
             / f"{PROJECT_NAME}_publisher.log"
         )
     LOG_WRITER.open()
-    client = mqtt.Client(
+    client = paho.mqtt.client.Client(
         client_id=HOSTNAME,
         # userdata=None,
-        protocol=mqtt.MQTTv5,
+        protocol=paho.mqtt.client.MQTTv5,
     )
     client.on_publish = on_publish
     # client.on_disconnect = on_disconnect
 
     heimdallr_settings = HeimdallrSettings(setting_scope)
 
-    client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
+    client.tls_set(tls_version=paho.mqtt.client.ssl.PROTOCOL_TLS)
 
     client.username_pw_set(
         heimdallr_settings.mqtt_username, heimdallr_settings.mqtt_password

@@ -16,6 +16,7 @@ from typing import Any
 
 import dash
 import flask
+import paho
 from dash import Dash
 from dash.dash_table import DataTable
 from dash.dependencies import Input, Output
@@ -83,7 +84,7 @@ MQTT_CLIENT = Client(
     protocol=MQTTv5,
     # clean_session=True
 )
-MQTT_CLIENT.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
+MQTT_CLIENT.tls_set(tls_version=paho.mqtt.client.ssl.PROTOCOL_TLS)
 DASH_APP = Dash(
     __name__,
     external_scripts=external_scripts,
