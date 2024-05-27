@@ -2827,9 +2827,9 @@ class NvidiaSMI:
                     or NVSMI_CLOCK_THROTTLE_REASONS_SW_THERMAL_SLOWDOWN in filter
                     or NVSMI_CLOCK_THROTTLE_REASONS_SYNC_BOOST in filter
                 ):
-                    gpuResults[
-                        "clocks_throttle"
-                    ] = NvidiaSMI.__GetClocksThrottleReasons(handle)
+                    gpuResults["clocks_throttle"] = (
+                        NvidiaSMI.__GetClocksThrottleReasons(handle)
+                    )
 
                 fbMemoryUsage = {}
                 includeMemoryUsage = False
@@ -3268,9 +3268,9 @@ class NvidiaSMI:
                             except NVMLError as err:
                                 supportedGraphicsClocks = NvidiaSMI.__handleError(err)
 
-                            supportMemClock[
-                                "supported_graphics_clock"
-                            ] = supportedGraphicsClocks
+                            supportMemClock["supported_graphics_clock"] = (
+                                supportedGraphicsClocks
+                            )
 
                             supportedClocks.append(supportMemClock)
                     #                         jj+=1
