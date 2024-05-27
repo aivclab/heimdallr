@@ -15,6 +15,10 @@ import pandas
 from dash import html
 from dash.dcc import Graph
 from dash.html import Div, H3
+from pandas import DataFrame
+from plotly import graph_objs
+from warg import Number
+
 from heimdallr.configuration.heimdallr_config import (
     DROP_COLUMNS,
     INT_COLUMNS,
@@ -23,9 +27,6 @@ from heimdallr.configuration.heimdallr_config import (
 )
 from heimdallr.utilities.date_tools import timestamp_to_datetime
 from heimdallr.utilities.publisher.unpacking import pull_gpu_info
-from pandas import DataFrame
-from plotly import graph_objs
-from warg import Number
 
 MB_DIVISOR = int(1024**2)
 
@@ -55,7 +56,10 @@ def to_overall_gpu_process_df(
                 resulta.append(df)
 
     out_df = pandas.concat(resulta, sort=False)
-    out_df.sort_values(by=sort_by_key, axis=0, ascending=False, inplace=True)
+
+    if sort_by_key in out_df.columns:
+        out_df.sort_values(by=sort_by_key, axis=0, ascending=False, inplace=True)
+
     if len(out_df) == 0:
         return pandas.DataFrame()
 

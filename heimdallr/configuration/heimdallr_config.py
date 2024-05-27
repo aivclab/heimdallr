@@ -18,7 +18,7 @@ MQTT_TOPIC = "v1/gpu/status"
 MQTT_PUBLISH_INTERVAL_SEC = 2  # SECONDS
 MQTT_QOS = 0  # At most once (0), At least once (1), Exactly once (2)
 
-HTML_TITLE = "VCLab Board"
+HTML_TITLE = "Local Resources"
 
 GPU_GRAPHS_ID = "gpu-graphs"
 GPU_TABLES_ID = "gpu-tables"

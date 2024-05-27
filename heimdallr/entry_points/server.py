@@ -7,7 +7,6 @@ __doc__ = r"""
            Created on 19/03/2020
            """
 
-import copy
 import datetime
 import json
 import logging
@@ -192,7 +191,7 @@ def update_table(n: int) -> Div:
     compute_machines = []
 
     if GPU_STATS:
-        df = to_overall_gpu_process_df(copy.deepcopy(GPU_STATS))
+        df = to_overall_gpu_process_df(GPU_STATS.as_dict())
     else:
         df = DataFrame(["No data"], columns=("data",))
 

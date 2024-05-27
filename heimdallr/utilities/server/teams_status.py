@@ -12,7 +12,6 @@ import logging
 import random
 from typing import List
 
-import msal
 import requests
 
 __all__ = ["team_members_status"]
@@ -58,6 +57,7 @@ def team_members_status(access_token) -> List[html.Div]:
 
 if __name__ == "__main__":
     from exclude.calendar_app.tutorial.set_teams_config import s
+    import msal
 
     app = msal.ConfidentialClientApplication(
         s.teams_client_id,
