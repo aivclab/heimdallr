@@ -7,7 +7,6 @@ __doc__ = r"""
            Created on 19/03/2020
            """
 
-
 import copy
 import datetime
 import json
@@ -23,6 +22,14 @@ from dash.dependencies import Input, Output
 from dash.html import Div
 from draugr.writers import LogWriter, MockWriter, Writer
 from flask import Response
+from paho import mqtt
+from paho.mqtt.client import Client
+from paho.mqtt.enums import CallbackAPIVersion
+from pandas import DataFrame
+from waitress import serve
+from warg import NOD, default_datetime_repr, ensure_existence
+
+from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 from heimdallr.configuration.heimdallr_config import ALL_CONSTANTS
 from heimdallr.configuration.heimdallr_settings import (
     HeimdallrSettings,
@@ -34,14 +41,6 @@ from heimdallr.utilities.server import (
     per_machine_per_device_pie_charts,
     to_overall_gpu_process_df,
 )
-from paho import mqtt
-from paho.mqtt.client import Client
-from pandas import DataFrame
-from waitress import serve
-from warg import NOD, default_datetime_repr
-from warg import ensure_existence
-
-from heimdallr import PROJECT_APP_PATH, PROJECT_NAME
 
 __all__ = ["main"]
 
@@ -81,7 +80,8 @@ KEEP_ALIVE = NOD()
 HOSTNAME = socket.gethostname()
 CLIENT_ID = HOSTNAME
 MQTT_CLIENT = Client(
-    client_id=CLIENT_ID,
+    CallbackAPIVersion.VERSION1,
+    CLIENT_ID,
     # clean_session=True
 )
 DASH_APP = Dash(
@@ -175,7 +175,7 @@ def update_graph(n: int) -> Div:
     compute_machines = []
     if GPU_STATS:
         compute_machines.extend(
-            per_machine_per_device_pie_charts(copy.deepcopy(GPU_STATS), KEEP_ALIVE)
+            per_machine_per_device_pie_charts(GPU_STATS.as_dict(), KEEP_ALIVE.as_dict())
         )
     return Div(compute_machines)
 
@@ -226,7 +226,7 @@ def update_table(n: int) -> Div:
     compute_machines = []
 
     if DU_STATS:
-        df = to_overall_du_process_df(copy.deepcopy(DU_STATS))
+        df = to_overall_du_process_df(DU_STATS.as_dict())
     else:
         df = DataFrame(["No data"], columns=("data",))
 
