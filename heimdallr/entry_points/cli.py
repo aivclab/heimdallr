@@ -13,18 +13,18 @@ from pathlib import Path
 from typing import Any
 
 import fire
-import warg
-from heimdallr.configuration.heimdallr_settings import (
-    HeimdallrSettings,
-    SettingScopeEnum,
-)
+from draugr.python_utilities import get_terminal_size
 from pyfiglet import Figlet
 from sorcery import assigned_names
 
 from heimdallr import get_version
+from heimdallr.configuration.heimdallr_settings import (
+    HeimdallrSettings,
+    SettingScopeEnum,
+)
 
 margin_percentage = 0 / 6
-terminal_width = warg.get_terminal_size().columns
+terminal_width = get_terminal_size().columns
 margin = int(margin_percentage * terminal_width)
 width = terminal_width - 2 * margin
 underline = "_" * width
@@ -257,7 +257,7 @@ def draw_cli_header(
 ):
     """description"""
     drawer(
-        f"{Figlet(font = font, justify = 'center', width = terminal_width).renderText(title)}{underline}\n"
+        f"{Figlet(font=font, justify='center', width=terminal_width).renderText(title)}{underline}\n"
     )
 
 

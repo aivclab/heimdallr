@@ -7,13 +7,14 @@ __doc__ = r"""
            Created on 19/01/2020
            """
 
+from draugr.python_utilities import get_terminal_size
+from pyfiglet import Figlet
+from warg import ConfigShell
 
 from heimdallr.configuration.heimdallr_settings import (
     HeimdallrSettings,
     SettingScopeEnum,
 )
-from pyfiglet import Figlet
-from warg import ConfigShell, get_terminal_size
 
 margin_percentage = 0 / 6
 terminal_width = get_terminal_size().columns
@@ -29,7 +30,7 @@ def draw_cli_header(
 ) -> None:
     """description"""
     drawer(
-        f"{Figlet(font = font, justify = 'center', width = terminal_width).renderText(title)}{underline}\n"
+        f"{Figlet(font=font, justify='center', width=terminal_width).renderText(title)}{underline}\n"
     )
 
 
