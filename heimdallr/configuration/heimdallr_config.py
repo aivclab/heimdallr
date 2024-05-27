@@ -52,9 +52,9 @@ BUILD_STATUS_MAPPING = NOD(
     vision="https://travis-ci.com/aivclab/vision.svg?branch=master",
     RayKarsten="https://github.com/aivclab/RayKarstenWebAsm.svg",
     dmr="https://github.com/aivclab/dmr.svg",
-).as_dict()
+)  # .as_dict()
 BUILD_STATUS_INTERVAL = "build-status-interval"
 
 DEBUG = True
 
-ALL_CONSTANTS = NOD(locals()).as_dict()
+ALL_CONSTANTS = NOD(locals())  # .as_dict()

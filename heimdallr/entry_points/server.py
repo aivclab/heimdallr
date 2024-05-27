@@ -23,8 +23,7 @@ from dash.html import Div
 from draugr.writers import LogWriter, MockWriter, Writer
 from flask import Response
 from paho import mqtt
-from paho.mqtt.client import Client
-from paho.mqtt.enums import CallbackAPIVersion
+from paho.mqtt.client import Client, MQTTv5
 from pandas import DataFrame
 from waitress import serve
 from warg import NOD, default_datetime_repr, ensure_existence
@@ -80,10 +79,11 @@ KEEP_ALIVE = NOD()
 HOSTNAME = socket.gethostname()
 CLIENT_ID = HOSTNAME
 MQTT_CLIENT = Client(
-    CallbackAPIVersion.VERSION1,
-    CLIENT_ID,
+    client_id=CLIENT_ID,
+    protocol=MQTTv5,
     # clean_session=True
 )
+MQTT_CLIENT.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
 DASH_APP = Dash(
     __name__,
     external_scripts=external_scripts,
@@ -361,7 +361,7 @@ def main(
         )
     LOG_WRITER.open()
     MQTT_CLIENT.on_message = on_message
-    MQTT_CLIENT.on_disconnect = on_disconnect
+    # MQTT_CLIENT.on_disconnect = on_disconnect
 
     if True:
         crystallised_heimdallr_settings = HeimdallrSettings(setting_scope)

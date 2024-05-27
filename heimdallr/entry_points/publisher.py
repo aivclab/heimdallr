@@ -69,18 +69,26 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
             / f"{PROJECT_NAME}_publisher.log"
         )
     LOG_WRITER.open()
-    client = mqtt.Client(HOSTNAME)
+    client = mqtt.Client(
+        client_id=HOSTNAME,
+        # userdata=None,
+        protocol=mqtt.MQTTv5,
+    )
     client.on_publish = on_publish
-    client.on_disconnect = on_disconnect
+    # client.on_disconnect = on_disconnect
 
     heimdallr_settings = HeimdallrSettings(setting_scope)
+
+    client.tls_set(tls_version=mqtt.ssl.PROTOCOL_TLS)
 
     client.username_pw_set(
         heimdallr_settings.mqtt_username, heimdallr_settings.mqtt_password
     )
     try:
         client.connect(
-            heimdallr_settings.mqtt_broker, heimdallr_settings.mqtt_port, keepalive=60
+            heimdallr_settings.mqtt_broker,
+            int(heimdallr_settings.mqtt_port),
+            keepalive=60,
         )
     except ValueError as ve:
         raise ValueError(
@@ -105,7 +113,6 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
             sensor_data[HOSTNAME]["du_stats"] = pull_disk_usage_info()
 
             a = sensor_data.as_dict()
-            assert a is dict
             client.publish(
                 ALL_CONSTANTS.MQTT_TOPIC,
                 json.dumps(a),
