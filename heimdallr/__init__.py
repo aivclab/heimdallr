@@ -13,7 +13,7 @@ from warg import clean_string, get_version, package_is_editable
 
 __project__ = "Heimdallr"
 __author__ = "Christian Heider Nielsen"
-__version__ = "0.2.7"
+__version__ = "0.2.8"
 __doc__ = """
 Created on 27/04/2019
 
