@@ -8,6 +8,7 @@ __doc__ = r"""
            Function to get GPU information.
 """
 
+import logging
 from typing import List, Mapping, Sequence
 
 import numpy
@@ -28,16 +29,18 @@ from heimdallr.configuration.heimdallr_config import (
 from heimdallr.utilities.date_tools import timestamp_to_datetime
 from heimdallr.utilities.publisher.unpacking import pull_gpu_info
 
-MB_DIVISOR = int(1024**2)
+MB_DIVISOR = int(1024 ** 2)
 
 __all__ = [
     "to_overall_gpu_process_df",
     "per_machine_per_device_pie_charts",
 ]
 
+logger = logging.getLogger(__name__)
+
 
 def to_overall_gpu_process_df(
-    gpu_stats: Mapping, sort_by_key="used_gpu_mem"
+        gpu_stats: Mapping, sort_by_key="used_gpu_mem"
 ) -> DataFrame:
     """
     to overall gpu usage process df
@@ -59,6 +62,8 @@ def to_overall_gpu_process_df(
 
     if sort_by_key in out_df.columns:
         out_df.sort_values(by=sort_by_key, axis=0, ascending=False, inplace=True)
+    else:
+        logger.warning(f"{sort_by_key} was not found in {out_df.columns}")
 
     if len(out_df) == 0:
         return pandas.DataFrame()
@@ -82,7 +87,7 @@ def to_overall_gpu_process_df(
 
 
 def per_machine_per_device_pie_charts(
-    gpu_stats: Mapping, keep_alive: Sequence[Number]
+        gpu_stats: Mapping, keep_alive: Sequence[Number]
 ) -> List[html.Div]:
     """
     per machine per device pie charts

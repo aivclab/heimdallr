@@ -46,12 +46,12 @@ CALENDAR_ID = "calender-table"
 CALENDAR_INTERVAL_MS = 1000 * 60 * 60
 
 BUILD_STATUS_MAPPING = NOD(
-    streamserver="https://travis-ci.org/aivclab/streamserver.svg?branch=master",
-    dlcourse="https://github.com/aivclab/dlcourse.svg?branch=master",
-    poserecorder="https://github.com/aivclab/pose-recorder.svg",
-    vision="https://travis-ci.com/aivclab/vision.svg?branch=master",
-    RayKarsten="https://github.com/aivclab/RayKarstenWebAsm.svg",
-    dmr="https://github.com/aivclab/dmr.svg",
+    #streamserver="https://travis-ci.org/aivclab/streamserver.svg?branch=master",
+    #dlcourse="https://github.com/aivclab/dlcourse.svg?branch=master",
+    #poserecorder="https://github.com/aivclab/pose-recorder.svg",
+    #vision="https://travis-ci.com/aivclab/vision.svg?branch=master",
+    #RayKarsten="https://github.com/aivclab/RayKarstenWebAsm.svg",
+    #dmr="https://github.com/aivclab/dmr.svg",
 )  # .as_dict()
 BUILD_STATUS_INTERVAL = "build-status-interval"
 

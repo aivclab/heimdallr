@@ -45,6 +45,9 @@ __all__ = ["main"]
 
 from heimdallr.utilities.server.du_utilities import to_overall_du_process_df
 from heimdallr.utilities.server.teams_status import team_members_status
+import dash_bootstrap_components
+
+logger = logging.getLogger(__name__)
 
 log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
@@ -63,12 +66,13 @@ external_scripts = [
 # external CSS stylesheets
 external_stylesheets = [
     "https://codepen.io/chriddyp/pen/bWLwgP.css",
-    {
-        "href": "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css",
-        "rel": "stylesheet",
-        "integrity": "sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO",
-        "crossorigin": "anonymous",
-    },
+    #{
+    #    "href": "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css",
+    #    "rel": "stylesheet",
+    #    "integrity": "sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO",
+    #    "crossorigin": "anonymous",
+    #},
+dash_bootstrap_components.themes.DARKLY
 ]
 
 GPU_STATS = NOD()
@@ -92,7 +96,7 @@ DASH_APP = Dash(
 
 DEVELOPMENT = False
 DASH_APP.layout = get_root_layout(DEVELOPMENT)
-LOG_WRITER: Writer = MockWriter()
+#LOG_WRITER: Writer = MockWriter()
 
 
 @DASH_APP.callback(
@@ -203,11 +207,10 @@ def update_table(n: int) -> Div:
             page_size=ALL_CONSTANTS.TABLE_PAGE_SIZE,
             # style_as_list_view=True,
             style_data_conditional=[
-                {"if": {"row_index": "odd"}, "backgroundColor": "rgb(248, 248, 248)"}
+                #{"if": {"row_index": "odd"}, "backgroundColor": "rgb(248, 248, 248)"}
             ],
             style_header={
-                "backgroundColor": "rgb(230, 230, 230)",
-                "fontWeight": "bold",
+                #"backgroundColor": "rgb(230, 230, 230)",                "fontWeight": "bold",
             },
         )
     )
@@ -287,7 +290,6 @@ def on_post_config() -> Response:
 
 def on_message(client: Any, userdata: Any, result: mqtt.client.MQTTMessage) -> None:
     """description"""
-    global LOG_WRITER
     global GPU_STATS
     global KEEP_ALIVE
     d = json.loads(result.payload)
@@ -300,7 +302,7 @@ def on_message(client: Any, userdata: Any, result: mqtt.client.MQTTMessage) -> N
             GPU_STATS[key] = d[key]  # ["gpu_stats"]
             DU_STATS[key] = {}
         KEEP_ALIVE[key] = 0
-    LOG_WRITER(
+    logger.info(
         f"received payload for {keys}, retain:{result.retain}, timestamp:{result.timestamp}"
     )
 
@@ -338,7 +340,7 @@ def setup_mqtt_connection(settings) -> None:
         )
         MQTT_CLIENT.subscribe(ALL_CONSTANTS.MQTT_TOPIC, ALL_CONSTANTS.MQTT_QOS)
     except Exception as e:
-        LOG_WRITER(f"MQTT connection error: {e}")
+        logger.error(f"MQTT connection error: {e}")
         # raise e
 
 
@@ -349,18 +351,20 @@ def main(
     **kwargs,
 ) -> None:
     """description"""
-    global LOG_WRITER, DEVELOPMENT
+    global  DEVELOPMENT
 
-    if setting_scope == SettingScopeEnum.user:
-        LOG_WRITER = LogWriter(
-            ensure_existence(PROJECT_APP_PATH.user_log) / f"{PROJECT_NAME}_server.log"
-        )
-    else:
-        LOG_WRITER = LogWriter(
-            ensure_existence(PROJECT_APP_PATH.site_log) / f"{PROJECT_NAME}_server.log"
-        )
+    if False:
+        if setting_scope == SettingScopeEnum.user:
+            LOG_WRITER = LogWriter(
+                ensure_existence(PROJECT_APP_PATH.user_log) / f"{PROJECT_NAME}_server.log"
+            )
+        else:
+            LOG_WRITER = LogWriter(
+                ensure_existence(PROJECT_APP_PATH.site_log) / f"{PROJECT_NAME}_server.log"
+            )
 
-    LOG_WRITER.open()
+        LOG_WRITER.open()
+
     MQTT_CLIENT.on_message = on_message
     # MQTT_CLIENT.on_disconnect = on_disconnect
 
@@ -393,7 +397,7 @@ def main(
         # DASH_APP.run_server(host=host, port=port)
         serve(DASH_APP.server, **kwargs)
 
-    LOG_WRITER.close()
+    #LOG_WRITER.close()
 
 
 if __name__ == "__main__":
