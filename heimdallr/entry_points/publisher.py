@@ -111,6 +111,7 @@ def main(setting_scope: SettingScopeEnum = SettingScopeEnum.user) -> None:
             """description"""
             sensor_data[HOSTNAME]["gpu_stats"] = pull_gpu_info()
             sensor_data[HOSTNAME]["du_stats"] = pull_disk_usage_info()
+            # sensor_data[HOSTNAME]['top_stats']= pull_top_info()
 
             a = sensor_data.as_dict()
             client.publish(
