@@ -76,6 +76,8 @@ external_stylesheets = [
     dash_bootstrap_components.themes.DARKLY,
 ]
 
+logger = logging.getLogger(__name__)
+
 GPU_STATS = NOD()
 DU_STATS = NOD()
 KEEP_ALIVE = NOD()
@@ -198,6 +200,7 @@ def update_table(n: int) -> Div:
 
     if GPU_STATS:
         df = to_overall_gpu_process_df(GPU_STATS.as_dict())
+
     else:
         df = DataFrame(["No data"], columns=("data",))
 
@@ -277,6 +280,7 @@ def menu_toggle(n_clicks: int) -> dict:
     """
     if n_clicks and n_clicks % 2 == 1:
         return {"display": "block"}
+
     return {"display": "none"}
 
 
@@ -313,6 +317,7 @@ def on_message(client: Any, userdata: Any, result: mqtt.client.MQTTMessage) -> N
         if "gpu_stats" in d[key]:
             GPU_STATS[key] = d[key]["gpu_stats"]
             DU_STATS[key] = d[key]["du_stats"]
+
         else:
             GPU_STATS[key] = d[key]  # ["gpu_stats"]
             DU_STATS[key] = {}
