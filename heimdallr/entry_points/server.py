@@ -13,6 +13,7 @@ import logging
 import socket
 import time
 from typing import Any
+from uuid import uuid4
 
 import dash
 import flask
@@ -83,7 +84,7 @@ KEEP_ALIVE = NOD()
 
 # CLIENT_ID = str(uuid.getnode())
 HOSTNAME = socket.gethostname()
-CLIENT_ID = HOSTNAME
+CLIENT_ID = HOSTNAME+uuid4().hex
 MQTT_CLIENT = Client(
     client_id=CLIENT_ID,
     protocol=MQTTv5,
@@ -239,10 +240,49 @@ def update_table(n: int) -> Div:
 
 
 @DASH_APP.callback(
+    Output(ALL_CONSTANTS.TOP_TABLES_ID, "children"),
+    [Input(ALL_CONSTANTS.TOP_INTERVAL_ID, "n_intervals")],
+)
+def update_top_table(n: int) -> Div:
+    """description"""
+    global GPU_STATS
+    global MQTT_CLIENT
+
+    MQTT_CLIENT.loop()
+
+    compute_machines = []
+
+    if len(DU_STATS) > 0:
+        df = to_overall_du_process_df(DU_STATS.as_dict())
+    else:
+        df = DataFrame(["No data"], columns=("data",))
+
+    compute_machines.append(
+        DataTable(
+            id="du-table-0",
+            columns=[{"name": i, "id": i} for i in df.columns],
+            data=df.to_dict("records"),
+            page_size=ALL_CONSTANTS.TABLE_PAGE_SIZE,
+            # style_as_list_view=True,
+            style_data_conditional=[
+                {"if": {"row_index": "odd"}, "backgroundColor": "rgb(50, 50, 50)"},
+                {"if": {"row_index": "even"}, "backgroundColor": "rgb(60, 60, 60)"},
+            ],
+            style_header={
+                "backgroundColor": "rgb(30, 30, 30)",
+                "fontWeight": "bold",
+            },
+        )
+    )
+
+    return Div(compute_machines)
+
+
+@DASH_APP.callback(
     Output(ALL_CONSTANTS.DU_TABLES_ID, "children"),
     [Input(ALL_CONSTANTS.DU_INTERVAL_ID, "n_intervals")],
 )
-def update_table(n: int) -> Div:
+def update_du_table(n: int) -> Div:
     """description"""
     global GPU_STATS
     global MQTT_CLIENT
