@@ -47,20 +47,31 @@ def to_overall_gpu_process_df(
     """
     resulta = []
     columns = []
+
+    logger.warning(gpu_stats)
+
     if len(gpu_stats):
+
         for k2, v2 in gpu_stats.items():
             device_info = v2["devices"]
+
             for device_i in device_info:
+
                 processes = device_i["processes"]
+
                 if len(processes) > 0:
                     columns = list(processes[0].keys())
+
                 df = pandas.DataFrame(data=processes)
                 df["machine"] = [k2] * len(processes)
+
                 resulta.append(df)
 
     out_df = pandas.concat(resulta, sort=False)
 
-    if sort_by_key in out_df.columns:
+    logger.warning(out_df)
+
+    if sort_by_key:
         out_df.sort_values(by=sort_by_key, axis=0, ascending=False, inplace=True)
     else:
         logger.warning(f"{sort_by_key} was not found in {out_df.columns}")
