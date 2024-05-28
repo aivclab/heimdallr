@@ -29,7 +29,7 @@ from heimdallr.configuration.heimdallr_config import (
 from heimdallr.utilities.date_tools import timestamp_to_datetime
 from heimdallr.utilities.publisher.unpacking import pull_gpu_info
 
-MB_DIVISOR = int(1024 ** 2)
+MB_DIVISOR = int(1024**2)
 
 __all__ = [
     "to_overall_gpu_process_df",
@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 
 
 def to_overall_gpu_process_df(
-        gpu_stats: Mapping, sort_by_key="used_gpu_mem"
+    gpu_stats: Mapping, sort_by_key="used_gpu_mem"
 ) -> DataFrame:
     """
     to overall gpu usage process df
@@ -87,7 +87,7 @@ def to_overall_gpu_process_df(
 
 
 def per_machine_per_device_pie_charts(
-        gpu_stats: Mapping, keep_alive: Sequence[Number]
+    gpu_stats: Mapping, keep_alive: Sequence[Number]
 ) -> List[html.Div]:
     """
     per machine per device pie charts

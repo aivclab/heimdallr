@@ -42,26 +42,28 @@ def get_header() -> html.Div:
                 [html.H1(HTML_TITLE)],
                 className="col text-left align-self-center p-1",
             ),
-            # html.Div(
-            #     [
-            #         html.Img(
-            #             src="/assets/alexandra.png",
-            #             style={"height": "110px", "object-fit": "contain"},
-            #         ),
-            #     ]
-            #     + (
-            #         [
-            #             html.Img(
-            #                 src=f"data:image/svg+xml;base64,{encoded.decode()}",
-            #                 # className='img-responsive',
-            #                 style={"height": "110px", "object-fit": "contain"},
-            #             )
-            #         ]
-            #         if encoded
-            #         else []
-            #     ),
-            #     className="col text-center p-1",
-            # ),
+            html.Div(
+                []
+                #     +[
+                #         html.Img(
+                #             src="/assets/alexandra.png",
+                #             style={"height": "110px", "object-fit": "contain"},
+                #         ),
+                #     ]
+                #     + (
+                #         [
+                #             html.Img(
+                #                 src=f"data:image/svg+xml;base64,{encoded.decode()}",
+                #                 # className='img-responsive',
+                #                 style={"height": "110px", "object-fit": "contain"},
+                #             )
+                #         ]
+                #         if encoded
+                #         else []
+                #     ),
+                ,
+                className="col text-center p-1",
+            ),
             html.Div(
                 [
                     html.H1(id=TIME_ID),

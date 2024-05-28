@@ -24,6 +24,7 @@ from draugr.writers import LogWriter, MockWriter, Writer
 from flask import Response
 from paho import mqtt
 from paho.mqtt.client import Client, MQTTv5
+from paho.mqtt.enums import CallbackAPIVersion
 from pandas import DataFrame
 from waitress import serve
 from warg import NOD, default_datetime_repr, ensure_existence
@@ -66,13 +67,13 @@ external_scripts = [
 # external CSS stylesheets
 external_stylesheets = [
     "https://codepen.io/chriddyp/pen/bWLwgP.css",
-    #{
+    # {
     #    "href": "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css",
     #    "rel": "stylesheet",
     #    "integrity": "sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO",
     #    "crossorigin": "anonymous",
-    #},
-dash_bootstrap_components.themes.DARKLY
+    # },
+    dash_bootstrap_components.themes.DARKLY,
 ]
 
 GPU_STATS = NOD()
@@ -85,6 +86,7 @@ CLIENT_ID = HOSTNAME
 MQTT_CLIENT = Client(
     client_id=CLIENT_ID,
     protocol=MQTTv5,
+callback_api_version=CallbackAPIVersion.VERSION2
     # clean_session=True
 )
 MQTT_CLIENT.tls_set(tls_version=paho.mqtt.client.ssl.PROTOCOL_TLS)
@@ -96,7 +98,7 @@ DASH_APP = Dash(
 
 DEVELOPMENT = False
 DASH_APP.layout = get_root_layout(DEVELOPMENT)
-#LOG_WRITER: Writer = MockWriter()
+# LOG_WRITER: Writer = MockWriter()
 
 
 @DASH_APP.callback(
@@ -199,6 +201,8 @@ def update_table(n: int) -> Div:
     else:
         df = DataFrame(["No data"], columns=("data",))
 
+    logger.warning(df)
+
     compute_machines.append(
         DataTable(
             id="gpu-table-0",
@@ -207,10 +211,12 @@ def update_table(n: int) -> Div:
             page_size=ALL_CONSTANTS.TABLE_PAGE_SIZE,
             # style_as_list_view=True,
             style_data_conditional=[
-                #{"if": {"row_index": "odd"}, "backgroundColor": "rgb(248, 248, 248)"}
+                {"if": {"row_index": "odd"}, "backgroundColor": "rgb(50, 50, 50)"},
+                {"if": {"row_index": "even"}, "backgroundColor": "rgb(60, 60, 60)"},
             ],
             style_header={
-                #"backgroundColor": "rgb(230, 230, 230)",                "fontWeight": "bold",
+                "backgroundColor": "rgb(30, 30, 30)",
+                "fontWeight": "bold",
             },
         )
     )
@@ -233,6 +239,8 @@ def update_table(n: int) -> Div:
     else:
         df = DataFrame(["No data"], columns=("data",))
 
+    logger.warning(df)
+
     compute_machines.append(
         DataTable(
             id="du-table-0",
@@ -241,10 +249,11 @@ def update_table(n: int) -> Div:
             page_size=ALL_CONSTANTS.TABLE_PAGE_SIZE,
             # style_as_list_view=True,
             style_data_conditional=[
-                {"if": {"row_index": "odd"}, "backgroundColor": "rgb(248, 248, 248)"}
+                {"if": {"row_index": "odd"}, "backgroundColor": "rgb(50, 50, 50)"},
+                {"if": {"row_index": "even"}, "backgroundColor": "rgb(60, 60, 60)"},
             ],
             style_header={
-                "backgroundColor": "rgb(230, 230, 230)",
+                "backgroundColor": "rgb(30, 30, 30)",
                 "fontWeight": "bold",
             },
         )
@@ -292,17 +301,25 @@ def on_message(client: Any, userdata: Any, result: mqtt.client.MQTTMessage) -> N
     """description"""
     global GPU_STATS
     global KEEP_ALIVE
+
     d = json.loads(result.payload)
+
     keys = d.keys()
+
+    logger.warning("received message")
+
     for key in keys:
+
         if "gpu_stats" in d[key]:
             GPU_STATS[key] = d[key]["gpu_stats"]
             DU_STATS[key] = d[key]["du_stats"]
         else:
             GPU_STATS[key] = d[key]  # ["gpu_stats"]
             DU_STATS[key] = {}
+
         KEEP_ALIVE[key] = 0
-    logger.info(
+
+    logger.warning(
         f"received payload for {keys}, retain:{result.retain}, timestamp:{result.timestamp}"
     )
 
@@ -333,15 +350,47 @@ def setup_mqtt_connection(settings) -> None:
             settings.mqtt_password,
         )
     try:
+
+        MQTT_CLIENT.user_data_set([])
+
         MQTT_CLIENT.connect(
             settings.mqtt_broker,
             settings.mqtt_port,
             keepalive=60,
         )
-        MQTT_CLIENT.subscribe(ALL_CONSTANTS.MQTT_TOPIC, ALL_CONSTANTS.MQTT_QOS)
+
     except Exception as e:
         logger.error(f"MQTT connection error: {e}")
         # raise e
+
+def on_unsubscribe(client, userdata, mid, reason_code_list, properties):
+    # Be careful, the reason_code_list is only present in MQTTv5.
+    # In MQTTv3 it will always be empty
+    if len(reason_code_list) == 0 or not reason_code_list[0].is_failure:
+        print("unsubscribe succeeded (if SUBACK is received in MQTTv3 it success)")
+    else:
+        print(f"Broker replied with failure: {reason_code_list[0]}")
+    #client.disconnect()
+
+
+def on_subscribe(client, userdata, mid, reason_code_list, properties):
+    # Since we subscribed only for a single channel, reason_code_list contains
+    # a single entry
+    if reason_code_list[0].is_failure:
+        logger.warning(f"Broker rejected you subscription: {reason_code_list[0]}")
+    else:
+        logger.warning(f"Broker granted the following QoS: {reason_code_list[0].value}")
+
+
+def on_connect(client, userdata, flags, reason_code, properties):
+    if reason_code.is_failure:
+        print(f"Failed to connect: {reason_code}. loop_forever() will retry connection")
+    else:
+        # we should always subscribe from on_connect callback to be sure
+        # our subscribed is persisted across reconnections.
+
+        MQTT_CLIENT.subscribe(ALL_CONSTANTS.MQTT_TOPIC, qos=ALL_CONSTANTS.MQTT_QOS)
+
 
 
 def main(
@@ -351,43 +400,42 @@ def main(
     **kwargs,
 ) -> None:
     """description"""
-    global  DEVELOPMENT
+    global DEVELOPMENT
+    global MQTT_CLIENT
 
     if False:
         if setting_scope == SettingScopeEnum.user:
             LOG_WRITER = LogWriter(
-                ensure_existence(PROJECT_APP_PATH.user_log) / f"{PROJECT_NAME}_server.log"
+                ensure_existence(PROJECT_APP_PATH.user_log)
+                / f"{PROJECT_NAME}_server.log"
             )
         else:
             LOG_WRITER = LogWriter(
-                ensure_existence(PROJECT_APP_PATH.site_log) / f"{PROJECT_NAME}_server.log"
+                ensure_existence(PROJECT_APP_PATH.site_log)
+                / f"{PROJECT_NAME}_server.log"
             )
 
         LOG_WRITER.open()
 
     MQTT_CLIENT.on_message = on_message
-    # MQTT_CLIENT.on_disconnect = on_disconnect
+    MQTT_CLIENT.on_subscribe = on_subscribe
+    MQTT_CLIENT.on_unsubscribe = on_unsubscribe
+    MQTT_CLIENT.on_connect = on_connect
 
-    print("#0")
+    crystallised_heimdallr_settings = HeimdallrSettings(setting_scope)
+    setup_mqtt_connection(settings=crystallised_heimdallr_settings)
 
-    if True:
-        crystallised_heimdallr_settings = HeimdallrSettings(setting_scope)
-        setup_mqtt_connection(settings=crystallised_heimdallr_settings)
 
     DASH_APP.title = ALL_CONSTANTS.HTML_TITLE
     DASH_APP.update_title = ALL_CONSTANTS.HTML_TITLE
     host = ALL_CONSTANTS.SERVER_ADDRESS
     port = ALL_CONSTANTS.SERVER_PORT
 
-    print("#1")
-
     DEVELOPMENT = development
     DASH_APP.layout = get_root_layout(DEVELOPMENT)
 
-    print("#2")
-
     if development:
-        DASH_APP.run_server(
+        DASH_APP.run(
             host=host,
             port=port,
             debug=ALL_CONSTANTS.DEBUG,
@@ -397,7 +445,7 @@ def main(
         # DASH_APP.run_server(host=host, port=port)
         serve(DASH_APP.server, **kwargs)
 
-    #LOG_WRITER.close()
+    # LOG_WRITER.close()
 
 
 if __name__ == "__main__":
