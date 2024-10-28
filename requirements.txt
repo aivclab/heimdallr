@@ -12,3 +12,4 @@ sorcery
 setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
 dash
 plotly
+werkzeug>=3.0.6 # not directly required, pinned by Snyk to avoid a vulnerability
