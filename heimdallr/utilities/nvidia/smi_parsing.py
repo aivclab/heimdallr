@@ -1763,7 +1763,7 @@ class NvidiaSMI:
 
                 if NVSMI_ALL in filter or NVSMI_UTILIZATION_ENCODER in filter:
                     try:
-                        (util_int, ssize) = nvmlDeviceGetEncoderUtilization(handle)
+                        util_int, ssize = nvmlDeviceGetEncoderUtilization(handle)
                         encoder_util = NvidiaSMI.__toString(util_int) + " %"
                     except NVMLError as err:
                         error = NvidiaSMI.__handleError(err)
@@ -1777,7 +1777,7 @@ class NvidiaSMI:
 
                 if NVSMI_ALL in filter or NVSMI_UTILIZATION_DECODER in filter:
                     try:
-                        (util_int, ssize) = nvmlDeviceGetDecoderUtilization(handle)
+                        util_int, ssize = nvmlDeviceGetDecoderUtilization(handle)
                         decoder_util = NvidiaSMI.__toString(util_int) + " %"
                     except NVMLError as err:
                         error = NvidiaSMI.__handleError(err)
@@ -1800,7 +1800,7 @@ class NvidiaSMI:
                     or NVSMI_ECC_MODE_PENDING in filter
                 ):
                     try:
-                        (current, pending) = nvmlDeviceGetEccMode(handle)
+                        current, pending = nvmlDeviceGetEccMode(handle)
                         curr_str = "Enabled" if (current != 0) else "Disabled"
                         pend_str = "Enabled" if (pending != 0) else "Disabled"
                     except NVMLError as err:
@@ -2932,7 +2932,7 @@ class NvidiaSMI:
 
                 if NVSMI_ALL in filter or NVSMI_UTILIZATION_ENCODER in filter:
                     try:
-                        (util_int, ssize) = nvmlDeviceGetEncoderUtilization(handle)
+                        util_int, ssize = nvmlDeviceGetEncoderUtilization(handle)
                         encoder_util = util_int
                     except NVMLError as err:
                         error = NvidiaSMI.__handleError(err)
@@ -2943,7 +2943,7 @@ class NvidiaSMI:
 
                 if NVSMI_ALL in filter or NVSMI_UTILIZATION_DECODER in filter:
                     try:
-                        (util_int, ssize) = nvmlDeviceGetDecoderUtilization(handle)
+                        util_int, ssize = nvmlDeviceGetDecoderUtilization(handle)
                         decoder_util = util_int
                     except NVMLError as err:
                         error = NvidiaSMI.__handleError(err)
@@ -2962,7 +2962,7 @@ class NvidiaSMI:
                     or NVSMI_ECC_MODE_PENDING in filter
                 ):
                     try:
-                        (current, pending) = nvmlDeviceGetEccMode(handle)
+                        current, pending = nvmlDeviceGetEccMode(handle)
                         curr_str = "Enabled" if (current != 0) else "Disabled"
                         pend_str = "Enabled" if (pending != 0) else "Disabled"
                     except NVMLError as err:
