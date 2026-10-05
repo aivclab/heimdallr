@@ -25,7 +25,6 @@ from github.PullRequest import PullRequest
 from github.Repository import Repository
 from sorcery import assigned_names
 
-
 # TODO: CONVERT TO PLUGINS for heimdallr!
 
 
@@ -47,7 +46,7 @@ class StateEnum(Enum):
 
 
 class PullRequestSortEnum(Enum):
-    (created, updated, popularity) = assigned_names()  # (comment  count),
+    created, updated, popularity = assigned_names()  # (comment  count),
 
     long_running = (
         "long-running"  # (age, filtering by pulls  updated in the  last  month).
